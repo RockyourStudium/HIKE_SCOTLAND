@@ -4,6 +4,9 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    // Gradient class names (from-*/via-*/to-*) live in these data files, so
+    // they must be scanned or Tailwind will purge them.
+    "./data/**/*.{js,ts}",
   ],
   theme: {
     extend: {

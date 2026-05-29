@@ -4,6 +4,7 @@ const columns = [
   {
     title: "Explore",
     links: [
+      { href: "/destinations", label: "Destinations" },
       { href: "/routes", label: "Hiking Routes" },
       { href: "/tours", label: "Guided Tours" },
       { href: "/stays", label: "Accommodation" },
