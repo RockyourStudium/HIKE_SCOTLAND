@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Soft rolling Border hills with a winding river">
+  <defs>
+    <linearGradient id="sb-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1B4332"/>
+      <stop offset="0.55" stop-color="#2D6A4F"/>
+      <stop offset="1" stop-color="#95D5B2"/>
+    </linearGradient>
+    <radialGradient id="sb-sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D8F3DC" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#D8F3DC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sb-sky)"/>
+  <circle cx="1180" cy="240" r="230" fill="url(#sb-sun)"/>
+  <!-- distant soft hills -->
+  <path d="M0,500 L400,450 L800,505 L1200,445 L1600,500 L1600,900 L0,900 Z" fill="#1B4332" opacity="0.45"/>
+  <rect x="0" y="485" width="1600" height="90" fill="#D8F3DC" opacity="0.12"/>
+  <!-- rounded mid hills -->
+  <path d="M0,640 L360,560 L760,645 L1160,560 L1600,640 L1600,900 L0,900 Z" fill="#2D6A4F" opacity="0.85"/>
+  <!-- foreground hill with winding river -->
+  <path d="M0,760 L420,690 L900,770 L1320,690 L1600,760 L1600,900 L0,900 Z" fill="#1B4332"/>
+  <path d="M720,900 C760,810 660,770 720,720 C780,672 700,640 760,600 L820,600 C770,645 850,675 790,725 C740,772 840,812 800,900 Z" fill="#95D5B2" opacity="0.45"/>
+  <path d="M0,840 L500,800 L1000,850 L1600,805 L1600,900 L0,900 Z" fill="#081C15"/>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Gentle hills around a loch with a wooded island">
+  <defs>
+    <linearGradient id="ll-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1B4332"/>
+      <stop offset="0.55" stop-color="#2D6A4F"/>
+      <stop offset="1" stop-color="#95D5B2"/>
+    </linearGradient>
+    <linearGradient id="ll-water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#95D5B2"/>
+      <stop offset="1" stop-color="#2D6A4F"/>
+    </linearGradient>
+    <radialGradient id="ll-sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D8F3DC" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#D8F3DC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#ll-sky)"/>
+  <circle cx="380" cy="240" r="220" fill="url(#ll-sun)"/>
+  <!-- far gentle hills -->
+  <path d="M0,470 L320,400 L640,475 L960,395 L1280,470 L1600,410 L1600,620 L0,620 Z" fill="#1B4332" opacity="0.55"/>
+  <rect x="0" y="455" width="1600" height="90" fill="#D8F3DC" opacity="0.12"/>
+  <!-- rolling green hills (mid) -->
+  <path d="M0,600 L280,520 L560,605 L880,510 L1180,600 L1460,520 L1600,565 L1600,620 L0,620 Z" fill="#2D6A4F" opacity="0.92"/>
+  <!-- loch -->
+  <rect x="0" y="620" width="1600" height="280" fill="url(#ll-water)"/>
+  <rect x="0" y="634" width="1600" height="3" fill="#D8F3DC" opacity="0.30"/>
+  <rect x="0" y="690" width="1600" height="2" fill="#D8F3DC" opacity="0.18"/>
+  <!-- wooded island -->
+  <ellipse cx="900" cy="700" rx="190" ry="34" fill="#1B4332"/>
+  <g fill="#081C15">
+    <path d="M840,700 L870,640 L900,700 Z"/>
+    <path d="M885,700 L920,628 L955,700 Z"/>
+    <path d="M935,700 L965,648 L995,700 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Glencoe peaks with cloud drifting through the glen">
+  <defs>
+    <linearGradient id="gc-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#081C15"/>
+      <stop offset="0.55" stop-color="#1B4332"/>
+      <stop offset="1" stop-color="#2D6A4F"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#gc-sky)"/>
+  <!-- far wall -->
+  <path d="M0,500 L300,320 L600,520 L900,300 L1200,520 L1500,360 L1600,440 L1600,900 L0,900 Z" fill="#2D6A4F" opacity="0.45"/>
+  <!-- the three sisters - big buttresses -->
+  <path d="M120,900 L360,360 L600,900 Z" fill="#1B4332"/>
+  <path d="M520,900 L800,300 L1080,900 Z" fill="#163A2B"/>
+  <path d="M980,900 L1240,380 L1500,900 Z" fill="#1B4332"/>
+  <!-- drifting cloud band -->
+  <rect x="0" y="560" width="1600" height="130" fill="#D8F3DC" opacity="0.16"/>
+  <ellipse cx="500" cy="610" rx="420" ry="55" fill="#D8F3DC" opacity="0.20"/>
+  <ellipse cx="1180" cy="635" rx="460" ry="60" fill="#D8F3DC" opacity="0.16"/>
+  <!-- dark foreground glen floor -->
+  <path d="M0,800 L420,720 L820,810 L1240,720 L1600,800 L1600,900 L0,900 Z" fill="#081C15"/>
+</svg>

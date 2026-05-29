@@ -4,6 +4,7 @@ import RouteCard from "@/components/RouteCard";
 import TourCard from "@/components/TourCard";
 import { routes } from "@/data/routes";
 import { tours } from "@/data/tours";
+import { heroImage } from "@/lib/heroImage";
 
 const steps = [
   {
@@ -38,9 +39,14 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-forest-gradient text-fog">
-        <div className="absolute inset-0 opacity-20" aria-hidden>
-          <div className="absolute -right-24 top-10 h-72 w-72 rounded-full bg-mist blur-3xl" />
-          <div className="absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-forest-highland blur-3xl" />
+        <div className="absolute inset-0" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={heroImage("landing")}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest-darkest/85 via-forest-darkest/45 to-forest-darkest/10" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
           <div className="max-w-3xl animate-fade-up">

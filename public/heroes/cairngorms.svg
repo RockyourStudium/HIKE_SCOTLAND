@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Cairngorms plateau with pine forest and loch">
+  <defs>
+    <linearGradient id="cg-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0E2A1F"/>
+      <stop offset="0.55" stop-color="#2D6A4F"/>
+      <stop offset="1" stop-color="#52B788"/>
+    </linearGradient>
+    <linearGradient id="cg-water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#52B788"/>
+      <stop offset="1" stop-color="#1B4332"/>
+    </linearGradient>
+    <radialGradient id="cg-sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D8F3DC" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#D8F3DC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#cg-sky)"/>
+  <circle cx="430" cy="230" r="220" fill="url(#cg-sun)"/>
+  <!-- broad flat-topped plateau (far) -->
+  <path d="M0,470 L300,420 L520,430 L760,400 L1040,425 L1320,405 L1600,430 L1600,640 L0,640 Z" fill="#2D6A4F" opacity="0.55"/>
+  <rect x="0" y="455" width="1600" height="100" fill="#D8F3DC" opacity="0.10"/>
+  <!-- rounded hills (mid) -->
+  <path d="M0,600 L260,520 L520,610 L820,500 L1120,605 L1400,525 L1600,590 L1600,640 L0,640 Z" fill="#1B4332" opacity="0.9"/>
+  <!-- loch -->
+  <rect x="0" y="640" width="1600" height="120" fill="url(#cg-water)"/>
+  <rect x="0" y="648" width="1600" height="3" fill="#D8F3DC" opacity="0.3"/>
+  <rect x="0" y="690" width="1600" height="2" fill="#D8F3DC" opacity="0.2"/>
+  <!-- pine forest foreground -->
+  <g fill="#081C15">
+    <path d="M0,760 L1600,760 L1600,900 L0,900 Z"/>
+    <path d="M120,760 L160,640 L200,760 Z"/>
+    <path d="M180,760 L230,620 L280,760 Z"/>
+    <path d="M260,760 L300,660 L340,760 Z"/>
+    <path d="M1180,760 L1220,650 L1260,760 Z"/>
+    <path d="M1260,760 L1310,615 L1360,760 Z"/>
+    <path d="M1350,760 L1390,655 L1430,760 Z"/>
+  </g>
+</svg>

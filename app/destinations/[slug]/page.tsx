@@ -9,6 +9,7 @@ import { routes } from "@/data/routes";
 import { tours } from "@/data/tours";
 import { stays } from "@/data/stays";
 import RouteCard from "@/components/RouteCard";
+import { heroImage } from "@/lib/heroImage";
 
 export function generateStaticParams() {
   return destinations.map((d) => ({ slug: d.slug }));
@@ -48,9 +49,14 @@ export default function DestinationPage({
     <>
       {/* Hero */}
       <section className={`relative overflow-hidden bg-gradient-to-br ${dest.heroGradient} text-fog`}>
-        <div className="absolute inset-0 opacity-20" aria-hidden>
-          <div className="absolute -right-24 top-10 h-72 w-72 rounded-full bg-mist blur-3xl" />
-          <div className="absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-forest-highland blur-3xl" />
+        <div className="absolute inset-0" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={heroImage(dest.slug)}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest-darkest/85 via-forest-darkest/45 to-forest-darkest/10" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-fog/70">

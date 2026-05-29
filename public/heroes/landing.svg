@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylised Scottish mountain landscape at golden hour">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#081C15"/>
+      <stop offset="0.5" stop-color="#1B4332"/>
+      <stop offset="1" stop-color="#2D6A4F"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D8F3DC" stop-opacity="0.95"/>
+      <stop offset="0.35" stop-color="#95D5B2" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#95D5B2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1120" cy="290" r="300" fill="url(#sun)"/>
+  <circle cx="1120" cy="290" r="74" fill="#D8F3DC" opacity="0.9"/>
+  <!-- distant range -->
+  <path d="M0,560 L180,495 L360,565 L560,460 L780,560 L1000,430 L1240,540 L1460,465 L1600,515 L1600,900 L0,900 Z" fill="#2D6A4F" opacity="0.45"/>
+  <rect x="0" y="535" width="1600" height="110" fill="#95D5B2" opacity="0.10"/>
+  <!-- mid range -->
+  <path d="M0,650 L240,545 L470,665 L690,515 L910,665 L1150,560 L1390,670 L1600,585 L1600,900 L0,900 Z" fill="#1B4332" opacity="0.9"/>
+  <!-- near range -->
+  <path d="M0,760 L300,650 L560,775 L860,600 L1120,775 L1400,665 L1600,730 L1600,900 L0,900 Z" fill="#081C15"/>
+  <rect x="0" y="715" width="1600" height="90" fill="#D8F3DC" opacity="0.07"/>
+</svg>

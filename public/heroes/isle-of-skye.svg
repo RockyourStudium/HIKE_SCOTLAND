@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Jagged Skye pinnacles above the sea">
+  <defs>
+    <linearGradient id="sk-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#081C15"/>
+      <stop offset="0.5" stop-color="#235241"/>
+      <stop offset="1" stop-color="#52B788"/>
+    </linearGradient>
+    <linearGradient id="sk-sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#52B788"/>
+      <stop offset="1" stop-color="#163A2B"/>
+    </linearGradient>
+    <radialGradient id="sk-sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D8F3DC" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#95D5B2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sk-sky)"/>
+  <circle cx="1150" cy="270" r="250" fill="url(#sk-sun)"/>
+  <!-- distant headland -->
+  <path d="M0,560 L360,500 L720,560 L1080,510 L1440,560 L1600,535 L1600,650 L0,650 Z" fill="#2D6A4F" opacity="0.5"/>
+  <rect x="0" y="540" width="1600" height="90" fill="#D8F3DC" opacity="0.10"/>
+  <!-- sea -->
+  <rect x="0" y="650" width="1600" height="250" fill="url(#sk-sea)"/>
+  <rect x="0" y="662" width="1600" height="3" fill="#D8F3DC" opacity="0.28"/>
+  <rect x="0" y="705" width="1600" height="2" fill="#D8F3DC" opacity="0.18"/>
+  <!-- jagged pinnacles (the Storr / Quiraing) -->
+  <g fill="#081C15">
+    <path d="M0,650 L120,470 L210,650 Z"/>
+    <path d="M150,650 L260,360 L330,650 Z"/>
+    <path d="M300,650 L380,500 L450,650 Z"/>
+    <path d="M1120,650 L1200,470 L1270,650 Z"/>
+    <path d="M1230,650 L1330,400 L1410,650 Z"/>
+    <path d="M1380,650 L1470,520 L1560,650 Z"/>
+  </g>
+  <path d="M0,650 L1600,650 L1600,672 L0,672 Z" fill="#081C15" opacity="0.5"/>
+</svg>
