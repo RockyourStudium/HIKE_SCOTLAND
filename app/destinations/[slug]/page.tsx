@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
@@ -50,11 +51,13 @@ export default function DestinationPage({
       {/* Hero */}
       <section className={`relative overflow-hidden bg-gradient-to-br ${dest.heroGradient} text-fog`}>
         <div className="absolute inset-0" aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={heroImage(dest.slug)}
             alt=""
-            className="h-full w-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest-darkest/85 via-forest-darkest/45 to-forest-darkest/10" />
         </div>

@@ -53,14 +53,14 @@ export default function Navbar() {
       >
         <Link
           href="/"
-          className="flex items-center gap-2 text-lg font-semibold tracking-tight"
+          className="flex flex-shrink-0 items-center gap-2 whitespace-nowrap text-lg font-semibold tracking-tight"
         >
           <span aria-hidden className="text-2xl">⛰️</span>
           <span className="font-display text-xl">Hike Scotland</span>
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-1 lg:flex">
           {/* Destinations dropdown */}
           <li ref={destRef} className="relative">
             <button
@@ -69,7 +69,7 @@ export default function Navbar() {
               aria-expanded={destOpen}
               aria-haspopup="true"
               aria-current={destinationsActive ? "page" : undefined}
-              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:bg-forest-highland/40 ${
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:bg-forest-highland/40 ${
                 destinationsActive ? "bg-forest-highland text-white" : "text-fog/90"
               }`}
             >
@@ -124,7 +124,7 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-full px-4 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:bg-forest-highland/40 ${
+                  className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:bg-forest-highland/40 ${
                     active ? "bg-forest-highland text-white" : "text-fog/90"
                   }`}
                 >
@@ -136,7 +136,7 @@ export default function Navbar() {
           <li>
             <Link
               href="/plan"
-              className="ml-2 rounded-full bg-mist px-5 py-2 text-sm font-semibold uppercase tracking-wide text-forest-darkest transition-colors hover:bg-mint"
+              className="ml-2 whitespace-nowrap rounded-full bg-mist px-5 py-2 text-sm font-semibold uppercase tracking-wide text-forest-darkest transition-colors hover:bg-mint"
             >
               Start Planning
             </Link>
@@ -149,7 +149,7 @@ export default function Navbar() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          className="inline-flex items-center justify-center rounded-lg p-2 text-fog hover:bg-forest-highland/40 md:hidden"
+          className="inline-flex items-center justify-center rounded-lg p-2 text-fog hover:bg-forest-highland/40 lg:hidden"
         >
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
           {open ? (
@@ -166,7 +166,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div id="mobile-menu" className="border-t border-forest-highland/30 md:hidden">
+        <div id="mobile-menu" className="border-t border-forest-highland/30 lg:hidden">
           <ul className="space-y-1 px-4 py-3">
             {/* Mobile destinations group */}
             <li>

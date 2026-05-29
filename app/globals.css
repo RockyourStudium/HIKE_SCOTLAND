@@ -2,13 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* System font stacks keep the app fully self-contained (no external fetch). */
-  --font-inter: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
-    "Times New Roman", serif;
-}
+/* --font-body (Lato) and --font-heading (Josefin Sans) are set on <html> by
+   next/font, which includes its own metric-matched fallback face. We must NOT
+   redeclare them in :root — that would override next/font with equal specificity. */
 
 html {
   scroll-behavior: smooth;
@@ -17,7 +13,7 @@ html {
 body {
   background-color: #d8f3dc;
   color: #1b4332;
-  font-family: var(--font-inter);
+  font-family: var(--font-body, ui-sans-serif, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

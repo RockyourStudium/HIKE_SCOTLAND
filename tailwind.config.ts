@@ -24,8 +24,9 @@ const config: Config = {
         softgray: "#BDBDBD",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "Georgia", "serif"],
+        // Body: Lato. Headings (font-display): Josefin Sans. Both self-hosted via next/font.
+        sans: ["var(--font-body)", "system-ui", "-apple-system", "sans-serif"],
+        display: ["var(--font-heading)", "system-ui", "sans-serif"],
       },
       backgroundImage: {
         "forest-gradient": "linear-gradient(135deg, #081C15 0%, #2D6A4F 100%)",
