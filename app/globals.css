@@ -114,6 +114,26 @@ body {
   white-space: nowrap;
 }
 
+/* Flowing gradient card titles — same shimmer motion as the CTA label, but
+   text-only (no border) and in a darker forest palette so it stays readable
+   on white cards. */
+.shimmer-title {
+  background: linear-gradient(
+    90deg,
+    #081c15 0%,
+    #1b4332 25%,
+    #52b788 50%,
+    #1b4332 75%,
+    #081c15 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: cta-shimmer 4s linear infinite;
+}
+
 /* Disabled state (e.g. the quiz "Next" before an answer is picked): no
    animation, muted, same footprint as the animated button. */
 .cta-disabled {

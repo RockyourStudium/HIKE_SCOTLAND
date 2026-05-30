@@ -16,7 +16,7 @@ export default function StayCard({ stay }: { stay: Stay }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-lg font-bold text-forest-darkest">{stay.name}</h3>
+        <h3 className="shimmer-title font-display text-lg font-bold">{stay.name}</h3>
         <p className="mt-1 text-sm text-neutralgray">{stay.region}</p>
         <p className="mt-3 flex-1 text-sm leading-relaxed text-neutralgray">{stay.summary}</p>
 

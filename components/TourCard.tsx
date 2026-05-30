@@ -32,7 +32,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-xl font-bold text-forest-darkest">
+          <h3 className="shimmer-title font-display text-xl font-bold">
             {tour.name}
           </h3>
           <DifficultyBadge level={tour.difficulty} />

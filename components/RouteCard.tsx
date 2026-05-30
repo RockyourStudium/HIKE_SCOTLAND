@@ -41,7 +41,7 @@ export default function RouteCard({ route }: { route: Route }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-xl font-bold text-forest-darkest">
+        <h3 className="shimmer-title font-display text-xl font-bold">
           {route.name}
         </h3>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-neutralgray">
