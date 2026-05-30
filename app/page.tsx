@@ -1,5 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Compass,
+  Map,
+  Backpack,
+  MountainSnow,
+  Castle,
+  Bird,
+  Mountain,
+} from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import RouteCard from "@/components/RouteCard";
@@ -10,17 +19,17 @@ import { heroImage } from "@/lib/heroImage";
 
 const steps = [
   {
-    icon: "🧭",
+    icon: Compass,
     title: "Tell us your style",
     body: "Answer a few quick questions about your experience, time and what you love about the outdoors.",
   },
   {
-    icon: "🗺️",
+    icon: Map,
     title: "Get matched routes",
     body: "We surface routes, guided tours and stays tailored to your preferences and ability.",
   },
   {
-    icon: "🎒",
+    icon: Backpack,
     title: "Build your itinerary",
     body: "Combine walks, tours and accommodation into one plan — ready when you are.",
   },
@@ -35,17 +44,17 @@ const stats = [
 
 const benefits = [
   {
-    icon: "🏔️",
+    icon: MountainSnow,
     title: "Breathtaking landscapes",
     body: "From the windswept peaks of Glencoe to the lush trails of Glen Affric, experience nature's grandeur one step at a time.",
   },
   {
-    icon: "🏰",
+    icon: Castle,
     title: "Walking through history",
     body: "Follow ancient footpaths past castles, cairns and clan lands — from Culloden to the ruins of Urquhart Castle.",
   },
   {
-    icon: "🦌",
+    icon: Bird,
     title: "Wild, untouched beauty",
     body: "Discover remote glens, hidden waterfalls and wildlife you'll never meet from a car window. Scotland, raw and real.",
   },
@@ -105,7 +114,8 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
           <div className="max-w-3xl animate-fade-up">
             <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-mint ring-1 ring-inset ring-white/20">
-              ⛰️ Discover Scotland on foot
+              <Mountain aria-hidden className="h-4 w-4" strokeWidth={2} />
+              Discover Scotland on foot
             </p>
             <h1 className="mt-6 font-display text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
               Plan your perfect Scottish hiking adventure
@@ -190,7 +200,12 @@ export default function HomePage() {
               <span className="absolute -top-4 left-6 flex h-9 w-9 items-center justify-center rounded-full bg-forest-highland text-sm font-bold text-white">
                 {i + 1}
               </span>
-              <div aria-hidden className="text-3xl">{step.icon}</div>
+              <step.icon
+                aria-hidden
+                className="h-9 w-9"
+                color="url(#hike-gradient)"
+                strokeWidth={1.75}
+              />
               <h3 className="mt-3 font-display text-xl font-bold text-forest-darkest">
                 {step.title}
               </h3>
@@ -258,7 +273,12 @@ export default function HomePage() {
           <Reveal className="mt-12 grid gap-6 md:grid-cols-3">
             {benefits.map((b) => (
               <div key={b.title} className="rounded-2xl bg-white p-6 shadow-card">
-                <div aria-hidden className="text-3xl">{b.icon}</div>
+                <b.icon
+                  aria-hidden
+                  className="h-9 w-9"
+                  color="url(#hike-gradient)"
+                  strokeWidth={1.75}
+                />
                 <h3 className="mt-3 font-display text-xl font-bold text-forest-darkest">
                   {b.title}
                 </h3>

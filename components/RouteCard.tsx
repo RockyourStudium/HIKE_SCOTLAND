@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PawPrint } from "lucide-react";
 import type { Route } from "@/data/types";
 import { DifficultyBadge, Tag } from "./Badge";
 
@@ -60,7 +61,11 @@ export default function RouteCard({ route }: { route: Route }) {
           {route.terrain.slice(0, 3).map((t) => (
             <Tag key={t}>{t}</Tag>
           ))}
-          {route.dogFriendly && <Tag>🐾 Dog friendly</Tag>}
+          {route.dogFriendly && (
+            <Tag>
+              <PawPrint aria-hidden className="mr-1 h-3.5 w-3.5" /> Dog friendly
+            </Tag>
+          )}
         </div>
       </div>
     </Link>

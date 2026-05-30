@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { CalendarDays, TrainFront, Backpack, Dumbbell, PawPrint } from "lucide-react";
 import { routes, getRouteById } from "@/data/routes";
 import { DifficultyBadge } from "@/components/Badge";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
@@ -97,7 +98,7 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
               <div className="mt-4 grid gap-6 sm:grid-cols-2">
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>🗓️</span> Best time to walk
+                    <CalendarDays aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> Best time to walk
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutralgray">
                     {dest?.bestTime ??
@@ -110,7 +111,7 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
                 </div>
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>🚆</span> Getting there
+                    <TrainFront aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> Getting there
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutralgray">
                     {dest?.gettingThere ??
@@ -119,7 +120,7 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
                 </div>
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>🎒</span> What to bring
+                    <Backpack aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> What to bring
                   </h3>
                   <ul className="mt-2 space-y-1.5">
                     {gear.map((g) => (
@@ -132,13 +133,16 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
                 </div>
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>💪</span> Fitness & experience
+                    <Dumbbell aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> Fitness & experience
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutralgray">
                     {fitnessNote(route.difficulty)}
                   </p>
                   {route.dogFriendly && (
-                    <p className="mt-2 text-sm text-neutralgray">🐾 Dog friendly — well-behaved dogs welcome.</p>
+                    <p className="mt-2 flex items-center gap-1.5 text-sm text-neutralgray">
+                      <PawPrint aria-hidden className="h-4 w-4 flex-shrink-0" color="url(#hike-gradient)" />
+                      Dog friendly — well-behaved dogs welcome.
+                    </p>
                   )}
                 </div>
               </div>

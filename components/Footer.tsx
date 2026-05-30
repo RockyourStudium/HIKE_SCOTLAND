@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Mountain, TreePine } from "lucide-react";
 
 const columns = [
   {
@@ -27,7 +28,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
-              <span aria-hidden className="text-2xl">⛰️</span>
+              <Mountain aria-hidden className="h-6 w-6 text-mint" strokeWidth={2} />
               <span className="font-display text-xl font-semibold">Hike Scotland</span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-fog/70">
@@ -64,7 +65,10 @@ export default function Footer() {
               Image Credits
             </Link>
             <span aria-hidden>·</span>
-            <p>Made for outdoor enthusiasts 🌲</p>
+            <p className="inline-flex items-center gap-1.5">
+              Made for outdoor enthusiasts
+              <TreePine aria-hidden className="h-4 w-4 text-mint" />
+            </p>
           </div>
         </div>
       </div>

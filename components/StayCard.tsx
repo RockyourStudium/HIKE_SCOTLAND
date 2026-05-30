@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import type { Stay } from "@/data/types";
 import { Tag } from "./Badge";
 
@@ -9,7 +10,7 @@ export default function StayCard({ stay }: { stay: Stay }) {
           {stay.type}
         </span>
         <span className="flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-forest-darkest">
-          <span aria-hidden className="text-mist">★</span>
+          <Star aria-hidden className="h-3.5 w-3.5 fill-mist text-mist" />
           {stay.rating.toFixed(1)}
         </span>
       </div>

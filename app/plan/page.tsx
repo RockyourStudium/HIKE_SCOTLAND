@@ -81,7 +81,7 @@ const steps: Step[] = [
     help: "We'll only suggest dog-friendly options.",
     options: [
       { value: "No", label: "Just humans" },
-      { value: "Yes", label: "Yes, with a dog 🐾" },
+      { value: "Yes", label: "Yes, with a dog" },
     ],
   },
   {

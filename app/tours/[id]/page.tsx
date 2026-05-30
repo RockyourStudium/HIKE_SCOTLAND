@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
 import { tours, getTourById } from "@/data/tours";
 import { DifficultyBadge } from "@/components/Badge";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
@@ -100,7 +101,7 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
               <div className="mt-4 grid gap-6 sm:grid-cols-2">
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>🗓️</span> Best time to travel
+                    <CalendarDays aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> Best time to travel
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutralgray">
                     {dest?.bestTime ?? "Available across the main walking season, spring to autumn."}
@@ -108,7 +109,7 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
                 </div>
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>🚆</span> Getting there
+                    <TrainFront aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> Getting there
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutralgray">
                     {dest?.gettingThere ?? `Based in ${tour.region}. Full meeting-point details on booking.`}
@@ -116,7 +117,7 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
                 </div>
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>🎒</span> What to bring
+                    <Backpack aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> What to bring
                   </h3>
                   <ul className="mt-2 space-y-1.5">
                     {gear.map((g) => (
@@ -129,7 +130,7 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
                 </div>
                 <div className="rounded-2xl bg-white p-6 shadow-card">
                   <h3 className="flex items-center gap-2 font-semibold text-forest-darkest">
-                    <span aria-hidden>💪</span> Fitness & experience
+                    <Dumbbell aria-hidden className="h-5 w-5" color="url(#hike-gradient)" /> Fitness & experience
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-neutralgray">
                     {fitnessNote(tour.difficulty)}

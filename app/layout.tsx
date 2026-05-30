@@ -42,6 +42,23 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${josefinSans.variable} ${lato.variable}`}>
       <body className="min-h-screen flex flex-col bg-fog text-forest-dark">
+        {/* Shared SVG gradient for Lucide icons — mirrors the site's
+            forest-gradient (#081C15 → #2D6A4F). Reference via
+            color="url(#hike-gradient)" on any icon over a light surface. */}
+        <svg
+          width="0"
+          height="0"
+          aria-hidden
+          focusable="false"
+          className="absolute"
+        >
+          <defs>
+            <linearGradient id="hike-gradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#081C15" />
+              <stop offset="100%" stopColor="#2D6A4F" />
+            </linearGradient>
+          </defs>
+        </svg>
         <a href="#main" className="skip-link">
           Skip to main content
         </a>

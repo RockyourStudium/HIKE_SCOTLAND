@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { CalendarDays, TrainFront } from "lucide-react";
 import {
   destinations,
   getDestinationBySlug,
@@ -158,7 +159,7 @@ export default function DestinationPage({
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl bg-white p-6 shadow-card sm:p-8">
             <div className="flex items-center gap-3">
-              <span aria-hidden className="text-2xl">🗓️</span>
+              <CalendarDays aria-hidden className="h-7 w-7" color="url(#hike-gradient)" strokeWidth={1.75} />
               <h3 className="font-display text-xl font-bold text-forest-darkest">
                 Best time to visit
               </h3>
@@ -169,7 +170,7 @@ export default function DestinationPage({
           </div>
           <div className="rounded-2xl bg-white p-6 shadow-card sm:p-8">
             <div className="flex items-center gap-3">
-              <span aria-hidden className="text-2xl">🚆</span>
+              <TrainFront aria-hidden className="h-7 w-7" color="url(#hike-gradient)" strokeWidth={1.75} />
               <h3 className="font-display text-xl font-bold text-forest-darkest">
                 Getting there
               </h3>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Mountain } from "lucide-react";
 import { destinations } from "@/data/destinations";
 
 const links = [
@@ -54,7 +55,7 @@ export default function Navbar() {
           href="/"
           className="flex flex-shrink-0 items-center gap-2 whitespace-nowrap text-lg font-semibold tracking-tight"
         >
-          <span aria-hidden className="text-2xl">⛰️</span>
+          <Mountain aria-hidden className="h-6 w-6 text-mint" strokeWidth={2} />
           <span className="font-display text-xl">Hike Scotland</span>
         </Link>
 
