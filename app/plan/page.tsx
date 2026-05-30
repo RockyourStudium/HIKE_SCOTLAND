@@ -205,11 +205,21 @@ export default function PlanPage() {
         </div>
 
         {/* Question */}
-        <fieldset className="rounded-2xl bg-white p-6 shadow-card sm:p-8">
-          <legend className="font-display text-2xl font-bold text-forest-darkest">
+        <div
+          role="group"
+          aria-labelledby="step-question"
+          aria-describedby="step-help"
+          className="rounded-2xl bg-white p-6 shadow-card sm:p-8"
+        >
+          <h2
+            id="step-question"
+            className="font-display text-2xl font-bold text-forest-darkest"
+          >
             {step.question}
-          </legend>
-          <p className="mt-2 text-sm text-neutralgray">{step.help}</p>
+          </h2>
+          <p id="step-help" className="mt-2 text-sm text-neutralgray">
+            {step.help}
+          </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {step.options.map((opt) => {
@@ -254,7 +264,7 @@ export default function PlanPage() {
               );
             })}
           </div>
-        </fieldset>
+        </div>
 
         {/* Nav */}
         <div className="mt-6 flex items-center justify-between">
