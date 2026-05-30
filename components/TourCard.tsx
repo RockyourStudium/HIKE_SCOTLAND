@@ -1,10 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Tour } from "@/data/types";
 import { DifficultyBadge } from "./Badge";
 
 export default function TourCard({ tour }: { tour: Tour }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+    <Link
+      href={`/tours/${tour.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+    >
       <div className="relative flex h-52 items-end overflow-hidden p-4">
         {tour.image ? (
           <Image
@@ -55,14 +59,11 @@ export default function TourCard({ tour }: { tour: Tour }) {
               <span className="text-sm font-normal text-neutralgray"> / person</span>
             </p>
           </div>
-          <button
-            type="button"
-            className="rounded-full bg-forest-highland px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-forest-dark"
-          >
-            Enquire
-          </button>
+          <span className="rounded-full bg-forest-highland px-5 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-forest-dark">
+            View details
+          </span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

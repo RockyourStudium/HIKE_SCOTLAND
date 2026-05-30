@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Route } from "@/data/types";
 import { DifficultyBadge, Tag } from "./Badge";
 
@@ -13,7 +14,10 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 export default function RouteCard({ route }: { route: Route }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+    <Link
+      href={`/routes/${route.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+    >
       <div className="relative flex h-56 items-end overflow-hidden p-4">
         {route.image ? (
           <Image
@@ -59,6 +63,6 @@ export default function RouteCard({ route }: { route: Route }) {
           {route.dogFriendly && <Tag>🐾 Dog friendly</Tag>}
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

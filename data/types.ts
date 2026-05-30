@@ -25,6 +25,8 @@ export interface Route {
   seasons: ("Spring" | "Summer" | "Autumn" | "Winter")[];
   dogFriendly: boolean;
   summary: string;
+  /** Longer, booking-oriented description (one entry per paragraph). */
+  description: string[];
   highlights: string[];
   /** Tailwind gradient classes used as the card header fallback. */
   gradient: string;
@@ -42,6 +44,8 @@ export interface Tour {
   pricePerPerson: number;
   guided: boolean;
   summary: string;
+  /** Longer, booking-oriented description (one entry per paragraph). */
+  description: string[];
   includes: string[];
   gradient: string;
   /** Optional photo for the card header (path under /public). */
