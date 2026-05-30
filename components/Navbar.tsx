@@ -9,7 +9,6 @@ const links = [
   { href: "/routes", label: "ROUTES" },
   { href: "/tours", label: "GUIDED TOURS" },
   { href: "/stays", label: "STAYS" },
-  { href: "/plan", label: "PLAN A TRIP" },
 ];
 
 export default function Navbar() {
@@ -236,6 +235,14 @@ export default function Navbar() {
                 </li>
               );
             })}
+            <li className="pt-2">
+              <Link
+                href="/plan"
+                className="block rounded-full bg-mist px-4 py-3 text-center text-base font-semibold uppercase tracking-wide text-forest-darkest transition-colors hover:bg-mint"
+              >
+                Start Planning
+              </Link>
+            </li>
           </ul>
         </div>
       )}
