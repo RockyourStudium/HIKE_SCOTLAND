@@ -32,6 +32,45 @@ const stats = [
   { value: "0", label: "Booking headaches" },
 ];
 
+const benefits = [
+  {
+    icon: "🏔️",
+    title: "Breathtaking landscapes",
+    body: "From the windswept peaks of Glencoe to the lush trails of Glen Affric, experience nature's grandeur one step at a time.",
+  },
+  {
+    icon: "🏰",
+    title: "Walking through history",
+    body: "Follow ancient footpaths past castles, cairns and clan lands — from Culloden to the ruins of Urquhart Castle.",
+  },
+  {
+    icon: "🦌",
+    title: "Wild, untouched beauty",
+    body: "Discover remote glens, hidden waterfalls and wildlife you'll never meet from a car window. Scotland, raw and real.",
+  },
+];
+
+const levels = [
+  {
+    name: "Easy",
+    accent: "bg-mint",
+    body: "Relaxed walks on well-maintained trails, ideal for anyone who wants to take it slow.",
+    examples: "Loch Lomond shoreline, Perthshire forest trails",
+  },
+  {
+    name: "Moderate",
+    accent: "bg-mist",
+    body: "A steady climb and varied terrain for walkers who want a little more underfoot.",
+    examples: "Glen Affric trails, ridge walks with moderate ascent",
+  },
+  {
+    name: "Challenging",
+    accent: "bg-forest-highland",
+    body: "Long hikes, steep ascents and raw nature for experienced, well-prepared hikers.",
+    examples: "Ben Nevis ascent, the ridges of Torridon",
+  },
+];
+
 export default function HomePage() {
   const featuredRoutes = routes.slice(0, 3);
   const featuredTours = tours.slice(0, 3);
@@ -96,8 +135,34 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Story / intro */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-mist">
+            Why hike Scotland
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold text-forest-darkest sm:text-4xl">
+            Where nature speaks in silence
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-neutralgray">
+            Imagine standing on a windswept ridge, the air crisp and clear, as
+            endless green hills roll out before you under a sky painted in soft
+            greys and gold. This is Scotland — where beauty waits around every bend.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-neutralgray">
+            Scotland isn&apos;t just a destination, it&apos;s a feeling that stays
+            with you. From the haunting beauty of Glencoe to the rugged trails of
+            the Isle of Skye, the Highlands reward every kind of walker — whether
+            you&apos;re a seasoned trekker or lacing up for the very first time.
+          </p>
+          <p className="mt-6 font-display text-xl font-semibold text-forest-highland">
+            You walk, we plan — together we discover the soul of the Highlands.
+          </p>
+        </div>
+      </section>
+
       {/* How it works */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-20">
         <SectionHeading
           eyebrow="How it works"
           title="Three steps to the trail"
@@ -169,21 +234,82 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Why Scotland — benefits */}
+      <section className="bg-white/60">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <SectionHeading
+            eyebrow="The draw"
+            title="What makes Scotland a hiker's dream?"
+            description="Looking for adventure or quiet moments in nature? Scotland's trails offer both — with breathtaking views every step of the way."
+            align="center"
+          />
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {benefits.map((b) => (
+              <div key={b.title} className="rounded-2xl bg-white p-6 shadow-card">
+                <div aria-hidden className="text-3xl">{b.icon}</div>
+                <h3 className="mt-3 font-display text-xl font-bold text-forest-darkest">
+                  {b.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-neutralgray">{b.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Choose your challenge */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <SectionHeading
+          eyebrow="For every pace"
+          title="Choose your challenge"
+          description="No matter your experience or fitness, there's a perfect walk for you. You choose how far — and how wild — you want to go."
+          align="center"
+        />
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {levels.map((level) => (
+            <div
+              key={level.name}
+              className="overflow-hidden rounded-2xl bg-white shadow-card"
+            >
+              <div className={`h-2 ${level.accent}`} />
+              <div className="p-6">
+                <h3 className="font-display text-xl font-bold text-forest-darkest">
+                  {level.name}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-neutralgray">{level.body}</p>
+                <p className="mt-4 text-sm text-forest-dark">
+                  <span className="font-semibold">Try:</span> {level.examples}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Link
+            href="/routes"
+            className="inline-flex items-center justify-center rounded-full bg-forest-highland px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-dark"
+          >
+            Browse all routes
+          </Link>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl bg-forest-gradient px-6 py-14 text-center text-fog sm:px-12">
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            Not sure where to start?
+            The Highlands are calling
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-fog/85">
-            Our interactive planner asks a handful of questions and matches you
-            with routes, tours and stays in minutes.
+            Lace up your boots and pack your sense of adventure — let us handle
+            the planning while you focus on the wonder. Answer a few questions and
+            we&apos;ll match you with routes, tours and stays in minutes.
           </p>
           <Link
             href="/plan"
             className="mt-8 inline-flex items-center justify-center rounded-full bg-mist px-8 py-3.5 text-base font-semibold text-forest-darkest transition-colors hover:bg-mint"
           >
-            Find my adventure
+            Book your journey
           </Link>
         </div>
       </section>
