@@ -105,6 +105,15 @@ export const USED_IMAGES: UsedImage[] = [
   { file: "/cards/glencoe-photography.jpg", label: "Tour: Glencoe Photography Trek", original: "excursion_02.jpg" },
   { file: "/cards/highlands-grand-tour.jpg", label: "Tour: Highlands Grand Tour", original: "teaser_2.jpg" },
   { file: "/cards/borders-gentle-rambles.jpg", label: "Tour: Borders Gentle Rambles", original: "borders_4.jpg" },
+
+  // Landing-page gallery (bento)
+  { file: "/gallery/island-studded-loch.jpg", label: "Gallery: Island-studded loch", original: "excursion_05.jpg" },
+  { file: "/gallery/highland-loch.jpg", label: "Gallery: Highland loch under snow", original: "argyll_hero.jpg" },
+  { file: "/gallery/hebridean-shore.jpg", label: "Gallery: Hebridean shore", original: "excursion_10.jpg" },
+  { file: "/gallery/argyll-coast.jpg", label: "Gallery: Argyll coast at dusk", original: "argyll_5.jpg" },
+  { file: "/gallery/hidden-glen.jpg", label: "Gallery: A hidden glen", original: "excursion_04.jpg" },
+  { file: "/gallery/heather-in-bloom.jpg", label: "Gallery: Heather in bloom", original: "teaser_3.jpg" },
+  { file: "/gallery/sea-cliffs.jpg", label: "Gallery: Wild sea cliffs", original: "excursion_09.jpg" },
 ];
 
 export interface ResolvedCredit extends UsedImage {

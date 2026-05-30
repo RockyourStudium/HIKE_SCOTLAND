@@ -50,6 +50,17 @@ const benefits = [
   },
 ];
 
+// Bento mosaic — span classes tile cleanly on both 2-col and 4-col grids.
+const galleryTiles = [
+  { src: "/gallery/island-studded-loch.jpg", caption: "Island-studded loch", span: "col-span-2 row-span-2" },
+  { src: "/gallery/highland-loch.jpg", caption: "Highland loch under snow", span: "col-span-2" },
+  { src: "/gallery/hebridean-shore.jpg", caption: "Hebridean shore", span: "" },
+  { src: "/gallery/argyll-coast.jpg", caption: "Argyll coast at dusk", span: "" },
+  { src: "/gallery/hidden-glen.jpg", caption: "A hidden glen", span: "col-span-2" },
+  { src: "/gallery/heather-in-bloom.jpg", caption: "Heather in bloom", span: "" },
+  { src: "/gallery/sea-cliffs.jpg", caption: "Wild sea cliffs", span: "" },
+];
+
 const levels = [
   {
     name: "Easy",
@@ -294,8 +305,40 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Field notes — bento gallery */}
+      <section className="bg-white/60">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <SectionHeading
+            eyebrow="Field notes"
+            title="Scenes from the trail"
+            description="A glimpse of the landscapes waiting for you — from island-studded lochs to wild sea cliffs."
+            align="center"
+          />
+          <div className="mt-12 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:gap-4 lg:grid-cols-4">
+            {galleryTiles.map((tile) => (
+              <figure
+                key={tile.src}
+                className={`group relative overflow-hidden rounded-2xl shadow-card ${tile.span}`}
+              >
+                <Image
+                  src={tile.src}
+                  alt={tile.caption}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-darkest/80 via-transparent to-transparent" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-4 font-display text-sm font-semibold text-fog drop-shadow sm:text-base">
+                  {tile.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl bg-forest-gradient px-6 py-14 text-center text-fog sm:px-12">
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
             The Highlands are calling
