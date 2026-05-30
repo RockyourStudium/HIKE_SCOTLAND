@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import SectionHeading from "@/components/SectionHeading";
+import Reveal from "@/components/Reveal";
 import RouteCard from "@/components/RouteCard";
 import TourCard from "@/components/TourCard";
 import { routes } from "@/data/routes";
@@ -148,7 +149,7 @@ export default function HomePage() {
 
       {/* Story / intro */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto max-w-3xl text-center">
+        <Reveal className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wider text-mist">
             Why hike Scotland
           </p>
@@ -169,7 +170,7 @@ export default function HomePage() {
           <p className="mt-6 font-display text-xl font-semibold text-forest-highland">
             You walk, we plan — together we discover the soul of the Highlands.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* How it works */}
@@ -180,7 +181,7 @@ export default function HomePage() {
           description="No spreadsheets, no twenty browser tabs. Just a clear path from idea to adventure."
           align="center"
         />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <Reveal className="mt-12 grid gap-6 md:grid-cols-3">
           {steps.map((step, i) => (
             <div
               key={step.title}
@@ -196,7 +197,7 @@ export default function HomePage() {
               <p className="mt-2 text-sm leading-relaxed text-neutralgray">{step.body}</p>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* Featured routes */}
@@ -215,11 +216,11 @@ export default function HomePage() {
               View all routes
             </Link>
           </div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredRoutes.map((route) => (
               <RouteCard key={route.id} route={route} />
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -238,11 +239,11 @@ export default function HomePage() {
             View all tours
           </Link>
         </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featuredTours.map((tour) => (
             <TourCard key={tour.id} tour={tour} />
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* Why Scotland — benefits */}
@@ -254,7 +255,7 @@ export default function HomePage() {
             description="Looking for adventure or quiet moments in nature? Scotland's trails offer both — with breathtaking views every step of the way."
             align="center"
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <Reveal className="mt-12 grid gap-6 md:grid-cols-3">
             {benefits.map((b) => (
               <div key={b.title} className="rounded-2xl bg-white p-6 shadow-card">
                 <div aria-hidden className="text-3xl">{b.icon}</div>
@@ -264,7 +265,7 @@ export default function HomePage() {
                 <p className="mt-2 text-sm leading-relaxed text-neutralgray">{b.body}</p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -276,7 +277,7 @@ export default function HomePage() {
           description="No matter your experience or fitness, there's a perfect walk for you. You choose how far — and how wild — you want to go."
           align="center"
         />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <Reveal className="mt-12 grid gap-6 md:grid-cols-3">
           {levels.map((level) => (
             <div
               key={level.name}
@@ -294,7 +295,7 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-        </div>
+        </Reveal>
         <div className="mt-10 text-center">
           <Link
             href="/routes"
@@ -314,7 +315,7 @@ export default function HomePage() {
             description="A glimpse of the landscapes waiting for you — from island-studded lochs to wild sea cliffs."
             align="center"
           />
-          <div className="mt-12 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:gap-4 lg:grid-cols-4">
+          <Reveal className="mt-12 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:gap-4 lg:grid-cols-4">
             {galleryTiles.map((tile) => (
               <figure
                 key={tile.src}
@@ -333,7 +334,7 @@ export default function HomePage() {
                 </figcaption>
               </figure>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
