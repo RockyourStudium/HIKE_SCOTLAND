@@ -268,14 +268,17 @@ export default function PlanPage() {
 
         {/* Nav */}
         <div className="mt-6 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={back}
-            disabled={stepIndex === 0}
-            className="rounded-full px-5 py-2.5 text-sm font-semibold text-forest-dark transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            ← Back
-          </button>
+          {stepIndex === 0 ? (
+            <span aria-hidden />
+          ) : (
+            <button
+              type="button"
+              onClick={back}
+              className="rounded-full px-5 py-2.5 text-sm font-semibold text-forest-dark transition-colors hover:bg-white"
+            >
+              ← Back
+            </button>
+          )}
           <button
             type="button"
             onClick={next}
