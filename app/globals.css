@@ -37,6 +37,112 @@ body {
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Animated primary CTA — rotating gradient border + shimmering label.
+ * Adapted from the SheCodes footer effect into our forest palette.
+ * Structure: .cta-animated (rotating conic border)
+ *            > .cta-animated-inner (dark pill)
+ *              > .cta-shimmer (gradient text sweep)
+ * ------------------------------------------------------------------ */
+
+/* Registering the custom property lets the conic-gradient angle animate. */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.cta-animated {
+  position: relative;
+  display: inline-flex;
+  padding: 2px; /* border thickness */
+  border-radius: 9999px;
+  background: conic-gradient(
+    from var(--border-angle),
+    #2d6a4f,
+    #52b788,
+    #95d5b2,
+    #d8f3dc,
+    #95d5b2,
+    #52b788,
+    #2d6a4f
+  );
+  animation: border-rotate 4s linear infinite;
+  isolation: isolate;
+  cursor: pointer;
+}
+.cta-animated.cta-block {
+  display: flex;
+  width: 100%;
+}
+
+.cta-animated-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  border-radius: 9999px;
+  background: #081c15;
+  padding: 0.75rem 1.75rem;
+  transition: background-color 0.3s ease;
+}
+.cta-animated:hover .cta-animated-inner {
+  background: #1b4332;
+}
+/* Compact variant (e.g. navbar). */
+.cta-animated.cta-sm .cta-animated-inner {
+  padding: 0.45rem 1.25rem;
+}
+
+.cta-shimmer {
+  background: linear-gradient(
+    90deg,
+    #95d5b2 0%,
+    #d8f3dc 25%,
+    #ffffff 50%,
+    #d8f3dc 75%,
+    #95d5b2 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: cta-shimmer 3s linear infinite;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Disabled state (e.g. the quiz "Next" before an answer is picked): no
+   animation, muted, same footprint as the animated button. */
+.cta-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: calc(0.75rem + 2px) calc(1.75rem + 2px);
+  background: rgba(189, 189, 189, 0.35);
+  color: #757575;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+.cta-disabled.cta-block {
+  width: 100%;
+}
+
+@keyframes border-rotate {
+  to {
+    --border-angle: 360deg;
+  }
+}
+@keyframes cta-shimmer {
+  to {
+    background-position: -200% center;
+  }
+}
+
 /* Utility: skip link revealed on focus. */
 .skip-link {
   position: absolute;

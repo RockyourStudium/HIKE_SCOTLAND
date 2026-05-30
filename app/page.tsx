@@ -9,6 +9,7 @@ import {
   Bird,
   Mountain,
 } from "lucide-react";
+import AnimatedCTA from "@/components/AnimatedCTA";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import RouteCard from "@/components/RouteCard";
@@ -126,12 +127,7 @@ export default function HomePage() {
               planner that builds an itinerary around you.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/plan"
-                className="inline-flex items-center justify-center rounded-full bg-mist px-7 py-3.5 text-base font-semibold text-forest-darkest transition-colors hover:bg-mint"
-              >
-                Start the trip planner
-              </Link>
+              <AnimatedCTA href="/plan">Start the trip planner</AnimatedCTA>
               <Link
                 href="/routes"
                 className="inline-flex items-center justify-center rounded-full border border-fog/30 px-7 py-3.5 text-base font-semibold text-fog transition-colors hover:bg-white/10"
@@ -317,12 +313,7 @@ export default function HomePage() {
           ))}
         </Reveal>
         <div className="mt-10 text-center">
-          <Link
-            href="/routes"
-            className="inline-flex items-center justify-center rounded-full bg-forest-highland px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-dark"
-          >
-            Browse all routes
-          </Link>
+          <AnimatedCTA href="/routes">Browse all routes</AnimatedCTA>
         </div>
       </section>
 
@@ -369,12 +360,9 @@ export default function HomePage() {
             the planning while you focus on the wonder. Answer a few questions and
             we&apos;ll match you with routes, tours and stays in minutes.
           </p>
-          <Link
-            href="/plan"
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-mist px-8 py-3.5 text-base font-semibold text-forest-darkest transition-colors hover:bg-mint"
-          >
+          <AnimatedCTA href="/plan" className="mt-8">
             Book your journey
-          </Link>
+          </AnimatedCTA>
         </div>
       </section>
     </>

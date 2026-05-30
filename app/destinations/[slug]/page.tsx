@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CalendarDays, TrainFront } from "lucide-react";
+import AnimatedCTA from "@/components/AnimatedCTA";
 import {
   destinations,
   getDestinationBySlug,
@@ -97,12 +98,9 @@ export default function DestinationPage({
                 </p>
               ))}
             </div>
-            <Link
-              href="#featured"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-forest-highland px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-dark"
-            >
+            <AnimatedCTA href="#featured" className="mt-7 text-sm">
               See the routes ↓
-            </Link>
+            </AnimatedCTA>
           </div>
 
           {/* Highlights */}
@@ -258,12 +256,7 @@ export default function DestinationPage({
             exploring the rest of Scotland.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/plan"
-              className="inline-flex items-center justify-center rounded-full bg-mist px-7 py-3.5 text-base font-semibold text-forest-darkest transition-colors hover:bg-mint"
-            >
-              Plan a trip
-            </Link>
+            <AnimatedCTA href="/plan">Plan a trip</AnimatedCTA>
             <Link
               href={`/destinations/${next.slug}`}
               className="inline-flex items-center justify-center rounded-full border border-fog/30 px-7 py-3.5 text-base font-semibold text-fog transition-colors hover:bg-white/10"

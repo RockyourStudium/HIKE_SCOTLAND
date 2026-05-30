@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Mountain } from "lucide-react";
+import AnimatedCTA from "@/components/AnimatedCTA";
 import { destinations } from "@/data/destinations";
 
 const links = [
@@ -134,12 +135,9 @@ export default function Navbar() {
             );
           })}
           <li>
-            <Link
-              href="/plan"
-              className="ml-2 whitespace-nowrap rounded-full bg-mist px-5 py-2 text-sm font-semibold uppercase tracking-wide text-forest-darkest transition-colors hover:bg-mint"
-            >
+            <AnimatedCTA href="/plan" size="sm" className="ml-2 text-sm uppercase tracking-wide">
               Start Planning
-            </Link>
+            </AnimatedCTA>
           </li>
         </ul>
 
@@ -237,12 +235,9 @@ export default function Navbar() {
               );
             })}
             <li className="pt-2">
-              <Link
-                href="/plan"
-                className="block rounded-full bg-mist px-4 py-3 text-center text-base font-semibold uppercase tracking-wide text-forest-darkest transition-colors hover:bg-mint"
-              >
+              <AnimatedCTA href="/plan" block className="text-base uppercase tracking-wide">
                 Start Planning
-              </Link>
+              </AnimatedCTA>
             </li>
           </ul>
         </div>

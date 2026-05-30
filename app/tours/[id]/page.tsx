@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
 import { tours, getTourById } from "@/data/tours";
+import AnimatedCTA from "@/components/AnimatedCTA";
 import { DifficultyBadge } from "@/components/Badge";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
@@ -158,12 +159,9 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
                 <Fact label="Difficulty" value={tour.difficulty} />
                 <Fact label="Region" value={tour.region} />
               </dl>
-              <button
-                type="button"
-                className="mt-5 block w-full rounded-full bg-forest-highland px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-forest-dark"
-              >
+              <AnimatedCTA type="button" block className="mt-5 text-sm">
                 Enquire &amp; book this tour
-              </button>
+              </AnimatedCTA>
               <Link
                 href="/plan"
                 className="mt-2 block rounded-full border border-forest-highland px-5 py-3 text-center text-sm font-semibold text-forest-highland transition-colors hover:bg-forest-highland hover:text-white"

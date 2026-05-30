@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import AnimatedCTA from "@/components/AnimatedCTA";
 import RouteCard from "@/components/RouteCard";
 import TourCard from "@/components/TourCard";
 import StayCard from "@/components/StayCard";
@@ -279,14 +280,9 @@ export default function PlanPage() {
               ← Back
             </button>
           )}
-          <button
-            type="button"
-            onClick={next}
-            disabled={!answered}
-            className="rounded-full bg-forest-highland px-7 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-forest-dark disabled:cursor-not-allowed disabled:opacity-40"
-          >
+          <AnimatedCTA type="button" onClick={next} disabled={!answered}>
             {isLast ? "See my matches" : "Next →"}
-          </button>
+          </AnimatedCTA>
         </div>
       </div>
     </>
@@ -320,13 +316,9 @@ function Results({
             {answers.region !== "Anywhere" ? ` around ${answers.region}` : ""}
             {answers.dog === "Yes" ? ", travelling with a dog" : ""}.
           </p>
-          <button
-            type="button"
-            onClick={onRestart}
-            className="mt-6 inline-flex rounded-full bg-mist px-6 py-2.5 text-sm font-semibold text-forest-darkest transition-colors hover:bg-mint"
-          >
+          <AnimatedCTA type="button" onClick={onRestart} className="mt-6">
             ↺ Start over
-          </button>
+          </AnimatedCTA>
         </div>
       </header>
 
@@ -393,12 +385,7 @@ function Results({
             answers to explore other options.
           </p>
           <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              href="/routes"
-              className="rounded-full bg-forest-highland px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-forest-dark"
-            >
-              Browse all routes
-            </Link>
+            <AnimatedCTA href="/routes">Browse all routes</AnimatedCTA>
             <button
               type="button"
               onClick={onRestart}
