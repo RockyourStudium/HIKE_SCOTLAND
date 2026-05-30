@@ -1,6 +1,6 @@
 import type { Route } from "./types";
 
-export const routes: Route[] = [
+const baseRoutes: Route[] = [
   {
     id: "old-man-of-storr",
     name: "The Old Man of Storr",
@@ -172,5 +172,11 @@ export const routes: Route[] = [
     gradient: "from-forest-highland to-mist",
   },
 ];
+
+// Each route has a matching card photo at /public/cards/<id>.jpg.
+export const routes: Route[] = baseRoutes.map((r) => ({
+  ...r,
+  image: `/cards/${r.id}.jpg`,
+}));
 
 export const getRouteById = (id: string) => routes.find((r) => r.id === id);

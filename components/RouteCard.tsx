@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Route } from "@/data/types";
 import { DifficultyBadge, Tag } from "./Badge";
 
@@ -13,13 +14,25 @@ function Stat({ label, value }: { label: string; value: string }) {
 export default function RouteCard({ route }: { route: Route }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
-      <div
-        className={`relative flex h-40 items-end bg-gradient-to-br p-4 ${route.gradient}`}
-      >
-        <span className="absolute right-3 top-3">
+      <div className="relative flex h-56 items-end overflow-hidden p-4">
+        {route.image ? (
+          <Image
+            src={route.image}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className={`absolute inset-0 bg-gradient-to-br ${route.gradient}`} />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-forest-darkest/85 via-forest-darkest/20 to-forest-darkest/10" />
+        <span className="absolute right-3 top-3 z-10">
           <DifficultyBadge level={route.difficulty} />
         </span>
-        <p className="text-sm font-medium text-fog/90">{route.region}</p>
+        <p className="relative z-10 text-sm font-semibold text-fog drop-shadow">
+          {route.region}
+        </p>
       </div>
 
       <div className="flex flex-1 flex-col p-5">

@@ -26,8 +26,10 @@ export interface Route {
   dogFriendly: boolean;
   summary: string;
   highlights: string[];
-  /** Tailwind gradient classes used for the card hero. */
+  /** Tailwind gradient classes used as the card header fallback. */
   gradient: string;
+  /** Optional photo for the card header (path under /public). */
+  image?: string;
 }
 
 export interface Tour {
@@ -42,6 +44,8 @@ export interface Tour {
   summary: string;
   includes: string[];
   gradient: string;
+  /** Optional photo for the card header (path under /public). */
+  image?: string;
 }
 
 export interface Stay {

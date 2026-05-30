@@ -85,6 +85,26 @@ export const USED_IMAGES: UsedImage[] = [
   { file: "/heroes/glencoe.jpg", label: "Glencoe — hero", original: "excursion_08.jpg" },
   { file: "/heroes/loch-lomond-trossachs.jpg", label: "Loch Lomond & The Trossachs — hero", original: "highlands_6.jpg" },
   { file: "/heroes/scottish-borders.jpg", label: "The Scottish Borders — hero", original: "borders_hero.jpg" },
+
+  // Route cards
+  { file: "/cards/old-man-of-storr.jpg", label: "Route: The Old Man of Storr", original: "highlands_2.jpg" },
+  { file: "/cards/ben-nevis-mountain-track.jpg", label: "Route: Ben Nevis — Mountain Track", original: "highlands_3.jpg" },
+  { file: "/cards/loch-an-eilein.jpg", label: "Route: Loch an Eilein Circuit", original: "highlands_4.jpg" },
+  { file: "/cards/glencoe-lost-valley.jpg", label: "Route: The Lost Valley (Coire Gabhail)", original: "highlands_intro.jpg" },
+  { file: "/cards/west-highland-way.jpg", label: "Route: The West Highland Way", original: "excursion_07.jpg" },
+  { file: "/cards/quiraing-loop.jpg", label: "Route: The Quiraing Loop", original: "highlands_5.jpg" },
+  { file: "/cards/cairngorm-plateau.jpg", label: "Route: Cairn Gorm Plateau", original: "excursion_06.jpg" },
+  { file: "/cards/falls-of-bruar.jpg", label: "Route: Falls of Bruar", original: "excursion_03.jpg" },
+  { file: "/cards/ben-lomond.jpg", label: "Route: Ben Lomond", original: "argyll_4.jpg" },
+  { file: "/cards/st-cuthberts-way.jpg", label: "Route: St Cuthbert's Way", original: "borders_3.jpg" },
+
+  // Tour cards
+  { file: "/cards/skye-explorer.jpg", label: "Tour: Isle of Skye Explorer", original: "highlands_1.jpg" },
+  { file: "/cards/west-highland-way-supported.jpg", label: "Tour: West Highland Way — Supported", original: "teaser_1.jpg" },
+  { file: "/cards/cairngorms-wild-weekend.jpg", label: "Tour: Cairngorms Wild Weekend", original: "excursion_11.jpg" },
+  { file: "/cards/glencoe-photography.jpg", label: "Tour: Glencoe Photography Trek", original: "excursion_02.jpg" },
+  { file: "/cards/highlands-grand-tour.jpg", label: "Tour: Highlands Grand Tour", original: "teaser_2.jpg" },
+  { file: "/cards/borders-gentle-rambles.jpg", label: "Tour: Borders Gentle Rambles", original: "borders_4.jpg" },
 ];
 
 export interface ResolvedCredit extends UsedImage {

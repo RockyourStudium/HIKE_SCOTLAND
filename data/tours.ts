@@ -1,6 +1,6 @@
 import type { Tour } from "./types";
 
-export const tours: Tour[] = [
+const baseTours: Tour[] = [
   {
     id: "skye-explorer",
     name: "Isle of Skye Explorer",
@@ -86,5 +86,11 @@ export const tours: Tour[] = [
     gradient: "from-forest-highland to-mist",
   },
 ];
+
+// Each tour has a matching card photo at /public/cards/<id>.jpg.
+export const tours: Tour[] = baseTours.map((t) => ({
+  ...t,
+  image: `/cards/${t.id}.jpg`,
+}));
 
 export const getTourById = (id: string) => tours.find((t) => t.id === id);
