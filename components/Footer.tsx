@@ -59,7 +59,13 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-forest-highland/30 pt-6 text-sm text-fog/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Hike Scotland. Walk wild, tread lightly.</p>
-          <p>Made for outdoor enthusiasts 🌲</p>
+          <div className="flex items-center gap-4">
+            <Link href="/credits" className="transition-colors hover:text-fog">
+              Image Credits
+            </Link>
+            <span aria-hidden>·</span>
+            <p>Made for outdoor enthusiasts 🌲</p>
+          </div>
         </div>
       </div>
     </footer>
