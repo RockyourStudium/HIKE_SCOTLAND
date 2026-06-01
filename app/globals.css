@@ -163,6 +163,30 @@ body {
   }
 }
 
+/* Slow Ken-Burns zoom for cinematic hero images. Collapsed to a static frame
+   for users who prefer reduced motion (handled by the media query above). */
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+.animate-hero-zoom {
+  animation: hero-zoom 22s ease-out alternate infinite;
+  will-change: transform;
+}
+
+/* Hide scrollbars on horizontal carousels (scroll still works via swipe/buttons). */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Utility: skip link revealed on focus. */
 .skip-link {
   position: absolute;

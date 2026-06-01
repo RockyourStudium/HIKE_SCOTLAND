@@ -72,7 +72,7 @@ export default function Navbar() {
   const destinationsActive = pathname.startsWith("/destinations");
 
   return (
-    <header className="sticky top-0 z-50 bg-forest-darkest/95 backdrop-blur supports-[backdrop-filter]:bg-forest-darkest/80 text-fog">
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-forest-darkest text-fog">
       <nav
         aria-label="Primary"
         className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"

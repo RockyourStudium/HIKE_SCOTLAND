@@ -13,11 +13,20 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function RouteCard({ route }: { route: Route }) {
+export default function RouteCard({
+  route,
+  tone = "light",
+}: {
+  route: Route;
+  /** "light" = white (default), "tinted" = pale fog — for dark backgrounds. */
+  tone?: "light" | "tinted";
+}) {
   return (
     <Link
       href={`/routes/${route.id}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover ${
+        tone === "tinted" ? "bg-fog" : "bg-white"
+      }`}
     >
       <div className="relative flex h-56 items-end overflow-hidden p-4">
         {route.image ? (
