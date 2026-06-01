@@ -1,4 +1,4 @@
-import type { Region } from "./types";
+import type { Coords, Region } from "./types";
 
 export interface FieldNote {
   caption: string;
@@ -13,6 +13,8 @@ export interface Destination {
   name: string;
   /** Display order, e.g. "01". */
   number: string;
+  /** Representative point, shown in the hero eyebrow. */
+  coords: Coords;
   /** Short hero tagline. */
   tagline: string;
   heroGradient: string;
@@ -24,7 +26,7 @@ export interface Destination {
   fieldNotes: FieldNote[];
 }
 
-export const destinations: Destination[] = [
+const baseDestinations: Omit<Destination, "coords">[] = [
   {
     slug: "highlands",
     region: "Highlands",
@@ -194,6 +196,21 @@ export const destinations: Destination[] = [
     ],
   },
 ];
+
+// Representative map point per region (shown in the hero eyebrow).
+const destinationCoords: Record<string, Coords> = {
+  highlands: { lat: 56.8198, lng: -5.1052 }, // Fort William / Ben Nevis
+  cairngorms: { lat: 57.1175, lng: -3.6783 }, // Cairn Gorm
+  "isle-of-skye": { lat: 57.4718, lng: -6.2018 }, // Trotternish / Portree
+  glencoe: { lat: 56.6685, lng: -4.9667 },
+  "loch-lomond-trossachs": { lat: 56.1959, lng: -4.6436 }, // Loch Lomond
+  "scottish-borders": { lat: 55.599, lng: -2.7268 }, // Melrose
+};
+
+export const destinations: Destination[] = baseDestinations.map((d) => ({
+  ...d,
+  coords: destinationCoords[d.slug] ?? { lat: 56.8, lng: -4.5 },
+}));
 
 export const getDestinationBySlug = (slug: string) =>
   destinations.find((d) => d.slug === slug);
