@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import StayCard from "@/components/StayCard";
+import AddToTripButton from "@/components/AddToTripButton";
 import { stays } from "@/data/stays";
 
 const types = ["All", ...Array.from(new Set(stays.map((s) => s.type)))];
@@ -74,7 +75,11 @@ export default function StaysPage() {
         {filtered.length > 0 ? (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {filtered.map((stay) => (
-              <StayCard key={stay.id} stay={stay} />
+              <StayCard
+                key={stay.id}
+                stay={stay}
+                action={<AddToTripButton kind="stay" id={stay.id} compact />}
+              />
             ))}
           </div>
         ) : (

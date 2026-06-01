@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
 import { tours, getTourById } from "@/data/tours";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import AddToTripButton from "@/components/AddToTripButton";
 import { DifficultyBadge } from "@/components/Badge";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
@@ -162,6 +163,9 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
               <AnimatedCTA type="button" block className="mt-5 text-sm">
                 Enquire &amp; book this tour
               </AnimatedCTA>
+              <div className="mt-2">
+                <AddToTripButton kind="tour" id={tour.id} block />
+              </div>
               <Link
                 href="/plan"
                 className="mt-2 block rounded-full border border-forest-highland px-5 py-3 text-center text-sm font-semibold text-forest-highland transition-colors hover:bg-forest-highland hover:text-white"

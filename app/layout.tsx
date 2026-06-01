@@ -3,6 +3,7 @@ import { Josefin_Sans, Lato } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { TripProvider } from "@/lib/trip";
 
 // next/font downloads these at build time and self-hosts the .woff2 files,
 // so the browser never makes a request to Google — no user data leaves the site.
@@ -62,11 +63,13 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
-        <Navbar />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <TripProvider>
+          <Navbar />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </TripProvider>
       </body>
     </html>
   );

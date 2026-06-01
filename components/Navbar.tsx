@@ -3,9 +3,34 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Mountain } from "lucide-react";
+import { Mountain, Backpack } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import { destinations } from "@/data/destinations";
+import { useTrip } from "@/lib/trip";
+
+function TripLink({ block = false }: { block?: boolean }) {
+  const { count, hydrated } = useTrip();
+  const showCount = hydrated && count > 0;
+  return (
+    <Link
+      href="/my-trip"
+      className={`relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium uppercase tracking-wide text-fog/90 transition-colors hover:bg-forest-highland/40 ${
+        block ? "w-full" : ""
+      }`}
+    >
+      <Backpack aria-hidden className="h-4 w-4" strokeWidth={2} />
+      My Trip
+      {showCount && (
+        <span
+          aria-label={`${count} items in your trip`}
+          className="ml-0.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-mint px-1.5 text-xs font-bold text-forest-darkest"
+        >
+          {count}
+        </span>
+      )}
+    </Link>
+  );
+}
 
 const links = [
   { href: "/routes", label: "ROUTES" },
@@ -135,6 +160,9 @@ export default function Navbar() {
             );
           })}
           <li>
+            <TripLink />
+          </li>
+          <li>
             <AnimatedCTA href="/plan" size="sm" className="ml-2 text-sm uppercase tracking-wide">
               Start Planning
             </AnimatedCTA>
@@ -234,6 +262,9 @@ export default function Navbar() {
                 </li>
               );
             })}
+            <li>
+              <TripLink block />
+            </li>
             <li className="pt-2">
               <AnimatedCTA href="/plan" block className="text-base uppercase tracking-wide">
                 Start Planning

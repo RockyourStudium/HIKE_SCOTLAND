@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Backpack, Dumbbell, PawPrint } from "lucide-react";
 import { routes, getRouteById } from "@/data/routes";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import AddToTripButton from "@/components/AddToTripButton";
 import { DifficultyBadge } from "@/components/Badge";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
@@ -166,9 +167,12 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
                 <Fact label="Region" value={route.region} />
                 <Fact label="Dog friendly" value={route.dogFriendly ? "Yes" : "No"} />
               </dl>
-              <AnimatedCTA href="/plan" block className="mt-5 text-sm">
+              <AnimatedCTA href={`/plan?route=${route.id}`} block className="mt-5 text-sm">
                 Plan a trip around this route
               </AnimatedCTA>
+              <div className="mt-2">
+                <AddToTripButton kind="route" id={route.id} block />
+              </div>
               {dest && (
                 <Link
                   href={`/destinations/${dest.slug}`}

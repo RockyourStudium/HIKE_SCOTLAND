@@ -1,8 +1,16 @@
+import type { ReactNode } from "react";
 import { Star } from "lucide-react";
 import type { Stay } from "@/data/types";
 import { Tag } from "./Badge";
 
-export default function StayCard({ stay }: { stay: Stay }) {
+export default function StayCard({
+  stay,
+  action,
+}: {
+  stay: Stay;
+  /** Optional control rendered in the card footer, e.g. an Add-to-trip button. */
+  action?: ReactNode;
+}) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
       <div className={`flex h-28 items-end justify-between bg-gradient-to-br p-4 ${stay.gradient}`}>
@@ -26,7 +34,7 @@ export default function StayCard({ stay }: { stay: Stay }) {
           ))}
         </div>
 
-        <div className="mt-5 border-t border-softgray/40 pt-4">
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-softgray/40 pt-4">
           <p className="text-lg font-bold text-forest-darkest">
             {stay.pricePerNight === 0 ? (
               "Free"
@@ -37,6 +45,7 @@ export default function StayCard({ stay }: { stay: Stay }) {
               </>
             )}
           </p>
+          {action}
         </div>
       </div>
     </article>
