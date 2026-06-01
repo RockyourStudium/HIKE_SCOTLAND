@@ -1,6 +1,6 @@
-import type { Stay } from "./types";
+import type { Coords, Stay } from "./types";
 
-export const stays: Stay[] = [
+const baseStays: Omit<Stay, "coords">[] = [
   {
     id: "glen-nevis-lodge",
     name: "Glen Nevis Lodge",
@@ -90,5 +90,22 @@ export const stays: Stay[] = [
     gradient: "from-forest-dark to-forest-highland",
   },
 ];
+
+// Map location for each stay.
+const stayCoords: Record<string, Coords> = {
+  "glen-nevis-lodge": { lat: 56.796, lng: -5.068 },
+  "portree-harbour-bnb": { lat: 57.4118, lng: -6.1934 },
+  "cairngorm-bunkhouse": { lat: 57.1955, lng: -3.8265 },
+  "rannoch-bothy": { lat: 56.61, lng: -4.72 },
+  "glencoe-campsite": { lat: 56.685, lng: -5.098 },
+  "trossachs-country-hotel": { lat: 56.2447, lng: -4.2155 }, // Callander
+  "borders-farmhouse": { lat: 55.58, lng: -2.6 },
+  "skye-glamping-pods": { lat: 57.3, lng: -6.2 },
+};
+
+export const stays: Stay[] = baseStays.map((s) => ({
+  ...s,
+  coords: stayCoords[s.id] ?? { lat: 56.8, lng: -4.5 },
+}));
 
 export const getStayById = (id: string) => stays.find((s) => s.id === id);

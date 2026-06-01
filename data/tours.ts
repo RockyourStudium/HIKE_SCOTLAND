@@ -1,6 +1,6 @@
-import type { Tour } from "./types";
+import type { Coords, Tour } from "./types";
 
-const baseTours: Omit<Tour, "image" | "description">[] = [
+const baseTours: Omit<Tour, "image" | "description" | "coords">[] = [
   {
     id: "skye-explorer",
     name: "Isle of Skye Explorer",
@@ -114,11 +114,22 @@ const tourDescriptions: Record<string, string[]> = {
   ],
 };
 
+// Map point for each tour's base / start town.
+const tourCoords: Record<string, Coords> = {
+  "skye-explorer": { lat: 57.4125, lng: -6.1956 }, // Portree
+  "west-highland-way-supported": { lat: 56.2715, lng: -4.65 }, // Loch Lomond stretch
+  "cairngorms-wild-weekend": { lat: 57.19, lng: -3.825 }, // Aviemore
+  "glencoe-photography": { lat: 56.676, lng: -5.101 }, // Glencoe village
+  "highlands-grand-tour": { lat: 56.8198, lng: -5.1052 }, // Fort William
+  "borders-gentle-rambles": { lat: 55.599, lng: -2.7268 }, // Melrose
+};
+
 // Each tour has a matching card photo at /public/cards/<id>.jpg.
 export const tours: Tour[] = baseTours.map((t) => ({
   ...t,
   image: `/cards/${t.id}.jpg`,
   description: tourDescriptions[t.id] ?? [t.summary],
+  coords: tourCoords[t.id] ?? { lat: 56.8, lng: -4.5 },
 }));
 
 export const getTourById = (id: string) => tours.find((t) => t.id === id);

@@ -10,6 +10,12 @@ export type Region =
 
 export type Terrain = "Coastal" | "Mountain" | "Forest" | "Loch" | "Glen" | "Moorland";
 
+/** WGS84 latitude / longitude for plotting an item on the map. */
+export interface Coords {
+  lat: number;
+  lng: number;
+}
+
 export interface Route {
   id: string;
   name: string;
@@ -30,6 +36,8 @@ export interface Route {
   highlights: string[];
   /** Tailwind gradient classes used as the card header fallback. */
   gradient: string;
+  /** Map location of the trailhead / representative point. */
+  coords: Coords;
   /** Optional photo for the card header (path under /public). */
   image?: string;
 }
@@ -48,6 +56,8 @@ export interface Tour {
   description: string[];
   includes: string[];
   gradient: string;
+  /** Map location of the tour's base / start. */
+  coords: Coords;
   /** Optional photo for the card header (path under /public). */
   image?: string;
 }
@@ -62,4 +72,6 @@ export interface Stay {
   amenities: string[];
   summary: string;
   gradient: string;
+  /** Map location of the accommodation. */
+  coords: Coords;
 }

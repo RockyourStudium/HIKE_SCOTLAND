@@ -1,6 +1,6 @@
-import type { Route } from "./types";
+import type { Coords, Route } from "./types";
 
-const baseRoutes: Omit<Route, "image" | "description">[] = [
+const baseRoutes: Omit<Route, "image" | "description" | "coords">[] = [
   {
     id: "old-man-of-storr",
     name: "The Old Man of Storr",
@@ -216,11 +216,26 @@ const routeDescriptions: Record<string, string[]> = {
   ],
 };
 
+// Representative map points (trailhead, or midpoint for long-distance trails).
+const routeCoords: Record<string, Coords> = {
+  "old-man-of-storr": { lat: 57.5072, lng: -6.1846 },
+  "ben-nevis-mountain-track": { lat: 56.7969, lng: -5.0036 },
+  "loch-an-eilein": { lat: 57.1486, lng: -3.823 },
+  "glencoe-lost-valley": { lat: 56.6685, lng: -4.9667 },
+  "west-highland-way": { lat: 56.2715, lng: -4.65 }, // Loch Lomond stretch (midpoint of a 154 km trail)
+  "quiraing-loop": { lat: 57.6436, lng: -6.2718 },
+  "cairngorm-plateau": { lat: 57.1175, lng: -3.6783 },
+  "falls-of-bruar": { lat: 56.7815, lng: -3.9175 },
+  "ben-lomond": { lat: 56.19, lng: -4.633 },
+  "st-cuthberts-way": { lat: 55.58, lng: -2.5 }, // Borders midpoint (Melrose → Kirk Yetholm)
+};
+
 // Each route has a matching card photo at /public/cards/<id>.jpg.
 export const routes: Route[] = baseRoutes.map((r) => ({
   ...r,
   image: `/cards/${r.id}.jpg`,
   description: routeDescriptions[r.id] ?? [r.summary],
+  coords: routeCoords[r.id] ?? { lat: 56.8, lng: -4.5 },
 }));
 
 export const getRouteById = (id: string) => routes.find((r) => r.id === id);

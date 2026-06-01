@@ -15,6 +15,7 @@ import {
   BedDouble,
 } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import MapPanel, { type MapPoint } from "@/components/MapPanel";
 import { useTrip, type TripItem, type TripItemKind } from "@/lib/trip";
 import { getRouteById } from "@/data/routes";
 import { getTourById } from "@/data/tours";
@@ -34,6 +35,7 @@ function resolve(item: TripItem) {
       walkingDays: r.days,
       nights: 0,
       cost: 0,
+      coords: r.coords,
     };
   }
   if (item.kind === "tour") {
@@ -48,6 +50,7 @@ function resolve(item: TripItem) {
       walkingDays: t.days,
       nights: 0,
       cost: t.pricePerPerson,
+      coords: t.coords,
     };
   }
   const s = getStayById(item.id);
@@ -62,6 +65,7 @@ function resolve(item: TripItem) {
     walkingDays: 0,
     nights,
     cost: s.pricePerNight * nights,
+    coords: s.coords,
   };
 }
 
@@ -79,10 +83,31 @@ const kindLabel: Record<TripItemKind, string> = {
 export default function MyTripPage() {
   const { trip, hydrated, move, remove, setNights, clear } = useTrip();
   const [sent, setSent] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
 
   const rows = useMemo(
     () => trip.items.map((item) => ({ item, data: resolve(item) })),
     [trip.items]
+  );
+
+  const points = useMemo<MapPoint[]>(
+    () =>
+      rows.flatMap(({ item, data }, i) =>
+        data
+          ? [
+              {
+                id: item.id,
+                kind: item.kind,
+                name: data.name,
+                region: data.region,
+                lat: data.coords.lat,
+                lng: data.coords.lng,
+                order: i + 1,
+              },
+            ]
+          : []
+      ),
+    [rows]
   );
 
   const totals = useMemo(() => {
@@ -154,6 +179,20 @@ export default function MyTripPage() {
           <Summary label="Est. cost" value={totals.cost > 0 ? `£${totals.cost}` : "—"} />
         </dl>
 
+        {/* Map */}
+        <div className="mt-8">
+          <MapPanel
+            points={points}
+            connect
+            highlightId={hovered}
+            onPointHover={setHovered}
+            className="h-[20rem] sm:h-[26rem]"
+          />
+          <p className="mt-2 text-center text-xs text-neutralgray">
+            Numbered pins follow your itinerary order — hover a stop to find it on the map.
+          </p>
+        </div>
+
         {/* Itinerary */}
         <h2 className="mt-10 font-display text-2xl font-bold text-forest-darkest">
           Your itinerary
@@ -169,7 +208,11 @@ export default function MyTripPage() {
             return (
               <li
                 key={`${item.kind}-${item.id}`}
-                className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card sm:p-5"
+                onMouseEnter={() => setHovered(item.id)}
+                onMouseLeave={() => setHovered(null)}
+                className={`flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card transition-shadow sm:p-5 ${
+                  hovered === item.id ? "ring-2 ring-forest-highland" : ""
+                }`}
               >
                 {/* Order controls */}
                 <div className="flex flex-col items-center gap-1">

@@ -2,8 +2,11 @@
 
 import { useMemo, useState } from "react";
 import RouteCard from "@/components/RouteCard";
+import MapPanel from "@/components/MapPanel";
 import { routes } from "@/data/routes";
 import type { Difficulty } from "@/data/types";
+import { useTrip } from "@/lib/trip";
+import { tripPoints, routePoint } from "@/lib/mapPoints";
 
 const difficulties: (Difficulty | "All")[] = [
   "All",
@@ -15,11 +18,14 @@ const difficulties: (Difficulty | "All")[] = [
 
 const regions = ["All", ...Array.from(new Set(routes.map((r) => r.region)))];
 const durations = ["All", "Day walk", "Multi-day"] as const;
+const allRoutePoints = routes.map(routePoint);
 
 export default function RoutesPage() {
   const [difficulty, setDifficulty] = useState<(typeof difficulties)[number]>("All");
   const [region, setRegion] = useState<string>("All");
   const [duration, setDuration] = useState<(typeof durations)[number]>("All");
+  const [hovered, setHovered] = useState<string | null>(null);
+  const { trip } = useTrip();
 
   const filtered = useMemo(() => {
     return routes.filter((r) => {
@@ -30,6 +36,10 @@ export default function RoutesPage() {
       return true;
     });
   }, [difficulty, region, duration]);
+
+  const bookedPoints = useMemo(() => tripPoints(trip.items), [trip.items]);
+  const hoveredRoute = hovered ? routes.find((r) => r.id === hovered) : undefined;
+  const extraPoint = hoveredRoute ? routePoint(hoveredRoute) : null;
 
   const reset = () => {
     setDifficulty("All");
@@ -90,18 +100,42 @@ export default function RoutesPage() {
           </div>
         </section>
 
-        {/* Results */}
-        {filtered.length > 0 ? (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((route) => (
-              <RouteCard key={route.id} route={route} />
-            ))}
+        {/* Results + map */}
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr,22rem]">
+          <div className="order-2 lg:order-1">
+            {filtered.length > 0 ? (
+              <div className="grid gap-6 sm:grid-cols-2">
+                {filtered.map((route) => (
+                  <div
+                    key={route.id}
+                    onMouseEnter={() => setHovered(route.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    <RouteCard route={route} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-6 text-center text-neutralgray">
+                No routes match those filters. Try widening your search.
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="mt-16 text-center text-neutralgray">
-            No routes match those filters. Try widening your search.
-          </p>
-        )}
+
+          <div className="order-1 lg:order-2 lg:sticky lg:top-24 lg:self-start">
+            <MapPanel
+              points={bookedPoints}
+              fitPoints={allRoutePoints}
+              highlightId={hovered}
+              extraPoint={extraPoint}
+              className="h-[20rem] lg:h-[32rem]"
+              emptyHint="Hover a route to see where it is — added trip stops stay pinned here."
+            />
+            <p className="mt-2 text-center text-xs text-neutralgray">
+              Pins show your trip; hover a route to place it on the map.
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

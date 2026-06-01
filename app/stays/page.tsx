@@ -3,14 +3,20 @@
 import { useMemo, useState } from "react";
 import StayCard from "@/components/StayCard";
 import AddToTripButton from "@/components/AddToTripButton";
+import MapPanel from "@/components/MapPanel";
 import { stays } from "@/data/stays";
+import { useTrip } from "@/lib/trip";
+import { tripPoints, stayPoint } from "@/lib/mapPoints";
 
 const types = ["All", ...Array.from(new Set(stays.map((s) => s.type)))];
 const regions = ["All", ...Array.from(new Set(stays.map((s) => s.region)))];
+const allStayPoints = stays.map(stayPoint);
 
 export default function StaysPage() {
   const [type, setType] = useState("All");
   const [region, setRegion] = useState("All");
+  const [hovered, setHovered] = useState<string | null>(null);
+  const { trip } = useTrip();
 
   const filtered = useMemo(() => {
     return stays.filter((s) => {
@@ -19,6 +25,10 @@ export default function StaysPage() {
       return true;
     });
   }, [type, region]);
+
+  const bookedPoints = useMemo(() => tripPoints(trip.items), [trip.items]);
+  const hoveredStay = hovered ? stays.find((s) => s.id === hovered) : undefined;
+  const extraPoint = hoveredStay ? stayPoint(hoveredStay) : null;
 
   return (
     <>
@@ -72,21 +82,44 @@ export default function StaysPage() {
           </p>
         </section>
 
-        {filtered.length > 0 ? (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {filtered.map((stay) => (
-              <StayCard
-                key={stay.id}
-                stay={stay}
-                action={<AddToTripButton kind="stay" id={stay.id} compact />}
-              />
-            ))}
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr,22rem]">
+          <div className="order-2 lg:order-1">
+            {filtered.length > 0 ? (
+              <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {filtered.map((stay) => (
+                  <div
+                    key={stay.id}
+                    onMouseEnter={() => setHovered(stay.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    <StayCard
+                      stay={stay}
+                      action={<AddToTripButton kind="stay" id={stay.id} compact />}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-6 text-center text-neutralgray">
+                No stays match those filters yet.
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="mt-16 text-center text-neutralgray">
-            No stays match those filters yet.
-          </p>
-        )}
+
+          <div className="order-1 lg:order-2 lg:sticky lg:top-24 lg:self-start">
+            <MapPanel
+              points={bookedPoints}
+              fitPoints={allStayPoints}
+              highlightId={hovered}
+              extraPoint={extraPoint}
+              className="h-[20rem] lg:h-[32rem]"
+              emptyHint="Hover a stay to see where it is — added trip stops stay pinned here."
+            />
+            <p className="mt-2 text-center text-xs text-neutralgray">
+              Pins show your trip; hover a stay to place it on the map.
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

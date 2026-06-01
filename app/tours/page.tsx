@@ -2,14 +2,20 @@
 
 import { useMemo, useState } from "react";
 import TourCard from "@/components/TourCard";
+import MapPanel from "@/components/MapPanel";
 import { tours } from "@/data/tours";
+import { useTrip } from "@/lib/trip";
+import { tripPoints, tourPoint } from "@/lib/mapPoints";
 
 const types = ["All", "Guided", "Self-guided"] as const;
 const regions = ["All", ...Array.from(new Set(tours.map((t) => t.region)))];
+const allTourPoints = tours.map(tourPoint);
 
 export default function ToursPage() {
   const [type, setType] = useState<(typeof types)[number]>("All");
   const [region, setRegion] = useState("All");
+  const [hovered, setHovered] = useState<string | null>(null);
+  const { trip } = useTrip();
 
   const filtered = useMemo(() => {
     return tours.filter((t) => {
@@ -19,6 +25,10 @@ export default function ToursPage() {
       return true;
     });
   }, [type, region]);
+
+  const bookedPoints = useMemo(() => tripPoints(trip.items), [trip.items]);
+  const hoveredTour = hovered ? tours.find((t) => t.id === hovered) : undefined;
+  const extraPoint = hoveredTour ? tourPoint(hoveredTour) : null;
 
   return (
     <>
@@ -72,17 +82,43 @@ export default function ToursPage() {
           </p>
         </section>
 
-        {filtered.length > 0 ? (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((tour) => (
-              <TourCard key={tour.id} tour={tour} />
-            ))}
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr,22rem]">
+          {/* Results */}
+          <div className="order-2 lg:order-1">
+            {filtered.length > 0 ? (
+              <div className="grid gap-6 sm:grid-cols-2">
+                {filtered.map((tour) => (
+                  <div
+                    key={tour.id}
+                    onMouseEnter={() => setHovered(tour.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    <TourCard tour={tour} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-6 text-center text-neutralgray">
+                No tours match those filters yet.
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="mt-16 text-center text-neutralgray">
-            No tours match those filters yet.
-          </p>
-        )}
+
+          {/* Map */}
+          <div className="order-1 lg:order-2 lg:sticky lg:top-24 lg:self-start">
+            <MapPanel
+              points={bookedPoints}
+              fitPoints={allTourPoints}
+              highlightId={hovered}
+              extraPoint={extraPoint}
+              className="h-[20rem] lg:h-[32rem]"
+              emptyHint="Hover a tour to see where it is — added trip stops stay pinned here."
+            />
+            <p className="mt-2 text-center text-xs text-neutralgray">
+              Pins show your trip; hover a tour to place it on the map.
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
