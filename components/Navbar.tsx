@@ -50,13 +50,17 @@ export default function Navbar() {
     setDestOpen(false);
   }, [pathname]);
 
-  // Close the desktop dropdown on outside click or Escape.
+  // Close the destinations dropdown on outside click or Escape.
   useEffect(() => {
     if (!destOpen) return;
     const onClick = (e: MouseEvent) => {
-      if (destRef.current && !destRef.current.contains(e.target as Node)) {
-        setDestOpen(false);
-      }
+      const target = e.target as Node;
+      // Clicks inside the desktop dropdown are fine.
+      if (destRef.current?.contains(target)) return;
+      // Clicks inside the mobile menu are fine too — otherwise this mousedown
+      // would unmount a destination link before the tap navigates (mobile bug).
+      if (document.getElementById("mobile-menu")?.contains(target)) return;
+      setDestOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setDestOpen(false);
