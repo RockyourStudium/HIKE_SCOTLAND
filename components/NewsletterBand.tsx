@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import NewsletterForm from "@/components/NewsletterForm";
 
@@ -14,7 +15,17 @@ export default function NewsletterBand() {
 
   return (
     <section className="relative isolate overflow-hidden bg-forest-darkest text-fog">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-forest-gradient opacity-40" />
+      <Image
+        src="/heroes/highlands.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="-z-10 object-cover"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-darkest via-forest-darkest/70 to-forest-darkest/40"
+      />
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
         <div>
           <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mint">
