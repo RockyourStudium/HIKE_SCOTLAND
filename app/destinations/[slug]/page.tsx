@@ -171,6 +171,17 @@ export default function DestinationPage({
               key={note.caption}
               className={`group relative flex aspect-[4/5] flex-col justify-end overflow-hidden bg-gradient-to-br p-4 ${note.gradient}`}
             >
+              <Image
+                src={note.image}
+                alt={`${note.caption} — ${note.location}`}
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-t from-forest-darkest/90 via-forest-darkest/20 to-transparent"
+              />
               <figcaption className="relative text-fog">
                 <p className="text-xs uppercase tracking-wider text-fog/70">{note.location}</p>
                 <p className="mt-1 font-display text-lg font-semibold leading-snug">

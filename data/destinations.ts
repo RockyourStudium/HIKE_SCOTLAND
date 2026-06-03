@@ -3,6 +3,9 @@ import type { Coords, Region } from "./types";
 export interface FieldNote {
   caption: string;
   location: string;
+  /** Existing site asset, remixed into this gallery (see /credits for sources). */
+  image: string;
+  /** Fallback gradient shown behind the image. */
   gradient: string;
 }
 
@@ -49,10 +52,10 @@ const baseDestinations: Omit<Destination, "coords">[] = [
     gettingThere:
       "Fort William and Inverness are the main hubs, both reachable by train and road. The scenic A82 links Glasgow to the western Highlands.",
     fieldNotes: [
-      { caption: "First light on the ridge", location: "Glen Nevis", gradient: "from-forest-darkest to-forest-highland" },
-      { caption: "Mist over the moor", location: "Rannoch", gradient: "from-forest-dark to-mist" },
-      { caption: "The long glen", location: "Glen Affric", gradient: "from-forest-highland to-mint" },
-      { caption: "Summit cairn", location: "Ben Nevis", gradient: "from-forest-darkest to-forest-dark" },
+      { caption: "First light on the ridge", location: "Glen Nevis", image: "/cards/ben-nevis-mountain-track.jpg", gradient: "from-forest-darkest to-forest-highland" },
+      { caption: "Mist over the moor", location: "Rannoch", image: "/cards/highlands-grand-tour.jpg", gradient: "from-forest-dark to-mist" },
+      { caption: "The long glen", location: "Glen Affric", image: "/gallery/hidden-glen.jpg", gradient: "from-forest-highland to-mint" },
+      { caption: "Summit cairn", location: "Ben Nevis", image: "/heroes/highlands.jpg", gradient: "from-forest-darkest to-forest-dark" },
     ],
   },
   {
@@ -77,10 +80,10 @@ const baseDestinations: Omit<Destination, "coords">[] = [
     gettingThere:
       "Aviemore is the gateway town, served by direct trains from the central belt. The funicular and ski roads give quick access to the high ground.",
     fieldNotes: [
-      { caption: "Pines and still water", location: "Loch an Eilein", gradient: "from-forest-highland to-mist" },
-      { caption: "Onto the plateau", location: "Cairn Gorm", gradient: "from-forest-dark to-forest-highland" },
-      { caption: "Reindeer country", location: "Glenmore", gradient: "from-mist to-mint" },
-      { caption: "Frosted heather", location: "Rothiemurchus", gradient: "from-forest-darkest to-forest-highland" },
+      { caption: "Pines and still water", location: "Loch an Eilein", image: "/cards/loch-an-eilein.jpg", gradient: "from-forest-highland to-mist" },
+      { caption: "Onto the plateau", location: "Cairn Gorm", image: "/cards/cairngorm-plateau.jpg", gradient: "from-forest-dark to-forest-highland" },
+      { caption: "Reindeer country", location: "Glenmore", image: "/cards/cairngorms-wild-weekend.jpg", gradient: "from-mist to-mint" },
+      { caption: "Frosted heather", location: "Rothiemurchus", image: "/gallery/heather-in-bloom.jpg", gradient: "from-forest-darkest to-forest-highland" },
     ],
   },
   {
@@ -105,10 +108,10 @@ const baseDestinations: Omit<Destination, "coords">[] = [
     gettingThere:
       "Cross the Skye Bridge from the mainland near Kyle of Lochalsh, or take the ferry from Mallaig to Armadale. Portree is the island's main base.",
     fieldNotes: [
-      { caption: "Pinnacles at dawn", location: "The Quiraing", gradient: "from-forest-darkest to-forest-highland" },
-      { caption: "The lone spire", location: "Old Man of Storr", gradient: "from-forest-dark to-mist" },
-      { caption: "Clear blue water", location: "Fairy Pools", gradient: "from-mist to-mint" },
-      { caption: "Harbour evening", location: "Portree", gradient: "from-forest-highland to-mint" },
+      { caption: "Pinnacles at dawn", location: "The Quiraing", image: "/cards/quiraing-loop.jpg", gradient: "from-forest-darkest to-forest-highland" },
+      { caption: "The lone spire", location: "Old Man of Storr", image: "/cards/old-man-of-storr.jpg", gradient: "from-forest-dark to-mist" },
+      { caption: "Clear blue water", location: "Fairy Pools", image: "/cards/skye-explorer.jpg", gradient: "from-mist to-mint" },
+      { caption: "Harbour evening", location: "Portree", image: "/heroes/isle-of-skye.jpg", gradient: "from-forest-highland to-mint" },
     ],
   },
   {
@@ -133,10 +136,10 @@ const baseDestinations: Omit<Destination, "coords">[] = [
     gettingThere:
       "Glencoe sits on the A82 between Glasgow and Fort William, around two hours from Glasgow. The visitor centre is a useful starting point.",
     fieldNotes: [
-      { caption: "Cloud between the peaks", location: "Three Sisters", gradient: "from-forest-darkest to-forest-dark" },
-      { caption: "Into the gorge", location: "Lost Valley", gradient: "from-forest-dark to-forest-highland" },
-      { caption: "Ridge in the sky", location: "Aonach Eagach", gradient: "from-forest-highland to-mist" },
-      { caption: "River and stone", location: "River Coe", gradient: "from-mist to-mint" },
+      { caption: "Cloud between the peaks", location: "Three Sisters", image: "/heroes/glencoe.jpg", gradient: "from-forest-darkest to-forest-dark" },
+      { caption: "Into the gorge", location: "Lost Valley", image: "/cards/glencoe-lost-valley.jpg", gradient: "from-forest-dark to-forest-highland" },
+      { caption: "Ridge in the sky", location: "Aonach Eagach", image: "/cards/glencoe-photography.jpg", gradient: "from-forest-highland to-mist" },
+      { caption: "River and stone", location: "River Coe", image: "/cards/falls-of-bruar.jpg", gradient: "from-mist to-mint" },
     ],
   },
   {
@@ -161,10 +164,10 @@ const baseDestinations: Omit<Destination, "coords">[] = [
     gettingThere:
       "Balloch is reachable by direct train from Glasgow in under an hour. The A82 runs along the loch's western shore.",
     fieldNotes: [
-      { caption: "The bonnie banks", location: "Loch Lomond", gradient: "from-forest-highland to-mist" },
-      { caption: "First Munro views", location: "Ben Lomond", gradient: "from-forest-dark to-forest-highland" },
-      { caption: "Wooded shoreline", location: "The Trossachs", gradient: "from-mist to-mint" },
-      { caption: "Trailhead morning", location: "Milngavie", gradient: "from-forest-highland to-mint" },
+      { caption: "The bonnie banks", location: "Loch Lomond", image: "/gallery/island-studded-loch.jpg", gradient: "from-forest-highland to-mist" },
+      { caption: "First Munro views", location: "Ben Lomond", image: "/cards/ben-lomond.jpg", gradient: "from-forest-dark to-forest-highland" },
+      { caption: "Wooded shoreline", location: "The Trossachs", image: "/heroes/loch-lomond-trossachs.jpg", gradient: "from-mist to-mint" },
+      { caption: "Trailhead morning", location: "Milngavie", image: "/cards/west-highland-way.jpg", gradient: "from-forest-highland to-mint" },
     ],
   },
   {
@@ -189,10 +192,10 @@ const baseDestinations: Omit<Destination, "coords">[] = [
     gettingThere:
       "The Borders Railway runs from Edinburgh to Tweedbank, opening up the region for car-free walking. Melrose is a central base.",
     fieldNotes: [
-      { caption: "Rolling green hills", location: "The Eildons", gradient: "from-forest-highland to-mist" },
-      { caption: "Along the Tweed", location: "Melrose", gradient: "from-mist to-mint" },
-      { caption: "Pilgrim's path", location: "St Cuthbert's Way", gradient: "from-forest-highland to-mint" },
-      { caption: "Abbey ruins", location: "Dryburgh", gradient: "from-forest-dark to-forest-highland" },
+      { caption: "Rolling green hills", location: "The Eildons", image: "/cards/borders-gentle-rambles.jpg", gradient: "from-forest-highland to-mist" },
+      { caption: "Along the Tweed", location: "Melrose", image: "/heroes/scottish-borders.jpg", gradient: "from-mist to-mint" },
+      { caption: "Pilgrim's path", location: "St Cuthbert's Way", image: "/cards/st-cuthberts-way.jpg", gradient: "from-forest-highland to-mint" },
+      { caption: "Abbey ruins", location: "Dryburgh", image: "/cards/west-highland-way-supported.jpg", gradient: "from-forest-dark to-forest-highland" },
     ],
   },
 ];
