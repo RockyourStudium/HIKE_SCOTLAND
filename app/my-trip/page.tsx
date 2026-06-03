@@ -349,7 +349,8 @@ function Header() {
   return (
     <header className="bg-forest-gradient text-fog">
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <p className="text-sm font-semibold uppercase tracking-wider text-mint">
+        <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-mint">
+          <span aria-hidden className="h-px w-8 bg-mint/60" />
           Your plan
         </p>
         <h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">My Trip</h1>

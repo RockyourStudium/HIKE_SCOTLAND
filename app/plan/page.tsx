@@ -159,6 +159,7 @@ function PlanFlow() {
   );
 
   const [stepIndex, setStepIndex] = useState(0);
+  const [direction, setDirection] = useState<"forward" | "back">("forward");
   const [answers, setAnswers] = useState<Partial<Answers>>(initialAnswers);
   const [showResults, setShowResults] = useState(false);
 
@@ -188,12 +189,19 @@ function PlanFlow() {
 
   const next = () => {
     if (isLast) setShowResults(true);
-    else setStepIndex((i) => i + 1);
+    else {
+      setDirection("forward");
+      setStepIndex((i) => i + 1);
+    }
   };
-  const back = () => setStepIndex((i) => Math.max(0, i - 1));
+  const back = () => {
+    setDirection("back");
+    setStepIndex((i) => Math.max(0, i - 1));
+  };
 
   const restart = () => {
     setAnswers(initialAnswers);
+    setDirection("forward");
     setStepIndex(0);
     setShowResults(false);
   };
@@ -272,10 +280,13 @@ function PlanFlow() {
 
         {/* Question */}
         <div
+          key={stepIndex}
           role="group"
           aria-labelledby="step-question"
           aria-describedby="step-help"
-          className="rounded-2xl bg-white p-6 shadow-card sm:p-8"
+          className={`rounded-2xl bg-white p-6 shadow-card sm:p-8 ${
+            direction === "back" ? "quiz-slide-back" : "quiz-slide-forward"
+          }`}
         >
           <h2
             id="step-question"
@@ -372,7 +383,8 @@ function Results({
     <>
       <header className="bg-forest-gradient text-fog">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-wider text-mint">
+          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-mint">
+            <span aria-hidden className="h-px w-8 bg-mint/60" />
             Your personalised plan
           </p>
           <h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">

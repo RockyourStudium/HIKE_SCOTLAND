@@ -197,7 +197,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div id="mobile-menu" className="border-t border-forest-highland/30 lg:hidden">
+        <div id="mobile-menu" className="animate-fade-down border-t border-forest-highland/30 lg:hidden">
           <ul className="space-y-1 px-4 py-3">
             {/* Mobile destinations group */}
             <li>

@@ -135,7 +135,8 @@ export default function HomePage() {
       {/* Destinations */}
       <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
         <Reveal className="mb-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-mist">
+          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
+            <span aria-hidden className="h-px w-8 bg-mist/60" />
             Six regions
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold text-fog sm:text-4xl lg:text-5xl">
@@ -171,7 +172,8 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-mist">
+            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
+              <span aria-hidden className="h-px w-8 bg-mist/60" />
               Featured
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight">

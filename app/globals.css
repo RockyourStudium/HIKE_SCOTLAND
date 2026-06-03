@@ -206,6 +206,35 @@ body {
   animation: toast-progress 5s linear both;
 }
 
+/* Quiz question transitions — the card slides in from the side you're heading
+   toward as you move between questions. Disabled under prefers-reduced-motion. */
+@keyframes quiz-slide-forward {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes quiz-slide-back {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.quiz-slide-forward {
+  animation: quiz-slide-forward 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.quiz-slide-back {
+  animation: quiz-slide-back 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Hide scrollbars on horizontal carousels (scroll still works via swipe/buttons). */
 .no-scrollbar {
   -ms-overflow-style: none;

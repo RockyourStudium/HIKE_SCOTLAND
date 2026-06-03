@@ -15,7 +15,8 @@ export default function CreditsPage() {
     <>
       <header className="bg-forest-gradient text-fog">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-wider text-mint">
+          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-mint">
+            <span aria-hidden className="h-px w-8 bg-mint/60" />
             Attribution
           </p>
           <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">
