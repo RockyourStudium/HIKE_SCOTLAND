@@ -3,6 +3,7 @@ import { Josefin_Sans, Lato } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import NewsletterBand from "@/components/NewsletterBand";
 import { TripProvider } from "@/lib/trip";
 
 // next/font downloads these at build time and self-hosts the .woff2 files,
@@ -68,6 +69,7 @@ export default function RootLayout({
           <main id="main" className="flex-1">
             {children}
           </main>
+          <NewsletterBand />
           <Footer />
         </TripProvider>
       </body>

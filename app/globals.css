@@ -178,6 +178,34 @@ body {
   will-change: transform;
 }
 
+/* Newsletter success toast — slides in from the right, with a thin progress
+   bar that shrinks over the auto-dismiss window. Both collapse to a static
+   frame under prefers-reduced-motion (handled by the media query above). */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.toast-in {
+  animation: toast-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+.toast-progress {
+  animation: toast-progress 5s linear both;
+}
+
 /* Hide scrollbars on horizontal carousels (scroll still works via swipe/buttons). */
 .no-scrollbar {
   -ms-overflow-style: none;

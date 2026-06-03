@@ -17,6 +17,7 @@ const columns = [
       { href: "/plan", label: "Trip Planner" },
       { href: "/routes", label: "By Difficulty" },
       { href: "/tours", label: "By Region" },
+      { href: "/newsletter", label: "Newsletter" },
     ],
   },
 ];

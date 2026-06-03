@@ -36,6 +36,7 @@ const links = [
   { href: "/routes", label: "ROUTES" },
   { href: "/tours", label: "GUIDED TOURS" },
   { href: "/stays", label: "STAYS" },
+  { href: "/newsletter", label: "NEWS" },
 ];
 
 export default function Navbar() {
