@@ -137,7 +137,7 @@ export default function NewsletterForm() {
               placeholder="Your first name"
             />
             {errors.firstName && (
-              <p id="firstName-error" className="mt-2 text-sm text-mint">
+              <p id="firstName-error" className="mt-2 text-sm font-medium text-danger-light">
                 {errors.firstName}
               </p>
             )}
@@ -161,7 +161,7 @@ export default function NewsletterForm() {
               placeholder="you@example.com"
             />
             {errors.email && (
-              <p id="email-error" className="mt-2 text-sm text-mint">
+              <p id="email-error" className="mt-2 text-sm font-medium text-danger-light">
                 {errors.email}
               </p>
             )}

@@ -22,6 +22,12 @@ const config: Config = {
         fog: "#D8F3DC",
         neutralgray: "#757575",
         softgray: "#BDBDBD",
+        // Semantic state — a warm earthy red that stays distinct from the
+        // forest greens. `DEFAULT` for light surfaces, `light` for dark ones.
+        danger: {
+          DEFAULT: "#C0392B",
+          light: "#F4978E",
+        },
       },
       fontFamily: {
         // Body: Lato. Headings (font-display): Josefin Sans. Both self-hosted via next/font.
