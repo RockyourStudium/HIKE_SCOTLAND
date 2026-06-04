@@ -11,16 +11,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // One name per shade. `highland` (#2D6A4F) is the mid green used across
+        // the UI; darkest/dark are the deeper tones for surfaces and gradients.
         forest: {
           darkest: "#081C15",
           dark: "#1B4332",
-          DEFAULT: "#2D6A4F",
           highland: "#2D6A4F",
         },
         mist: "#52B788",
         mint: "#95D5B2",
         fog: "#D8F3DC",
-        neutralgray: "#757575",
+        // Muted UI text. #666 (not lighter) so it clears WCAG AA 4.5:1 on BOTH
+        // white cards and the fog page background (#757575 failed ~3.9:1 on fog).
+        neutralgray: "#666666",
         softgray: "#BDBDBD",
         // Semantic state — a warm earthy red that stays distinct from the
         // forest greens. `DEFAULT` for light surfaces, `light` for dark ones.
