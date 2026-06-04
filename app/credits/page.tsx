@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import { getImageCredits, IMAGE_LICENSE } from "@/data/imageCredits";
 
@@ -15,7 +16,7 @@ export default function CreditsPage() {
   return (
     <>
       <header className="bg-forest-gradient text-fog">
-        <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
+        <Container size="5xl" py="compact">
           <Eyebrow tone="mint" dash>Attribution</Eyebrow>
           <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">
             Image Credits
@@ -24,10 +25,10 @@ export default function CreditsPage() {
             All photography on Hike Scotland is licensed via {IMAGE_LICENSE}. We
             gratefully credit the photographers behind each image below.
           </p>
-        </div>
+        </Container>
       </header>
 
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      <Container size="5xl" py="compact">
         {credits.length > 0 ? (
           <ul className="space-y-4">
             {credits.map((credit) => (
@@ -64,7 +65,7 @@ export default function CreditsPage() {
           property of the respective photographers. If you believe an image is
           credited incorrectly, please get in touch and we&apos;ll put it right.
         </p>
-      </div>
+      </Container>
     </>
   );
 }

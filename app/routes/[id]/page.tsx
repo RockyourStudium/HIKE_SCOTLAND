@@ -7,6 +7,7 @@ import { routes, getRouteById } from "@/data/routes";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
 import { DifficultyBadge } from "@/components/Badge";
+import Container from "@/components/Container";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
 export function generateStaticParams() {
@@ -67,7 +68,7 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <Container py="compact">
         <div className="grid gap-10 lg:grid-cols-[1fr,20rem] lg:gap-14">
           {/* Main content */}
           <div className="space-y-12">
@@ -193,7 +194,7 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
             </div>
           </aside>
         </div>
-      </div>
+      </Container>
     </>
   );
 }

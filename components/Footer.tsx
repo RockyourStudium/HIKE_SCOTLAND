@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mountain, TreePine } from "lucide-react";
+import Container from "@/components/Container";
 
 const columns = [
   {
@@ -25,7 +26,7 @@ const columns = [
 export default function Footer() {
   return (
     <footer className="bg-forest-darkest text-fog">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <Container py="compact">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
@@ -72,7 +73,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }

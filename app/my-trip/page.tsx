@@ -15,6 +15,7 @@ import {
   BedDouble,
 } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import MapPanel, { type MapPoint } from "@/components/MapPanel";
 import { useTrip, type TripItem, type TripItemKind } from "@/lib/trip";
@@ -129,9 +130,9 @@ export default function MyTripPage() {
   // Avoid an SSR/CSR flash: wait until the persisted trip has loaded.
   if (!hydrated) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-20 text-center text-neutralgray sm:px-6 lg:px-8">
+      <Container size="3xl" py="standard" className="text-center text-neutralgray">
         Loading your trip…
-      </div>
+      </Container>
     );
   }
 
@@ -139,7 +140,7 @@ export default function MyTripPage() {
     return (
       <>
         <Header />
-        <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 lg:px-8">
+        <Container size="2xl" py="standard" className="text-center">
           <div className="rounded-2xl bg-white p-10 shadow-card">
             <Backpack aria-hidden className="mx-auto h-12 w-12" color="url(#hike-gradient)" />
             <h2 className="mt-4 font-display text-2xl font-bold text-forest-darkest">
@@ -159,7 +160,7 @@ export default function MyTripPage() {
               </Link>
             </div>
           </div>
-        </div>
+        </Container>
       </>
     );
   }
@@ -168,7 +169,7 @@ export default function MyTripPage() {
     <>
       <Header />
 
-      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+      <Container size="4xl" py="compact">
         {/* Summary bar */}
         <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <Summary label="Stops" value={String(trip.items.length)} />
@@ -341,7 +342,7 @@ export default function MyTripPage() {
             Add a name/email lead form here at that point.
           */}
         </section>
-      </div>
+      </Container>
     </>
   );
 }
@@ -349,14 +350,14 @@ export default function MyTripPage() {
 function Header() {
   return (
     <header className="bg-forest-gradient text-fog">
-      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+      <Container size="4xl" py="compact">
         <Eyebrow tone="mint" dash>Your plan</Eyebrow>
         <h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">My Trip</h1>
         <p className="mt-3 max-w-2xl text-fog/85">
           Everything you&apos;ve gathered, in the order you&apos;ll travel it. Add
           more as you browse, fine-tune the sequence, then send it our way.
         </p>
-      </div>
+      </Container>
     </header>
   );
 }

@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Mountain } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import CinematicHero from "@/components/CinematicHero";
+import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import RouteCard from "@/components/RouteCard";
 import { destinations, getDestinationBySlug } from "@/data/destinations";
@@ -71,7 +72,7 @@ export default function DestinationPage({
       />
 
       {/* Intro + why hike here */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <Container as="section" py="standard">
         <div className="grid gap-10 lg:grid-cols-[1fr,0.8fr] lg:gap-16">
           <div>
             <Eyebrow dash>{dest.name}</Eyebrow>
@@ -105,11 +106,11 @@ export default function DestinationPage({
             </ul>
           </aside>
         </div>
-      </section>
+      </Container>
 
       {/* Featured routes */}
       {featured.length > 0 && (
-        <section id="featured" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+        <Container as="section" id="featured" className="pb-20 lg:pb-28">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div>
               <Eyebrow dash>Hand-picked · Top {featured.length}</Eyebrow>
@@ -129,11 +130,11 @@ export default function DestinationPage({
               <RouteCard key={route.id} route={route} tone="tinted" />
             ))}
           </div>
-        </section>
+        </Container>
       )}
 
       {/* Practical info */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+      <Container as="section" className="pb-20 lg:pb-28">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl bg-white/[0.06] p-6 ring-1 ring-white/10 sm:p-8">
             <div className="flex items-center gap-3">
@@ -150,16 +151,16 @@ export default function DestinationPage({
             <p className="mt-4 text-base leading-loose text-fog/70">{dest.gettingThere}</p>
           </div>
         </div>
-      </section>
+      </Container>
 
       {/* Field notes gallery — full-bleed, sharp-cornered */}
       <section className="pb-20 lg:pb-28">
-        <div className="mx-auto mb-10 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Container className="mb-10">
           <Eyebrow dash>Field notes · From the trail</Eyebrow>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl">
             A glimpse of {dest.name}
           </h2>
-        </div>
+        </Container>
         <div className="grid grid-cols-2 gap-1.5 sm:gap-2 lg:grid-cols-4">
           {dest.fieldNotes.map((note) => (
             <figure
@@ -190,7 +191,7 @@ export default function DestinationPage({
 
       {/* Tours & stays quick links */}
       {(regionTours.length > 0 || regionStays.length > 0) && (
-        <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <Container as="section" className="pb-20">
           <div className="grid gap-4 sm:grid-cols-2">
             {regionTours.length > 0 && (
               <Link
@@ -221,14 +222,14 @@ export default function DestinationPage({
               </Link>
             )}
           </div>
-        </section>
+        </Container>
       )}
 
       {/* CTA — full-bleed */}
       <section className="relative isolate overflow-hidden">
         <Image src={heroImage(dest.slug)} alt="" fill sizes="100vw" className="-z-10 object-cover" />
         <div className="absolute inset-0 -z-10 bg-forest-darkest/80" />
-        <div className="mx-auto flex max-w-3xl flex-col items-center px-4 py-24 text-center sm:px-6 lg:px-8 lg:py-32">
+        <Container size="3xl" py="standard" className="flex flex-col items-center text-center">
           <h2 className="font-display text-3xl font-bold leading-tight text-fog sm:text-4xl lg:text-5xl">
             Ready to explore {dest.name}?
           </h2>
@@ -245,7 +246,7 @@ export default function DestinationPage({
               Next: {next.name} →
             </Link>
           </div>
-        </div>
+        </Container>
       </section>
     </div>
   );

@@ -1,10 +1,11 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { MapPin } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import RouteCard from "@/components/RouteCard";
 import TourCard from "@/components/TourCard";
@@ -120,9 +121,9 @@ export default function PlanPage() {
   return (
     <Suspense
       fallback={
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center text-neutralgray sm:px-6 lg:px-8">
+        <Container size="3xl" py="standard" className="text-center text-neutralgray">
           Loading the trip planner…
-        </div>
+        </Container>
       }
     >
       <PlanFlow />
@@ -167,6 +168,21 @@ function PlanFlow() {
   const step = activeSteps[stepIndex];
   const isLast = stepIndex === activeSteps.length - 1;
   const progress = Math.round(((stepIndex + 1) / activeSteps.length) * 100);
+
+  // The question card swaps in place (no route change), so move focus to the
+  // new question heading on each step change — otherwise screen-reader and
+  // keyboard users aren't told the content changed, and focus is left on the
+  // now-unmounted Next/Back button. Skip the very first render.
+  const questionRef = useRef<HTMLHeadingElement>(null);
+  const prevStepIndex = useRef(stepIndex);
+  useEffect(() => {
+    // Only on an actual step change — not the initial mount (and not the dev
+    // StrictMode double-effect, which keeps stepIndex the same), so we don't
+    // steal focus from the page intro on load.
+    if (prevStepIndex.current === stepIndex) return;
+    prevStepIndex.current = stepIndex;
+    questionRef.current?.focus();
+  }, [stepIndex]);
 
   const currentValue = answers[step.key];
   const answered =
@@ -226,7 +242,7 @@ function PlanFlow() {
   return (
     <>
       <header className="bg-forest-gradient text-fog">
-        <div className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 lg:px-8">
+        <Container size="3xl" py="compact" className="text-center">
           <h1 className="font-display text-3xl font-bold sm:text-4xl">
             Let&apos;s plan your trip
           </h1>
@@ -234,10 +250,10 @@ function PlanFlow() {
             Answer a few quick questions and we&apos;ll match you with routes, tours
             and stays.
           </p>
-        </div>
+        </Container>
       </header>
 
-      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+      <Container size="3xl" py="compact">
         {/* Anchor banner */}
         {anchorRoute && (
           <div className="mb-6 flex items-center gap-3 rounded-2xl bg-white p-4 shadow-card">
@@ -291,7 +307,9 @@ function PlanFlow() {
         >
           <h2
             id="step-question"
-            className="font-display text-2xl font-bold text-forest-darkest"
+            ref={questionRef}
+            tabIndex={-1}
+            className="font-display text-2xl font-bold text-forest-darkest outline-none"
           >
             {step.question}
           </h2>
@@ -361,7 +379,7 @@ function PlanFlow() {
             {isLast ? "See my matches" : "Next →"}
           </AnimatedCTA>
         </div>
-      </div>
+      </Container>
     </>
   );
 }
@@ -380,12 +398,23 @@ function Results({
   const { routes: rRoutes, tours: rTours, stays: rStays } = recommendations;
   const { count, hydrated } = useTrip();
 
+  // The results replace the quiz in place (no route change), so move focus to
+  // the results heading on mount — same reasoning as the per-question focus.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <>
       <header className="bg-forest-gradient text-fog">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <Container py="compact">
           <Eyebrow tone="mint" dash>Your personalised plan</Eyebrow>
-          <h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="mt-2 font-display text-3xl font-bold sm:text-4xl outline-none"
+          >
             Adventures matched to you
           </h1>
           <p className="mt-3 max-w-2xl text-fog/85">
@@ -416,10 +445,10 @@ function Results({
               ↺ Start over
             </button>
           </div>
-        </div>
+        </Container>
       </header>
 
-      <div className="mx-auto max-w-7xl space-y-16 px-4 py-14 sm:px-6 lg:px-8">
+      <Container py="compact" className="space-y-16">
         {/* Routes */}
         <section>
           <h2 className="font-display text-2xl font-bold text-forest-darkest">
@@ -501,7 +530,7 @@ function Results({
             </Link>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 }

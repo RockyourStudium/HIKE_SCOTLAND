@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import CinematicHero from "@/components/CinematicHero";
+import Container from "@/components/Container";
 import { destinations } from "@/data/destinations";
 import { routes } from "@/data/routes";
 import { heroImage } from "@/lib/heroImage";
@@ -23,7 +24,7 @@ export default function DestinationsPage() {
         subtitle="Six of Scotland's greatest hiking regions — from arctic plateaus to rolling Border hills. Pick a corner of the country and start exploring."
       />
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+      <Container as="section" py="standard">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map((d) => {
             const routeCount = routes.filter((r) => r.region === d.region).length;
@@ -60,7 +61,7 @@ export default function DestinationsPage() {
             );
           })}
         </div>
-      </section>
+      </Container>
     </div>
   );
 }

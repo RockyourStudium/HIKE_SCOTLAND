@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Container from "@/components/Container";
 import TourCard from "@/components/TourCard";
 import MapPanel from "@/components/MapPanel";
 import { tours } from "@/data/tours";
@@ -33,16 +34,16 @@ export default function ToursPage() {
   return (
     <>
       <header className="bg-forest-gradient text-fog">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <Container py="compact">
           <h1 className="font-display text-4xl font-bold sm:text-5xl">Guided Tours</h1>
           <p className="mt-3 max-w-2xl text-lg text-fog/85">
             Small-group guided adventures and self-guided trips with the
             logistics taken care of.
           </p>
-        </div>
+        </Container>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <Container py="compact">
         <section
           aria-label="Filter tours"
           className="flex flex-wrap items-end gap-5 rounded-2xl bg-white p-5 shadow-card sm:p-6"
@@ -119,7 +120,7 @@ export default function ToursPage() {
             </p>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 }

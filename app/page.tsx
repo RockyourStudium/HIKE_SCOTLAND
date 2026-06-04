@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MountainSnow, Castle, Bird } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import CinematicHero from "@/components/CinematicHero";
+import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import RouteCarousel from "@/components/RouteCarousel";
@@ -116,7 +117,7 @@ export default function HomePage() {
       </CinematicHero>
 
       {/* Feeling statement */}
-      <section className="mx-auto max-w-4xl px-4 py-32 text-center sm:px-6 lg:px-8 lg:py-48">
+      <Container as="section" size="4xl" py="dramatic" className="text-center">
         <Reveal>
           <Eyebrow>Why hike Scotland</Eyebrow>
           <h2 className="mx-auto mt-10 max-w-3xl font-display text-3xl font-bold leading-snug text-fog sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-snug">
@@ -129,10 +130,10 @@ export default function HomePage() {
             every kind of walker — seasoned trekker or first-timer alike.
           </p>
         </Reveal>
-      </section>
+      </Container>
 
       {/* Destinations */}
-      <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+      <Container as="section" className="pb-8">
         <Reveal className="mb-10">
           <Eyebrow dash>Six regions</Eyebrow>
           <h2 className="mt-3 font-display text-3xl font-bold text-fog sm:text-4xl lg:text-5xl">
@@ -162,10 +163,10 @@ export default function HomePage() {
             </Link>
           ))}
         </Reveal>
-      </section>
+      </Container>
 
       {/* Featured routes */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <Container as="section" py="standard">
         <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
             <Eyebrow dash>Featured</Eyebrow>
@@ -183,7 +184,7 @@ export default function HomePage() {
         <Reveal>
           <RouteCarousel routes={featuredRoutes} />
         </Reveal>
-      </section>
+      </Container>
 
       {/* What makes Scotland a hiker's dream — full-bleed cinematic band */}
       <section className="relative isolate overflow-hidden">
@@ -195,7 +196,7 @@ export default function HomePage() {
           className="-z-10 object-cover"
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-forest-darkest/75 via-forest-darkest/55 to-forest-darkest/80" />
-        <div className="mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8 lg:py-44">
+        <Container py="dramatic">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow>The draw</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight">
@@ -214,12 +215,12 @@ export default function HomePage() {
               </div>
             ))}
           </Reveal>
-        </div>
+        </Container>
       </section>
 
       {/* Choose your challenge */}
       <section>
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <Container py="standard">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow>For every pace</Eyebrow>
             <h2 className="mt-3 font-display text-3xl font-bold text-fog sm:text-4xl lg:text-5xl">
@@ -250,7 +251,7 @@ export default function HomePage() {
           <div className="mt-10 text-center">
             <AnimatedCTA href="/routes">Browse all routes</AnimatedCTA>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Scenes from the trail — full-bleed bento gallery (connects straight into the CTA) */}
@@ -293,7 +294,7 @@ export default function HomePage() {
           className="-z-10 object-cover"
         />
         <div className="absolute inset-0 -z-10 bg-forest-darkest/80" />
-        <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6 lg:px-8 lg:py-32">
+        <Container size="3xl" py="standard" className="text-center">
           <h2 className="font-display text-4xl font-bold leading-tight text-fog sm:text-5xl sm:leading-tight lg:text-6xl lg:leading-tight">
             Lace up. We&apos;ll handle the rest.
           </h2>
@@ -304,7 +305,7 @@ export default function HomePage() {
           <div className="mt-8 flex justify-center">
             <AnimatedCTA href="/plan">Start the trip planner</AnimatedCTA>
           </div>
-        </div>
+        </Container>
       </section>
     </div>
   );

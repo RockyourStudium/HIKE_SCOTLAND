@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Container from "@/components/Container";
 import RouteCard from "@/components/RouteCard";
 import MapPanel from "@/components/MapPanel";
 import { routes } from "@/data/routes";
@@ -50,16 +51,16 @@ export default function RoutesPage() {
   return (
     <>
       <header className="bg-forest-gradient text-fog">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <Container py="compact">
           <h1 className="font-display text-4xl font-bold sm:text-5xl">Hiking Routes</h1>
           <p className="mt-3 max-w-2xl text-lg text-fog/85">
             Browse hand-picked walks across Scotland and filter by difficulty,
             region and length.
           </p>
-        </div>
+        </Container>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <Container py="compact">
         {/* Filters */}
         <section
           aria-label="Filter routes"
@@ -136,7 +137,7 @@ export default function RoutesPage() {
             </p>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 }
