@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { MapPin } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Eyebrow from "@/components/Eyebrow";
 import RouteCard from "@/components/RouteCard";
 import TourCard from "@/components/TourCard";
 import StayCard from "@/components/StayCard";
@@ -383,10 +384,7 @@ function Results({
     <>
       <header className="bg-forest-gradient text-fog">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-mint">
-            <span aria-hidden className="h-px w-8 bg-mint/60" />
-            Your personalised plan
-          </p>
+          <Eyebrow tone="mint" dash>Your personalised plan</Eyebrow>
           <h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">
             Adventures matched to you
           </h1>

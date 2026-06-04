@@ -15,6 +15,7 @@ import {
   BedDouble,
 } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Eyebrow from "@/components/Eyebrow";
 import MapPanel, { type MapPoint } from "@/components/MapPanel";
 import { useTrip, type TripItem, type TripItemKind } from "@/lib/trip";
 import { getRouteById } from "@/data/routes";
@@ -349,10 +350,7 @@ function Header() {
   return (
     <header className="bg-forest-gradient text-fog">
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-mint">
-          <span aria-hidden className="h-px w-8 bg-mint/60" />
-          Your plan
-        </p>
+        <Eyebrow tone="mint" dash>Your plan</Eyebrow>
         <h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">My Trip</h1>
         <p className="mt-3 max-w-2xl text-fog/85">
           Everything you&apos;ve gathered, in the order you&apos;ll travel it. Add

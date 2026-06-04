@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import Eyebrow from "@/components/Eyebrow";
 import { getImageCredits, IMAGE_LICENSE } from "@/data/imageCredits";
 
 export const metadata: Metadata = {
@@ -15,10 +16,7 @@ export default function CreditsPage() {
     <>
       <header className="bg-forest-gradient text-fog">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-mint">
-            <span aria-hidden className="h-px w-8 bg-mint/60" />
-            Attribution
-          </p>
+          <Eyebrow tone="mint" dash>Attribution</Eyebrow>
           <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">
             Image Credits
           </h1>

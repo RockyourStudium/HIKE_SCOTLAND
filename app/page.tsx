@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MountainSnow, Castle, Bird } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import CinematicHero from "@/components/CinematicHero";
+import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import RouteCarousel from "@/components/RouteCarousel";
 import { routes } from "@/data/routes";
@@ -117,9 +118,7 @@ export default function HomePage() {
       {/* Feeling statement */}
       <section className="mx-auto max-w-4xl px-4 py-32 text-center sm:px-6 lg:px-8 lg:py-48">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-mist">
-            Why hike Scotland
-          </p>
+          <Eyebrow>Why hike Scotland</Eyebrow>
           <h2 className="mx-auto mt-10 max-w-3xl font-display text-3xl font-bold leading-snug text-fog sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-snug">
             Scotland isn&apos;t a destination. It&apos;s a feeling that stays with you.
           </h2>
@@ -135,10 +134,7 @@ export default function HomePage() {
       {/* Destinations */}
       <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
         <Reveal className="mb-10">
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-            <span aria-hidden className="h-px w-8 bg-mist/60" />
-            Six regions
-          </p>
+          <Eyebrow dash>Six regions</Eyebrow>
           <h2 className="mt-3 font-display text-3xl font-bold text-fog sm:text-4xl lg:text-5xl">
             Where the trail begins
           </h2>
@@ -172,10 +168,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-              <span aria-hidden className="h-px w-8 bg-mist/60" />
-              Featured
-            </p>
+            <Eyebrow dash>Featured</Eyebrow>
             <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight">
               Trails worth lacing up for
             </h2>
@@ -204,9 +197,7 @@ export default function HomePage() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-forest-darkest/75 via-forest-darkest/55 to-forest-darkest/80" />
         <div className="mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8 lg:py-44">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-mist">
-              The draw
-            </p>
+            <Eyebrow>The draw</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight">
               A hiker&apos;s dream, in every direction
             </h2>
@@ -230,9 +221,7 @@ export default function HomePage() {
       <section>
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-              For every pace
-            </p>
+            <Eyebrow>For every pace</Eyebrow>
             <h2 className="mt-3 font-display text-3xl font-bold text-fog sm:text-4xl lg:text-5xl">
               Choose your challenge
             </h2>
@@ -267,9 +256,7 @@ export default function HomePage() {
       {/* Scenes from the trail — full-bleed bento gallery (connects straight into the CTA) */}
       <section className="pt-24 lg:pt-40">
         <Reveal className="mx-auto mb-10 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-            Field notes
-          </p>
+          <Eyebrow>Field notes</Eyebrow>
           <h2 className="mt-3 font-display text-3xl font-bold text-fog sm:text-4xl lg:text-5xl">
             Scenes from the trail
           </h2>

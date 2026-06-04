@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Eyebrow from "@/components/Eyebrow";
 import NewsletterForm from "@/components/NewsletterForm";
 import { heroImage } from "@/lib/heroImage";
 
@@ -26,10 +27,7 @@ export default function NewsletterPage() {
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:py-32 lg:px-8">
         <div>
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mint">
-            <span aria-hidden className="h-px w-8 bg-mint/60" />
-            News from the trail
-          </p>
+          <Eyebrow tone="mint" dash>News from the trail</Eyebrow>
 
           <h1 className="mt-6 font-display font-bold leading-[1.04] tracking-[-0.01em] text-fog text-[clamp(2.5rem,6vw,4.5rem)]">
             Never miss a

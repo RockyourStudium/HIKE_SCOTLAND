@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Mountain } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import CinematicHero from "@/components/CinematicHero";
+import Eyebrow from "@/components/Eyebrow";
 import RouteCard from "@/components/RouteCard";
 import { destinations, getDestinationBySlug } from "@/data/destinations";
 import { routes } from "@/data/routes";
@@ -73,10 +74,7 @@ export default function DestinationPage({
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <div className="grid gap-10 lg:grid-cols-[1fr,0.8fr] lg:gap-16">
           <div>
-            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-              <span aria-hidden className="h-px w-8 bg-mist/60" />
-              {dest.name}
-            </p>
+            <Eyebrow dash>{dest.name}</Eyebrow>
             <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight">
               {dest.introHeading}
             </h2>
@@ -114,10 +112,7 @@ export default function DestinationPage({
         <section id="featured" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-                <span aria-hidden className="h-px w-8 bg-mist/60" />
-                Hand-picked · Top {featured.length}
-              </p>
+              <Eyebrow dash>Hand-picked · Top {featured.length}</Eyebrow>
               <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl">
                 Routes in {dest.name}
               </h2>
@@ -160,10 +155,7 @@ export default function DestinationPage({
       {/* Field notes gallery — full-bleed, sharp-cornered */}
       <section className="pb-20 lg:pb-28">
         <div className="mx-auto mb-10 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mist">
-            <span aria-hidden className="h-px w-8 bg-mist/60" />
-            Field notes · From the trail
-          </p>
+          <Eyebrow dash>Field notes · From the trail</Eyebrow>
           <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-fog sm:text-4xl">
             A glimpse of {dest.name}
           </h2>

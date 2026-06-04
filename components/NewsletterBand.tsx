@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Eyebrow from "@/components/Eyebrow";
 import NewsletterForm from "@/components/NewsletterForm";
 
 /**
@@ -28,10 +29,7 @@ export default function NewsletterBand() {
       />
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
         <div>
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mint">
-            <span aria-hidden className="h-px w-8 bg-mint/60" />
-            News from the trail
-          </p>
+          <Eyebrow tone="mint" dash>News from the trail</Eyebrow>
           <h2 className="mt-5 font-display font-bold leading-[1.05] text-fog text-[clamp(1.75rem,4vw,2.75rem)]">
             Never miss a walk worth taking.
           </h2>

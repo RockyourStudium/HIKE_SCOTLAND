@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import Eyebrow from "./Eyebrow";
 
 /**
  * Full-bleed cinematic hero for the marketing pages (landing + destinations).
@@ -51,10 +52,9 @@ export default function CinematicHero({
 
         <div className="mt-auto max-w-4xl animate-fade-up">
           {eyebrow && (
-            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-mint">
-              <span aria-hidden className="h-px w-8 bg-mint/60" />
+            <Eyebrow tone="mint" dash>
               {eyebrow}
-            </p>
+            </Eyebrow>
           )}
           <h1 className="mt-5 font-display font-bold leading-[1.04] tracking-[-0.01em] text-fog text-[clamp(2.75rem,8vw,7.5rem)]">
             {title}
