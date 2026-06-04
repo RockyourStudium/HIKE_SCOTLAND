@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Mountain } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Button from "@/components/Button";
 import CinematicHero from "@/components/CinematicHero";
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
@@ -118,12 +119,9 @@ export default function DestinationPage({
                 Routes in {dest.name}
               </h2>
             </div>
-            <Link
-              href="/routes"
-              className="rounded-full border border-fog/30 px-5 py-2.5 text-sm font-semibold text-fog transition-colors hover:bg-white/10"
-            >
+            <Button href="/routes" variant="ghost" size="sm">
               All routes
-            </Link>
+            </Button>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((route) => (
@@ -239,12 +237,9 @@ export default function DestinationPage({
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <AnimatedCTA href="/plan">Plan a trip</AnimatedCTA>
-            <Link
-              href={`/destinations/${next.slug}`}
-              className="inline-flex items-center justify-center rounded-full border border-fog/30 px-7 py-3.5 text-base font-semibold text-fog transition-colors hover:bg-white/10"
-            >
+            <Button href={`/destinations/${next.slug}`} variant="ghost" size="md">
               Next: {next.name} →
-            </Link>
+            </Button>
           </div>
         </Container>
       </section>

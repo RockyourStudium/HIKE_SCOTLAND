@@ -6,6 +6,7 @@ import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
 import { tours, getTourById } from "@/data/tours";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
+import Button from "@/components/Button";
 import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
@@ -167,12 +168,9 @@ export default function TourDetailPage({ params }: { params: { id: string } }) {
               <div className="mt-2">
                 <AddToTripButton kind="tour" id={tour.id} block />
               </div>
-              <Link
-                href="/plan"
-                className="mt-2 block rounded-full border border-forest-highland px-5 py-3 text-center text-sm font-semibold text-forest-highland transition-colors hover:bg-forest-highland hover:text-white"
-              >
+              <Button href="/plan" variant="outline" size="sm" block className="mt-2">
                 Not sure? Try the trip planner
-              </Link>
+              </Button>
               <p className="mt-3 text-center text-xs text-neutralgray">
                 No payment taken now — we&apos;ll confirm availability first.
               </p>

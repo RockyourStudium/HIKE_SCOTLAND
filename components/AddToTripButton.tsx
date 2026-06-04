@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Plus } from "lucide-react";
+import { buttonVariants } from "@/components/Button";
 import { useTrip, type TripItemKind } from "@/lib/trip";
 
 type Variant = "solid" | "outline";
@@ -37,11 +38,8 @@ export default function AddToTripButton({
   const base = compact
     ? "inline-flex items-center justify-center gap-1 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors"
     : "inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors";
-  const tone = inTrip
-    ? "border border-forest-highland bg-forest-highland text-white hover:bg-forest-dark"
-    : variant === "solid"
-    ? "bg-forest-highland text-white hover:bg-forest-dark"
-    : "border border-forest-highland text-forest-highland hover:bg-forest-highland hover:text-white";
+  const tone =
+    inTrip || variant === "solid" ? buttonVariants.secondary : buttonVariants.outline;
 
   return (
     <button

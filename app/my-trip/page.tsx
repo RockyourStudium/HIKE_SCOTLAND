@@ -15,6 +15,7 @@ import {
   BedDouble,
 } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Button from "@/components/Button";
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import MapPanel, { type MapPoint } from "@/components/MapPanel";
@@ -152,12 +153,9 @@ export default function MyTripPage() {
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <AnimatedCTA href="/plan">Start the trip planner</AnimatedCTA>
-              <Link
-                href="/routes"
-                className="inline-flex items-center justify-center rounded-full border border-forest-highland px-6 py-2.5 text-sm font-semibold text-forest-highland transition-colors hover:bg-forest-highland hover:text-white"
-              >
+              <Button href="/routes" variant="outline" size="sm">
                 Browse routes
-              </Link>
+              </Button>
             </div>
           </div>
         </Container>

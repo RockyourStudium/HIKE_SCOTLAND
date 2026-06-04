@@ -6,6 +6,7 @@ import { CalendarDays, TrainFront, Backpack, Dumbbell, PawPrint } from "lucide-r
 import { routes, getRouteById } from "@/data/routes";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
+import Button from "@/components/Button";
 import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
@@ -175,12 +176,9 @@ export default function RouteDetailPage({ params }: { params: { id: string } }) 
                 <AddToTripButton kind="route" id={route.id} block />
               </div>
               {dest && (
-                <Link
-                  href={`/destinations/${dest.slug}`}
-                  className="mt-2 block rounded-full border border-forest-highland px-5 py-3 text-center text-sm font-semibold text-forest-highland transition-colors hover:bg-forest-highland hover:text-white"
-                >
+                <Button href={`/destinations/${dest.slug}`} variant="outline" size="sm" block className="mt-2">
                   Explore {dest.name}
-                </Link>
+                </Button>
               )}
             </div>
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Map, Compass, Tent } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Button from "@/components/Button";
 import { heroImage } from "@/lib/heroImage";
 
 // Where lost walkers most likely meant to go.
@@ -60,12 +61,9 @@ export default function NotFound() {
 
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <AnimatedCTA href="/">Back to base camp</AnimatedCTA>
-          <Link
-            href="/routes"
-            className="inline-flex items-center justify-center rounded-full border border-fog/30 px-7 py-3.5 text-base font-semibold text-fog transition-colors hover:bg-white/10"
-          >
+          <Button href="/routes" variant="ghost" size="md">
             Browse routes
-          </Link>
+          </Button>
         </div>
 
         <div className="mt-16 grid gap-4 sm:grid-cols-3">

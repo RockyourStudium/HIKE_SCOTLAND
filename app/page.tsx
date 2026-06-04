@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MountainSnow, Castle, Bird } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Button from "@/components/Button";
 import CinematicHero from "@/components/CinematicHero";
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
@@ -108,12 +109,9 @@ export default function HomePage() {
         }
       >
         <AnimatedCTA href="/plan">Start the trip planner</AnimatedCTA>
-        <Link
-          href="/routes"
-          className="inline-flex items-center justify-center rounded-full border border-fog/30 px-7 py-3.5 text-base font-semibold text-fog transition-colors hover:bg-white/10"
-        >
+        <Button href="/routes" variant="ghost" size="md">
           Browse routes
-        </Link>
+        </Button>
       </CinematicHero>
 
       {/* Feeling statement */}
@@ -174,12 +172,9 @@ export default function HomePage() {
               Trails worth lacing up for
             </h2>
           </div>
-          <Link
-            href="/routes"
-            className="rounded-full border border-fog/30 px-5 py-2.5 text-sm font-semibold text-fog transition-colors hover:bg-white/10"
-          >
+          <Button href="/routes" variant="ghost" size="sm">
             View all routes
-          </Link>
+          </Button>
         </Reveal>
         <Reveal>
           <RouteCarousel routes={featuredRoutes} />

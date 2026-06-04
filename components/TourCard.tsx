@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Tour } from "@/data/types";
 import { DifficultyBadge } from "./Badge";
+import Button from "./Button";
 
 export default function TourCard({ tour }: { tour: Tour }) {
   return (
@@ -59,9 +60,9 @@ export default function TourCard({ tour }: { tour: Tour }) {
               <span className="text-sm font-normal text-neutralgray"> / person</span>
             </p>
           </div>
-          <span className="rounded-full bg-forest-highland px-5 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-forest-dark">
+          <Button as="span" variant="secondary" className="group-hover:bg-forest-dark">
             View details
-          </span>
+          </Button>
         </div>
       </div>
     </Link>

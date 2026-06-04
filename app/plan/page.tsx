@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { MapPin } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import Button from "@/components/Button";
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import RouteCard from "@/components/RouteCard";
@@ -437,13 +438,9 @@ function Results({
             <AnimatedCTA href="/my-trip">
               View my trip{hydrated && count > 0 ? ` (${count})` : ""}
             </AnimatedCTA>
-            <button
-              type="button"
-              onClick={onRestart}
-              className="inline-flex items-center justify-center rounded-full border border-fog/30 px-6 py-3 text-sm font-semibold text-fog transition-colors hover:bg-white/10"
-            >
+            <Button type="button" onClick={onRestart} variant="ghost" size="sm">
               ↺ Start over
-            </button>
+            </Button>
           </div>
         </Container>
       </header>
@@ -522,12 +519,9 @@ function Results({
           </p>
           <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
             <AnimatedCTA href="/my-trip">Go to my trip</AnimatedCTA>
-            <Link
-              href="/routes"
-              className="rounded-full border border-forest-highland px-6 py-2.5 text-sm font-semibold text-forest-highland transition-colors hover:bg-forest-highland hover:text-white"
-            >
+            <Button href="/routes" variant="outline" size="sm">
               Browse all routes
-            </Link>
+            </Button>
           </div>
         </div>
       </Container>
