@@ -1,11 +1,11 @@
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import type { Tables } from "@/types/database.types";
 
 export type Product = Tables<"products">;
 
 /** Alle Produkte, alphabetisch nach Name. */
 export async function getAllProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("products")
     .select("*")
     .order("name");
