@@ -7,6 +7,77 @@ Setup**, **laufende Pflege** und **Notfälle** (Backup/Restore).
 > **Nie** das Schema im Dashboard von Hand ändern — immer über eine Migration
 > (siehe „Schema ändern").
 
+> Live-Projekt: `hike-scotland` · Ref `bmcukaibgfvmvfqlmzwv` · Region eu-central-1
+
+---
+
+## 0. ER-Diagramm
+
+```mermaid
+erDiagram
+    auth_users  ||--||  profiles    : "1:1 (id = auth.uid)"
+    profiles    ||--o{  orders      : "platziert"
+    profiles    ||--o{  reviews     : "schreibt"
+    orders      ||--o{  order_items : "enthält"
+    products    ||--o{  order_items : "ist Position in"
+    products    ||--o{  reviews     : "wird bewertet in"
+
+    auth_users {
+        uuid id PK "von Supabase verwaltet"
+    }
+
+    profiles {
+        uuid        id          PK "= auth.users.id"
+        text        name
+        text        email          "unique"
+        text        phone
+        text        address
+        timestamptz created_at
+    }
+
+    products {
+        uuid          id          PK
+        text          name           "NOT NULL"
+        numeric       price          "NOT NULL, >= 0"
+        text          description
+        text          image_url
+        jsonb         variants       "Varianten/SKUs"
+        timestamptz   created_at
+        timestamptz   updated_at
+    }
+
+    orders {
+        uuid          id             PK
+        uuid          user_id        FK "-> profiles (CASCADE)"
+        numeric       total          "NOT NULL, >= 0"
+        text          status         "pending|processing|completed|cancelled|refunded"
+        text          payment_status "unpaid|paid|failed|refunded"
+        timestamptz   created_at
+        timestamptz   updated_at
+    }
+
+    order_items {
+        uuid          id          PK
+        uuid          order_id    FK "-> orders (CASCADE)"
+        uuid          product_id  FK "-> products (RESTRICT)"
+        integer       quantity       "> 0"
+        numeric       unit_price     "Preis zum Kaufzeitpunkt"
+    }
+
+    reviews {
+        uuid          id          PK
+        uuid          user_id     FK "-> profiles (CASCADE)"
+        uuid          product_id  FK "-> products (CASCADE)"
+        integer       rating         "1-5"
+        text          body
+        timestamptz   created_at
+        timestamptz   updated_at
+    }
+```
+
+> Lesehilfe: `||--o{` = „eins zu null-oder-viele". `auth_users` ist die von
+> Supabase verwaltete Login-Tabelle (`auth.users`); `profiles` hängt 1:1 daran.
+
 ---
 
 ## 1. Voraussetzungen (einmalig)
