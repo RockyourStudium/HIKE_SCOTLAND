@@ -41,15 +41,32 @@ export default function NewsletterForm() {
     return next;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  const [pending, setPending] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length === 0) {
-      // Frontend-only for now: no data leaves the browser. Hook a real
-      // newsletter service in here later.
+    if (Object.keys(next).length > 0) return;
+
+    setPending(true);
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          firstName: firstName.trim(),
+          source: "newsletter",
+        }),
+      });
+      if (!res.ok) throw new Error("subscribe failed");
       setSubmitted(true);
       setToast(true);
+    } catch {
+      setErrors({ email: "Something went wrong. Please try again." });
+    } finally {
+      setPending(false);
     }
   }
 
@@ -66,7 +83,7 @@ export default function NewsletterForm() {
         <div className="min-w-0 flex-1">
           <p className="font-display text-sm font-bold text-fog">You&apos;re on your way!</p>
           <p className="mt-0.5 text-sm leading-snug text-fog/75">
-            Check your inbox to confirm your subscription.
+            Fresh routes and seasonal highlights are on their way.
           </p>
         </div>
         <button
@@ -168,8 +185,8 @@ export default function NewsletterForm() {
           </div>
         </div>
 
-        <AnimatedCTA type="submit" block className="mt-7 text-base">
-          Fetch latest news
+        <AnimatedCTA type="submit" block className="mt-7 text-base" disabled={pending}>
+          {pending ? "Signing you up …" : "Fetch latest news"}
         </AnimatedCTA>
 
         <p className="mt-4 text-center text-xs leading-relaxed text-fog/60">

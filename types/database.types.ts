@@ -196,6 +196,45 @@ export type Database = {
           },
         ]
       }
+      subscribers: {
+        Row: {
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          source: string | null
+          status: string
+          token: string
+          unsubscribed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          source?: string | null
+          status?: string
+          token?: string
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          source?: string | null
+          status?: string
+          token?: string
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
