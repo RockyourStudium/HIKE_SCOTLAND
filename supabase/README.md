@@ -73,10 +73,53 @@ erDiagram
         timestamptz   created_at
         timestamptz   updated_at
     }
+
+    subscribers {
+        uuid          id              PK
+        text          email           "unique(lower(email))"
+        text          first_name
+        text          status          "pending|subscribed|unsubscribed"
+        uuid          token           "für Confirm-/Unsubscribe-Links"
+        text          source
+        timestamptz   created_at
+        timestamptz   updated_at
+        timestamptz   confirmed_at
+        timestamptz   unsubscribed_at
+    }
 ```
 
 > Lesehilfe: `||--o{` = „eins zu null-oder-viele". `auth_users` ist die von
 > Supabase verwaltete Login-Tabelle (`auth.users`); `profiles` hängt 1:1 daran.
+> `subscribers` steht bewusst **ohne** Beziehung — Newsletter braucht kein Login.
+
+---
+
+## Newsletter — Abonnenten (`subscribers`)
+
+Eigene, **auth-unabhängige** Tabelle für Newsletter-Anmeldungen (kein Login).
+Enthält PII (E-Mails) → **kein öffentlicher Lesezugriff**: RLS ist aktiv, aber
+bewusst **ohne** anon/authenticated-Policies. Aller Zugriff läuft serverseitig
+über den `service_role`-Key.
+
+- **Spalten:** `id · email · first_name · status (pending|subscribed|unsubscribed) · token · source · created_at · updated_at · confirmed_at · unsubscribed_at`. E-Mail case-insensitive eindeutig (`unique index on lower(email)`); jeder Abonnent hat einen geheimen `token` für Confirm-/Unsubscribe-Links.
+- **Aktueller Modus:** *ohne* Double Opt-in — Anmeldung setzt direkt `status='subscribed'`. Schema unterstützt Double Opt-in über `pending` + Confirm-Route; für DE/EU-Marketing **vor echtem Versand nachrüsten**.
+
+**Routen (App):**
+
+| Route | Zweck |
+|---|---|
+| `POST /api/newsletter/subscribe` | Anmeldung (`{email, firstName?, source?}`); reaktiviert Abgemeldete, idempotent |
+| `POST /api/newsletter/unsubscribe` | Abmeldung per `{token}` |
+| `/unsubscribe?token=…` | Abmelde-Seite mit Bestätigungs-Button (schützt vor Link-Prefetch) |
+
+**Unsubscribe-Link im Newsletter:**
+`https://hike-scotland-claude.vercel.app/unsubscribe?token=<token-des-abonnenten>`
+
+**Dateien:** Migration `supabase/migrations/20260605000000_newsletter_subscribers.sql` ·
+`lib/supabase-admin.ts` (service_role-Client) · `app/api/newsletter/*` ·
+`app/unsubscribe/` · Anbindung in `components/NewsletterForm.tsx`.
+
+> ⚠️ **Mailversand ist noch nicht angebunden** — aktuell wird nur gespeichert.
 
 ---
 
@@ -110,7 +153,8 @@ npx supabase link --project-ref <project-ref>   # ref steht im Dashboard-URL
 npx supabase db push      # spielt alle Dateien aus supabase/migrations/ ein
 ```
 Damit entstehen die Tabellen `profiles, products, orders, order_items, reviews`
-inkl. RLS, Indizes und den 5 Seed-Produkten.
+(inkl. RLS, Indizes und den 5 Seed-Produkten) sowie `subscribers` für den
+Newsletter (siehe eigenen Abschnitt unten).
 
 ### 2.4 Umgebungsvariablen für Next.js
 Im Dashboard unter **Project Settings → API** holen und in `.env.local` legen
