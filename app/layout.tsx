@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Josefin_Sans, Lato } from "next/font/google";
 import "./globals.css";
+import HideOnAdmin from "@/components/HideOnAdmin";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import NewsletterBand from "@/components/NewsletterBand";
@@ -67,12 +68,16 @@ export default function RootLayout({
         </a>
         <CatalogProvider>
           <TripProvider>
-            <Navbar />
+            <HideOnAdmin>
+              <Navbar />
+            </HideOnAdmin>
             <main id="main" className="flex-1">
               {children}
             </main>
-            <NewsletterBand />
-            <Footer />
+            <HideOnAdmin>
+              <NewsletterBand />
+              <Footer />
+            </HideOnAdmin>
           </TripProvider>
         </CatalogProvider>
       </body>
