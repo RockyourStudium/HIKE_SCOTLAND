@@ -15,12 +15,11 @@ Setup**, **laufende Pflege** und **Notfälle** (Backup/Restore).
 
 ```mermaid
 erDiagram
-    auth_users  ||--||  profiles    : "1:1 (id = auth.uid)"
-    profiles    ||--o{  orders      : "platziert"
-    profiles    ||--o{  reviews     : "schreibt"
-    orders      ||--o{  order_items : "enthält"
-    products    ||--o{  order_items : "ist Position in"
-    products    ||--o{  reviews     : "wird bewertet in"
+    auth_users      ||--||  profiles      : "1:1 (id = auth.uid)"
+    profiles        ||--o{  bookings      : "bucht"
+    profiles        ||--o{  reviews       : "schreibt"
+    bookings        ||--o{  booking_items : "enthält"
+    tour_departures ||--o{  booking_items : "Termin für (optional)"
 
     auth_users {
         uuid id PK "von Supabase verwaltet"
@@ -35,40 +34,53 @@ erDiagram
         timestamptz created_at
     }
 
-    products {
-        uuid          id          PK
-        text          name           "NOT NULL"
-        numeric       price          "NOT NULL, >= 0"
-        text          description
-        text          image_url
-        jsonb         variants       "Varianten/SKUs"
+    tour_departures {
+        uuid          id               PK
+        text          tour_id          "statische Katalog-ID"
+        date          departure_date
+        integer       capacity
+        integer       seats_remaining
+        numeric       price_per_person "optionaler Override"
+        text          status           "scheduled|weather_hold|cancelled|completed"
         timestamptz   created_at
         timestamptz   updated_at
     }
 
-    orders {
+    bookings {
         uuid          id             PK
         uuid          user_id        FK "-> profiles (CASCADE)"
-        numeric       total          "NOT NULL, >= 0"
-        text          status         "pending|processing|completed|cancelled|refunded"
-        text          payment_status "unpaid|paid|failed|refunded"
+        text          status         "pending|confirmed|completed|cancelled|no_show"
+        text          payment_status "unpaid|paid|failed|refunded|partially_refunded"
+        date          start_date
+        date          end_date
+        integer       party_size
+        numeric       total
+        text          currency       "default GBP"
+        text          notes
         timestamptz   created_at
         timestamptz   updated_at
     }
 
-    order_items {
-        uuid          id          PK
-        uuid          order_id    FK "-> orders (CASCADE)"
-        uuid          product_id  FK "-> products (RESTRICT)"
-        integer       quantity       "> 0"
-        numeric       unit_price     "Preis zum Kaufzeitpunkt"
+    booking_items {
+        uuid          id                PK
+        uuid          booking_id        FK "-> bookings (CASCADE)"
+        text          item_type         "tour|stay|route"
+        text          item_id           "statische Katalog-ID"
+        text          title             "Name-Snapshot"
+        uuid          tour_departure_id FK "-> tour_departures (SET NULL)"
+        integer       quantity          "Personen / Nächte"
+        numeric       unit_price        "eingefroren"
+        numeric       line_total
+        integer       position
+        timestamptz   created_at
     }
 
     reviews {
-        uuid          id          PK
-        uuid          user_id     FK "-> profiles (CASCADE)"
-        uuid          product_id  FK "-> products (CASCADE)"
-        integer       rating         "1-5"
+        uuid          id           PK
+        uuid          user_id      FK "-> profiles (CASCADE)"
+        text          subject_type "tour|stay|route"
+        text          subject_id   "statische Katalog-ID"
+        integer       rating       "1-5"
         text          body
         timestamptz   created_at
         timestamptz   updated_at
@@ -91,6 +103,33 @@ erDiagram
 > Lesehilfe: `||--o{` = „eins zu null-oder-viele". `auth_users` ist die von
 > Supabase verwaltete Login-Tabelle (`auth.users`); `profiles` hängt 1:1 daran.
 > `subscribers` steht bewusst **ohne** Beziehung — Newsletter braucht kein Login.
+>
+> ⚠️ **Der Katalog (Tours/Stays/Routes) liegt NICHT in der DB**, sondern statisch
+> in `data/*.ts`. Deshalb sind `booking_items.item_id`, `tour_departures.tour_id`
+> und `reviews.subject_id` **Text-IDs ohne FK** — sie verweisen auf die statischen
+> Katalog-Einträge. Nur `tour_departures` hat einen echten FK aus `booking_items`.
+
+---
+
+## Buchungsmodell (Touren)
+
+Eine **selbst zusammengestellte Tour** wird beim Buchen als **Snapshot**
+gespeichert (der „My Trip"-Planer bleibt clientseitig in localStorage):
+
+- **`bookings`** — eine Buchung: Bucher (`user_id`), Zeitraum, `party_size`,
+  `total`, Status-Maschinen (`status`, `payment_status`).
+- **`booking_items`** — die Posten der Tour, **eingefroren**: `item_type`
+  (tour|stay|route) + `item_id` (Katalog-ID) + `title`/`unit_price`/`line_total`
+  zum Buchungszeitpunkt. Tour-Posten zeigen optional auf eine `tour_departure`.
+- **`tour_departures`** — konkrete Abreisetermine je Tour mit `capacity` /
+  `seats_remaining` (+ `weather_hold`-Status fürs schottische Wetter). Öffentlich
+  lesbar; Schreiben nur via `service_role`.
+- **`reviews`** — polymorph über `subject_type`/`subject_id` (Tour, Stay **oder**
+  Route), eine Review pro Nutzer & Objekt.
+
+> ⚠️ **Noch offen:** Buchungs-Route (serverseitig, mit Sitzplatz-Abzug auf
+> `tour_departures.seats_remaining` in einer Transaktion) und Zahlungsanbindung.
+> Aktuell existiert das Datenmodell; die Checkout-Logik folgt.
 
 ---
 
@@ -152,9 +191,9 @@ npx supabase link --project-ref <project-ref>   # ref steht im Dashboard-URL
 ```bash
 npx supabase db push      # spielt alle Dateien aus supabase/migrations/ ein
 ```
-Damit entstehen die Tabellen `profiles, products, orders, order_items, reviews`
-(inkl. RLS, Indizes und den 5 Seed-Produkten) sowie `subscribers` für den
-Newsletter (siehe eigenen Abschnitt unten).
+Damit entstehen die Tabellen `profiles, tour_departures, bookings, booking_items,
+reviews` (Buchungsmodell, inkl. RLS, Indizes und ein paar Seed-Abreiseterminen)
+sowie `subscribers` für den Newsletter (siehe eigene Abschnitte oben).
 
 ### 2.4 Umgebungsvariablen für Next.js
 Im Dashboard unter **Project Settings → API** holen und in `.env.local` legen
@@ -211,8 +250,10 @@ Verwendung im Code: `createClient<Database>(...)` (Stack-B-Muster, ohne ORM).
 
 ## 5. Seed-Daten
 
-- Aktuell stehen 5 Beispiel-Produkte direkt in der Init-Migration (feste UUIDs,
-  `ON CONFLICT DO NOTHING` → mehrfaches Einspielen schadet nicht).
+- Aktuell stehen ein paar Beispiel-**Abreisetermine** (`tour_departures`) direkt
+  in der Umbau-Migration (`ON CONFLICT (tour_id, departure_date) DO NOTHING` →
+  mehrfaches Einspielen schadet nicht). `tour_id` verweist auf die statischen
+  Touren in `data/tours.ts`.
 - Für umfangreichere Testdaten: `supabase/seed.sql` anlegen — die wird bei
   `supabase db reset` automatisch nach den Migrationen ausgeführt.
 

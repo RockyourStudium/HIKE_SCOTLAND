@@ -14,50 +14,73 @@ export type Database = {
   }
   public: {
     Tables: {
-      order_items: {
+      booking_items: {
         Row: {
+          booking_id: string
+          created_at: string
           id: string
-          order_id: string
-          product_id: string
+          item_id: string
+          item_type: string
+          line_total: number
+          position: number | null
           quantity: number
+          title: string
+          tour_departure_id: string | null
           unit_price: number
         }
         Insert: {
+          booking_id: string
+          created_at?: string
           id?: string
-          order_id: string
-          product_id: string
-          quantity: number
+          item_id: string
+          item_type: string
+          line_total: number
+          position?: number | null
+          quantity?: number
+          title: string
+          tour_departure_id?: string | null
           unit_price: number
         }
         Update: {
+          booking_id?: string
+          created_at?: string
           id?: string
-          order_id?: string
-          product_id?: string
+          item_id?: string
+          item_type?: string
+          line_total?: number
+          position?: number | null
           quantity?: number
+          title?: string
+          tour_departure_id?: string | null
           unit_price?: number
         }
         Relationships: [
           {
-            foreignKeyName: "order_items_order_id_fkey"
-            columns: ["order_id"]
+            foreignKeyName: "booking_items_booking_id_fkey"
+            columns: ["booking_id"]
             isOneToOne: false
-            referencedRelation: "orders"
+            referencedRelation: "bookings"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_items_product_id_fkey"
-            columns: ["product_id"]
+            foreignKeyName: "booking_items_tour_departure_id_fkey"
+            columns: ["tour_departure_id"]
             isOneToOne: false
-            referencedRelation: "products"
+            referencedRelation: "tour_departures"
             referencedColumns: ["id"]
           },
         ]
       }
-      orders: {
+      bookings: {
         Row: {
           created_at: string
+          currency: string
+          end_date: string | null
           id: string
+          notes: string | null
+          party_size: number
           payment_status: string
+          start_date: string | null
           status: string
           total: number
           updated_at: string
@@ -65,17 +88,27 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          currency?: string
+          end_date?: string | null
           id?: string
+          notes?: string | null
+          party_size?: number
           payment_status?: string
+          start_date?: string | null
           status?: string
-          total: number
+          total?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          currency?: string
+          end_date?: string | null
           id?: string
+          notes?: string | null
+          party_size?: number
           payment_status?: string
+          start_date?: string | null
           status?: string
           total?: number
           updated_at?: string
@@ -83,46 +116,13 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "orders_user_id_fkey"
+            foreignKeyName: "bookings_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
-      }
-      products: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          image_url: string | null
-          name: string
-          price: number
-          updated_at: string
-          variants: Json
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string | null
-          name: string
-          price: number
-          updated_at?: string
-          variants?: Json
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string | null
-          name?: string
-          price?: number
-          updated_at?: string
-          variants?: Json
-        }
-        Relationships: []
       }
       profiles: {
         Row: {
@@ -156,8 +156,9 @@ export type Database = {
           body: string | null
           created_at: string
           id: string
-          product_id: string
           rating: number
+          subject_id: string
+          subject_type: string
           updated_at: string
           user_id: string
         }
@@ -165,8 +166,9 @@ export type Database = {
           body?: string | null
           created_at?: string
           id?: string
-          product_id: string
           rating: number
+          subject_id: string
+          subject_type: string
           updated_at?: string
           user_id: string
         }
@@ -174,19 +176,13 @@ export type Database = {
           body?: string | null
           created_at?: string
           id?: string
-          product_id?: string
           rating?: number
+          subject_id?: string
+          subject_type?: string
           updated_at?: string
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "reviews_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "reviews_user_id_fkey"
             columns: ["user_id"]
@@ -231,6 +227,42 @@ export type Database = {
           status?: string
           token?: string
           unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tour_departures: {
+        Row: {
+          capacity: number
+          created_at: string
+          departure_date: string
+          id: string
+          price_per_person: number | null
+          seats_remaining: number
+          status: string
+          tour_id: string
+          updated_at: string
+        }
+        Insert: {
+          capacity: number
+          created_at?: string
+          departure_date: string
+          id?: string
+          price_per_person?: number | null
+          seats_remaining: number
+          status?: string
+          tour_id: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          departure_date?: string
+          id?: string
+          price_per_person?: number | null
+          seats_remaining?: number
+          status?: string
+          tour_id?: string
           updated_at?: string
         }
         Relationships: []
