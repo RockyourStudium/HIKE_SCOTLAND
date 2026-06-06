@@ -16,9 +16,13 @@ Next.js 14 (App Router) · React 18 · TypeScript · Tailwind CSS 3 ·
 `lucide-react` · Leaflet + `react-leaflet@4` (an React 18 gepinnt — **v5 will
 React 19, nicht upgraden**) · `sharp` für Bildoptimierung.
 
-Kein Backend, keine DB: alle Inhalte statisch in `data/*.ts`
-(routes/tours/stays/destinations/types), jedes Item mit `coords {lat,lng}`.
-Trip-State lebt im React Context + localStorage (`lib/trip.tsx`).
+**Supabase** (PostgreSQL) als Backend — Details in `supabase/README.md`. In der
+DB liegen: Katalog (`tours`/`routes`/`stays`, jedes Item mit `coords {lat,lng}`),
+Buchungen (`bookings`/`booking_items`/`tour_departures`) und Newsletter
+(`subscribers`). Server liest über `lib/catalog.ts` (anon-Key, RLS); Schreib-/
+Admin-Zugriff **nur** server-seitig über `lib/supabase-admin.ts` (`service_role`).
+In `data/*.ts` bleiben nur noch `destinations`, `imageCredits` und `types`
+(App-Typen). Trip-State lebt im React Context + localStorage (`lib/trip.tsx`).
 
 ## Dev-Workflow
 
@@ -40,8 +44,8 @@ bauen/prüfen, dann pushen.
 - **Hell/Dunkel-Teilung nicht ohne Ansage brechen.** Marketing-Seiten (`/`,
   `/destinations`, `/destinations/[slug]`) sind bewusst dunkel/cineastisch;
   funktionale Seiten (`/plan`, `/my-trip`, `/routes`, `/tours`, `/stays`,
-  Detailseiten, `/credits`) bleiben hell — wegen Lesbarkeit von Formularen,
-  Karten und Cards.
+  Detailseiten, `/credits`, `/admin`) bleiben hell — wegen Lesbarkeit von
+  Formularen, Karten und Cards.
 - **`<Suspense>` im Planner nicht entfernen.** `useSearchParams` in
   `app/plan/page.tsx` braucht in Next 14 eine Suspense-Grenze beim statischen
   Prerender, sonst bricht der Build.
@@ -51,6 +55,11 @@ bauen/prüfen, dann pushen.
 - **Hydration:** Trip-Inhalte werden erst clientseitig aus localStorage geladen
   (`hydrated`-Flag). Komponenten dürfen vor `hydrated` nichts Abweichendes
   rendern — sonst SSR/CSR-Mismatch.
+- **`/admin` ist noch ohne echtes Login** und zeigt PII + Schreibzugriff. Schutz
+  vorerst über `middleware.ts`: 404, solange `ADMIN_ENABLED !== "true"` (Variable
+  nur lokal in `.env.local`). **In Production NICHT setzen**, bis echte Auth steht
+  — sonst läge das Dashboard offen. Reads über `service_role` nur in Server
+  Components / Server Actions (`lib/admin/*`).
 
 ## Konventionen
 

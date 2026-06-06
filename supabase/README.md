@@ -242,6 +242,11 @@ nur via `service_role`.
 > `data/types.ts` (App-Typen), `data/destinations.ts` und `data/imageCredits.ts`
 > bleiben bewusst statisch — nur tours/routes/stays sind in die DB gewandert.
 
+> **Pflege im Betrieb:** Katalog, Buchungen und Newsletter werden über das
+> interne Dashboard `/admin` bearbeitet (server-only via `service_role`, hinter
+> dem `ADMIN_ENABLED`-Gate — siehe Projekt-`CLAUDE.md`). Schema-Änderungen
+> weiterhin **nur** per Migration.
+
 ---
 
 ## Newsletter — Abonnenten (`subscribers`)

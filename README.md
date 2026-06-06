@@ -17,6 +17,12 @@ cinematic marketing front paired with a hands-on trip planner.
   your itinerary order; hover a card to locate it on the map.
 - **Cinematic destination pages** — full-bleed photography, large display
   typography, scroll reveals.
+- **Booking** — book a self-assembled trip as a guest; a race-safe SQL function
+  re-checks availability and freezes prices server-side.
+- **Newsletter** — email signup with token-based unsubscribe.
+- **Admin dashboard** (`/admin`) — internal tooling to manage subscribers,
+  bookings and the catalog (tours/routes/stays + tour departures). Gated by an
+  `ADMIN_ENABLED` env flag; no public auth yet.
 - **Accessible by default** — skip link, visible focus rings, reduced-motion
   support, semantic landmarks, labelled forms.
 
@@ -26,8 +32,12 @@ cinematic marketing front paired with a hands-on trip planner.
 - [Tailwind CSS 3](https://tailwindcss.com/) · [lucide-react](https://lucide.dev/) icons
 - [Leaflet](https://leafletjs.com/) + react-leaflet (OpenStreetMap tiles, no API key)
 - [sharp](https://sharp.pixelplumbing.com/) for build-time image optimisation
+- [Supabase](https://supabase.com/) (PostgreSQL) — catalog, bookings & newsletter
 
-No backend or database — all content is static and typed in `data/*.ts`.
+The catalog (routes, tours, stays), bookings and newsletter subscribers live in
+Supabase; public pages read it server-side with ISR (`revalidate`). `data/*.ts`
+keeps only destinations, image credits and shared types. Schema, setup and
+maintenance: see [`supabase/README.md`](supabase/README.md).
 
 ## Getting started
 
@@ -50,11 +60,14 @@ npm run dev      # http://localhost:3000
 
 ```
 app/          Routes (App Router): /, /plan, /my-trip, /routes, /tours,
-              /destinations, /stays, /credits …
-components/   UI: CinematicHero, Navbar, cards, carousels, maps, forms
-data/         Static, typed content (routes, tours, stays, destinations)
-lib/          recommend (quiz scoring), trip (context + localStorage),
-              heroImage, mapPoints
+              /destinations, /stays, /credits, /newsletter, /unsubscribe …
+app/admin/    Internal dashboard: overview, subscribers, bookings, catalog CRUD
+app/api/      Route handlers: /api/bookings, /api/newsletter/*
+components/    UI: CinematicHero, Navbar, cards, carousels, maps, forms; admin/*
+data/         Static, typed content (destinations, image credits, shared types)
+lib/          catalog + supabase (DB access), admin/* (service_role reads),
+              recommend (quiz scoring), trip (context + localStorage), mapPoints
+supabase/     SQL migrations + database README (schema, setup, maintenance)
 public/       Optimised imagery (heroes, cards, gallery)
 ```
 
