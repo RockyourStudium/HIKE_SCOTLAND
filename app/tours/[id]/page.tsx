@@ -11,6 +11,9 @@ import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
+// ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   const tours = await getTours();
   return tours.map((t) => ({ id: t.id }));
