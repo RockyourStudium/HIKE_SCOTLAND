@@ -192,6 +192,129 @@ export type Database = {
           },
         ]
       }
+      routes: {
+        Row: {
+          active: boolean
+          ascent_m: number
+          created_at: string
+          days: number
+          description: Json
+          difficulty: string
+          distance_km: number
+          dog_friendly: boolean
+          duration_hours: number
+          gradient: string | null
+          highlights: Json
+          id: string
+          image: string | null
+          lat: number
+          lng: number
+          name: string
+          region: string
+          seasons: Json
+          summary: string
+          terrain: Json
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          ascent_m: number
+          created_at?: string
+          days: number
+          description?: Json
+          difficulty: string
+          distance_km: number
+          dog_friendly: boolean
+          duration_hours: number
+          gradient?: string | null
+          highlights?: Json
+          id: string
+          image?: string | null
+          lat: number
+          lng: number
+          name: string
+          region: string
+          seasons?: Json
+          summary: string
+          terrain?: Json
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          ascent_m?: number
+          created_at?: string
+          days?: number
+          description?: Json
+          difficulty?: string
+          distance_km?: number
+          dog_friendly?: boolean
+          duration_hours?: number
+          gradient?: string | null
+          highlights?: Json
+          id?: string
+          image?: string | null
+          lat?: number
+          lng?: number
+          name?: string
+          region?: string
+          seasons?: Json
+          summary?: string
+          terrain?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      stays: {
+        Row: {
+          active: boolean
+          amenities: Json
+          created_at: string
+          gradient: string | null
+          id: string
+          lat: number
+          lng: number
+          name: string
+          price_per_night: number
+          rating: number
+          region: string
+          summary: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          amenities?: Json
+          created_at?: string
+          gradient?: string | null
+          id: string
+          lat: number
+          lng: number
+          name: string
+          price_per_night: number
+          rating: number
+          region: string
+          summary: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          amenities?: Json
+          created_at?: string
+          gradient?: string | null
+          id?: string
+          lat?: number
+          lng?: number
+          name?: string
+          price_per_night?: number
+          rating?: number
+          region?: string
+          summary?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscribers: {
         Row: {
           confirmed_at: string | null
@@ -263,6 +386,77 @@ export type Database = {
           seats_remaining?: number
           status?: string
           tour_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tour_departures_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tours: {
+        Row: {
+          active: boolean
+          created_at: string
+          days: number
+          description: Json
+          difficulty: string
+          gradient: string | null
+          group_size: string
+          guided: boolean
+          id: string
+          image: string | null
+          includes: Json
+          lat: number
+          lng: number
+          name: string
+          price_per_person: number
+          region: string
+          summary: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          days: number
+          description?: Json
+          difficulty: string
+          gradient?: string | null
+          group_size: string
+          guided: boolean
+          id: string
+          image?: string | null
+          includes?: Json
+          lat: number
+          lng: number
+          name: string
+          price_per_person: number
+          region: string
+          summary: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          days?: number
+          description?: Json
+          difficulty?: string
+          gradient?: string | null
+          group_size?: string
+          guided?: boolean
+          id?: string
+          image?: string | null
+          includes?: Json
+          lat?: number
+          lng?: number
+          name?: string
+          price_per_person?: number
+          region?: string
+          summary?: string
           updated_at?: string
         }
         Relationships: []
