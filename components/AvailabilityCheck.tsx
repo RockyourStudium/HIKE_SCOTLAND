@@ -9,9 +9,9 @@ import {
 } from "@/lib/availability";
 
 /**
- * Datum + Personenzahl wählen und prüfen, ob die zusammengestellte Tour im
- * Zeitraum buchbar ist. Zeigt nur "möglich / nicht möglich" + Gründe —
- * Alternativvorschläge folgen später per AI.
+ * Pick dates + party size and check whether the assembled trip can be booked.
+ * Shows only "available / not possible" + reasons — AI-driven alternatives
+ * will come later.
  */
 export default function AvailabilityCheck({
   items,
@@ -47,16 +47,17 @@ export default function AvailabilityCheck({
     <section className="mt-10 rounded-2xl bg-white p-6 shadow-card sm:p-8">
       <h2 className="flex items-center gap-2 font-display text-2xl font-bold text-forest-darkest">
         <CalendarDays aria-hidden className="h-6 w-6" color="url(#hike-gradient)" />
-        Verfügbarkeit prüfen
+        Check availability
       </h2>
       <p className="mt-1 text-sm text-neutralgray">
-        Wähle Zeitraum und Personenzahl — wir prüfen, ob deine Tour so buchbar ist.
+        Pick your dates and party size — we&apos;ll check whether your trip can be
+        booked.
       </p>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-3">
         <div>
           <label htmlFor="av-start" className="block text-sm font-semibold text-forest-dark">
-            Von
+            From
           </label>
           <input
             id="av-start"
@@ -68,7 +69,7 @@ export default function AvailabilityCheck({
         </div>
         <div>
           <label htmlFor="av-end" className="block text-sm font-semibold text-forest-dark">
-            Bis
+            To
           </label>
           <input
             id="av-end"
@@ -81,7 +82,7 @@ export default function AvailabilityCheck({
         </div>
         <div>
           <label htmlFor="av-party" className="block text-sm font-semibold text-forest-dark">
-            Personen
+            People
           </label>
           <input
             id="av-party"
@@ -101,12 +102,12 @@ export default function AvailabilityCheck({
         className="mt-5 inline-flex items-center gap-2 rounded-xl bg-forest-highland px-6 py-3 font-semibold text-white transition-colors hover:bg-forest-dark disabled:opacity-50"
       >
         {state === "loading" && <Loader2 aria-hidden className="h-4 w-4 animate-spin" />}
-        {state === "loading" ? "Prüfe …" : "Verfügbarkeit prüfen"}
+        {state === "loading" ? "Checking …" : "Check availability"}
       </button>
 
       {state === "error" && (
         <p className="mt-4 text-sm font-medium text-danger">
-          Die Prüfung hat nicht geklappt. Bitte versuche es später erneut.
+          Something went wrong. Please try again later.
         </p>
       )}
 
@@ -114,8 +115,8 @@ export default function AvailabilityCheck({
         <div className="mt-5 flex items-start gap-3 rounded-xl bg-mint/15 p-4 ring-1 ring-inset ring-forest-highland/30">
           <CheckCircle2 aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-forest-highland" />
           <p className="text-sm font-medium text-forest-dark">
-            Diese Tour ist im gewählten Zeitraum für {party}{" "}
-            {party === 1 ? "Person" : "Personen"} buchbar.
+            This trip can be booked for the selected dates for {party}{" "}
+            {party === 1 ? "person" : "people"}.
           </p>
         </div>
       )}
@@ -125,7 +126,7 @@ export default function AvailabilityCheck({
           <XCircle aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-danger" />
           <div className="text-sm">
             <p className="font-semibold text-danger">
-              Buchung ist im gewählten Zeitraum nicht möglich.
+              This trip can&apos;t be booked for the selected dates.
             </p>
             <ul className="mt-1 list-disc space-y-0.5 pl-5 text-forest-dark">
               {result.reasons.map((r, i) => (
