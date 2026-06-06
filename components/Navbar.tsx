@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Mountain, Backpack } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
+import SearchDialog from "@/components/SearchDialog";
 import { destinations } from "@/data/destinations";
 import { useTrip } from "@/lib/trip";
 
@@ -165,6 +166,9 @@ export default function Navbar() {
             );
           })}
           <li>
+            <SearchDialog />
+          </li>
+          <li>
             <TripLink />
           </li>
           <li>
@@ -174,14 +178,16 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          className="inline-flex items-center justify-center rounded-lg p-2 text-fog hover:bg-forest-highland/40 lg:hidden"
-        >
+        {/* Mobile controls */}
+        <div className="flex items-center gap-1 lg:hidden">
+          <SearchDialog />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-fog hover:bg-forest-highland/40"
+          >
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
           {open ? (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -192,7 +198,8 @@ export default function Navbar() {
               <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
           )}
-        </button>
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
