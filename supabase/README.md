@@ -19,6 +19,7 @@ erDiagram
     profiles        ||--o{  bookings      : "bucht"
     profiles        ||--o{  reviews       : "schreibt"
     bookings        ||--o{  booking_items : "enthält"
+    tours           ||--o{  tour_departures : "hat Termine"
     tour_departures ||--o{  booking_items : "Termin für (optional)"
 
     auth_users {
@@ -36,7 +37,7 @@ erDiagram
 
     tour_departures {
         uuid          id               PK
-        text          tour_id          "statische Katalog-ID"
+        text          tour_id          FK "-> tours (CASCADE)"
         date          departure_date
         integer       capacity
         integer       seats_remaining
@@ -98,16 +99,65 @@ erDiagram
         timestamptz   confirmed_at
         timestamptz   unsubscribed_at
     }
+
+    tours {
+        text          id          PK "Slug"
+        text          name
+        text          region
+        text          difficulty  "Easy|Moderate|Challenging|Expert"
+        integer       days
+        text          group_size
+        numeric       price_per_person
+        boolean       guided
+        text          summary
+        jsonb         description "Absätze"
+        jsonb         includes
+        double        lat
+        double        lng
+        boolean       active
+    }
+
+    routes {
+        text          id          PK "Slug"
+        text          name
+        text          region
+        text          difficulty
+        numeric       distance_km
+        integer       ascent_m
+        numeric       duration_hours
+        integer       days
+        jsonb         terrain
+        jsonb         seasons
+        boolean       dog_friendly
+        jsonb         highlights
+        double        lat
+        double        lng
+        boolean       active
+    }
+
+    stays {
+        text          id          PK "Slug"
+        text          name
+        text          type        "Bothy|Hostel|B&B|Lodge|Campsite|Hotel"
+        text          region
+        numeric       price_per_night
+        numeric       rating
+        jsonb         amenities
+        double        lat
+        double        lng
+        boolean       active
+    }
 ```
 
 > Lesehilfe: `||--o{` = „eins zu null-oder-viele". `auth_users` ist die von
 > Supabase verwaltete Login-Tabelle (`auth.users`); `profiles` hängt 1:1 daran.
 > `subscribers` steht bewusst **ohne** Beziehung — Newsletter braucht kein Login.
 >
-> ⚠️ **Der Katalog (Tours/Stays/Routes) liegt NICHT in der DB**, sondern statisch
-> in `data/*.ts`. Deshalb sind `booking_items.item_id`, `tour_departures.tour_id`
-> und `reviews.subject_id` **Text-IDs ohne FK** — sie verweisen auf die statischen
-> Katalog-Einträge. Nur `tour_departures` hat einen echten FK aus `booking_items`.
+> **Katalog (`tours`/`routes`/`stays`) liegt in der DB** (Slug-`id` = bisherige
+> data/*.ts-IDs, daher URL-stabil). `tour_departures.tour_id` ist ein echter FK
+> auf `tours`. `booking_items.item_id` und `reviews.subject_id` bleiben **polymorphe
+> Text-IDs ohne FK** (sie zeigen je nach `item_type`/`subject_type` auf tours, stays
+> **oder** routes — ein einzelner FK ist da nicht möglich).
 
 ---
 
@@ -121,15 +171,37 @@ gespeichert (der „My Trip"-Planer bleibt clientseitig in localStorage):
 - **`booking_items`** — die Posten der Tour, **eingefroren**: `item_type`
   (tour|stay|route) + `item_id` (Katalog-ID) + `title`/`unit_price`/`line_total`
   zum Buchungszeitpunkt. Tour-Posten zeigen optional auf eine `tour_departure`.
-- **`tour_departures`** — konkrete Abreisetermine je Tour mit `capacity` /
-  `seats_remaining` (+ `weather_hold`-Status fürs schottische Wetter). Öffentlich
-  lesbar; Schreiben nur via `service_role`.
+- **`tour_departures`** — konkrete Abreisetermine je Tour (FK auf `tours`) mit
+  `capacity` / `seats_remaining` (+ `weather_hold`-Status fürs schottische Wetter).
+  Öffentlich lesbar; Schreiben nur via `service_role`.
 - **`reviews`** — polymorph über `subject_type`/`subject_id` (Tour, Stay **oder**
   Route), eine Review pro Nutzer & Objekt.
 
 > ⚠️ **Noch offen:** Buchungs-Route (serverseitig, mit Sitzplatz-Abzug auf
 > `tour_departures.seats_remaining` in einer Transaktion) und Zahlungsanbindung.
 > Aktuell existiert das Datenmodell; die Checkout-Logik folgt.
+
+---
+
+## Katalog (`tours` / `routes` / `stays`)
+
+Der Inhalts-Katalog liegt vollständig in der DB (früher statisch in `data/*.ts`).
+`id` ist ein Slug (= bisherige IDs → URLs bleiben stabil), Arrays als `jsonb`,
+`coords` als `lat`/`lng`, `active` für Soft-Hide. RLS: **public read**, Schreiben
+nur via `service_role`.
+
+**Zugriff im Code:**
+- **Server** (Browse-/Detail-/Home-/Destination-Seiten): `lib/catalog.ts`
+  (`getTours/getRoutes/getStays` + `*ById`) — mappt DB-Zeilen auf die App-Typen
+  (`data/types.ts`). Seiten sind ISR (`revalidate = 300`) → Edits erscheinen ohne
+  Deploy nach ≤5 Min.
+- **Client** (Karten, `/plan`-Quiz, `/my-trip`): `lib/catalog-client.tsx`
+  (`CatalogProvider` + `useCatalog`) lädt den Katalog einmal über den anon-Key und
+  stellt id-Lookups bereit. `lib/mapPoints.ts` und `lib/recommend.ts` sind reine
+  Funktionen über diese Daten.
+
+> `data/types.ts` (App-Typen), `data/destinations.ts` und `data/imageCredits.ts`
+> bleiben bewusst statisch — nur tours/routes/stays sind in die DB gewandert.
 
 ---
 
@@ -191,9 +263,10 @@ npx supabase link --project-ref <project-ref>   # ref steht im Dashboard-URL
 ```bash
 npx supabase db push      # spielt alle Dateien aus supabase/migrations/ ein
 ```
-Damit entstehen die Tabellen `profiles, tour_departures, bookings, booking_items,
-reviews` (Buchungsmodell, inkl. RLS, Indizes und ein paar Seed-Abreiseterminen)
-sowie `subscribers` für den Newsletter (siehe eigene Abschnitte oben).
+Damit entstehen die Tabellen `tours, routes, stays` (Katalog), `profiles,
+tour_departures, bookings, booking_items, reviews` (Buchungsmodell) und
+`subscribers` (Newsletter) — inkl. RLS, Indizes und Seed-Daten. Siehe die
+eigenen Abschnitte oben.
 
 ### 2.4 Umgebungsvariablen für Next.js
 Im Dashboard unter **Project Settings → API** holen und in `.env.local` legen
