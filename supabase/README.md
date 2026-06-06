@@ -49,7 +49,9 @@ erDiagram
 
     bookings {
         uuid          id             PK
-        uuid          user_id        FK "-> profiles (CASCADE)"
+        uuid          user_id        FK "-> profiles (CASCADE), nullable (Gast)"
+        text          guest_name     "Gastbuchung"
+        text          guest_email    "Gastbuchung"
         text          status         "pending|confirmed|completed|cancelled|no_show"
         text          payment_status "unpaid|paid|failed|refunded|partially_refunded"
         date          start_date
@@ -178,9 +180,18 @@ gespeichert (der „My Trip"-Planer bleibt clientseitig in localStorage):
 - **`reviews`** — polymorph über `subject_type`/`subject_id` (Tour, Stay **oder**
   Route), eine Review pro Nutzer & Objekt.
 
-> ⚠️ **Noch offen:** Buchungs-Route (serverseitig, mit Sitzplatz-Abzug auf
-> `tour_departures.seats_remaining` in einer Transaktion) und Zahlungsanbindung.
-> Aktuell existiert das Datenmodell; die Checkout-Logik folgt.
+**Buchung anlegen:** `create_booking(p_items, p_start, p_end, p_party_size,
+p_guest_name, p_guest_email)` (`SECURITY DEFINER`, `pg_advisory_xact_lock`)
+prüft die Verfügbarkeit **race-sicher erneut**, friert die Preise ein
+(Tour = Preis × Personen, Stay = Preis/Nacht × Nächte, Route = 0) und legt
+`bookings` + `booking_items` in **einer Transaktion** an. Nur via `service_role`
+aufrufbar — Aufruf über die Route `POST /api/bookings` (`lib/bookings.ts` →
+`createBooking`). **Gastbuchung** (Name + E-Mail; `user_id` bleibt null, bis
+Login kommt). UI: `components/BookingPanel.tsx` in `/my-trip`.
+
+> ⚠️ **Noch offen:** Zahlungsanbindung; Login/Account-Bindung (dann `user_id`
+> füllen statt Gastfelder). Sitzplatz-Abzug auf `tour_departures` ist bewusst
+> **nicht** Teil der Durchsetzung — das gewählte Modell ist „max. 5 gleichzeitig".
 
 ---
 
@@ -203,10 +214,11 @@ Geprüft über die SQL-Funktion
   `stay_full`, `stay_unknown`, `invalid_dates`, `invalid_party`. Derzeit nur
   „nicht möglich"-Hinweis; Alternativvorschläge kommen später per AI.
 
-> Die eigentliche **Durchsetzung** beim Buchen (Race-sicher) gehört in die noch
-> offene Buchungs-Route — dort dieselbe Funktion in einer Transaktion (mit Lock)
-> erneut prüfen, bevor `INSERT`. Der Advisor-WARN „anon darf SECURITY-DEFINER
-> ausführen" ist bewusst akzeptiert (Vorab-Check ohne Login, keine PII-Rückgabe).
+> Die **Durchsetzung** beim Buchen passiert race-sicher in `create_booking()`
+> (Advisory-Lock + erneuter Check in einer Transaktion) — siehe „Buchungsmodell".
+> Der Advisor-WARN „anon darf SECURITY-DEFINER ausführen" betrifft nur den
+> Vorab-Check `check_booking_availability` (kein Login, keine PII) und ist bewusst
+> akzeptiert; `create_booking` ist ausschließlich via `service_role` aufrufbar.
 
 ---
 
