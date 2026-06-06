@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
-import { tours, getTourById } from "@/data/tours";
+import { getTourById, getTours } from "@/lib/catalog";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
 import Button from "@/components/Button";
@@ -11,12 +11,13 @@ import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const tours = await getTours();
   return tours.map((t) => ({ id: t.id }));
 }
 
-export function generateMetadata({ params }: { params: { id: string } }): Metadata {
-  const tour = getTourById(params.id);
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const tour = await getTourById(params.id);
   if (!tour) return { title: "Tour not found — Hike Scotland" };
   return { title: `${tour.name} — Hike Scotland`, description: tour.summary };
 }
@@ -30,8 +31,8 @@ function Fact({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function TourDetailPage({ params }: { params: { id: string } }) {
-  const tour = getTourById(params.id);
+export default async function TourDetailPage({ params }: { params: { id: string } }) {
+  const tour = await getTourById(params.id);
   if (!tour) notFound();
 
   const dest = destinationForRegion(tour.region);
