@@ -142,6 +142,7 @@ erDiagram
         text          region
         numeric       price_per_night
         numeric       rating
+        integer       max_guests  "geteilte Personen-Kapazität"
         jsonb         amenities
         double        lat
         double        lng
@@ -180,6 +181,32 @@ gespeichert (der „My Trip"-Planer bleibt clientseitig in localStorage):
 > ⚠️ **Noch offen:** Buchungs-Route (serverseitig, mit Sitzplatz-Abzug auf
 > `tour_departures.seats_remaining` in einer Transaktion) und Zahlungsanbindung.
 > Aktuell existiert das Datenmodell; die Checkout-Logik folgt.
+
+---
+
+## Verfügbarkeit & Constraints
+
+Geprüft über die SQL-Funktion
+`check_booking_availability(p_items, p_start, p_end, p_party_size)` (RPC,
+**`SECURITY DEFINER`** → darf alle Buchungen zählen, gibt aber nur
+`{ ok, reasons }` zurück, keine fremden Daten). App-Wrapper:
+`lib/availability.ts` → `checkBookingAvailability()`.
+
+- **Begleitkapazität (Routes + Guided Tours):** **GLOBAL max. 5 gleichzeitig
+  laufende Buchungen** (Datums-Überlappung), die einen Route-/Tour-Posten
+  enthalten. Gezählt werden **Buchungen, nicht Personen** (5 Personen in einer
+  Buchung = 1; 5 Einzelbuchungen = 5). Der Wert ist die Anbieter-/Begleitkapazität
+  (Konstante `v_max_concurrent` in der Funktion — eine Stelle zum Ändern).
+- **Stays:** geteilte Personen-Kapazität `stays.max_guests`. Summe der Personen
+  überlappender Buchungen + neue Personenzahl ≤ `max_guests`, sonst `stay_full`.
+- **Meldungen:** `reasons[]` mit `code` + deutscher `message` — `guides_full`,
+  `stay_full`, `stay_unknown`, `invalid_dates`, `invalid_party`. Derzeit nur
+  „nicht möglich"-Hinweis; Alternativvorschläge kommen später per AI.
+
+> Die eigentliche **Durchsetzung** beim Buchen (Race-sicher) gehört in die noch
+> offene Buchungs-Route — dort dieselbe Funktion in einer Transaktion (mit Lock)
+> erneut prüfen, bevor `INSERT`. Der Advisor-WARN „anon darf SECURITY-DEFINER
+> ausführen" ist bewusst akzeptiert (Vorab-Check ohne Login, keine PII-Rückgabe).
 
 ---
 

@@ -273,6 +273,7 @@ export type Database = {
           id: string
           lat: number
           lng: number
+          max_guests: number
           name: string
           price_per_night: number
           rating: number
@@ -289,6 +290,7 @@ export type Database = {
           id: string
           lat: number
           lng: number
+          max_guests?: number
           name: string
           price_per_night: number
           rating: number
@@ -305,6 +307,7 @@ export type Database = {
           id?: string
           lat?: number
           lng?: number
+          max_guests?: number
           name?: string
           price_per_night?: number
           rating?: number
@@ -466,6 +469,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_booking_availability: {
+        Args: {
+          p_end: string
+          p_items: Json
+          p_party_size: number
+          p_start: string
+        }
+        Returns: Json
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
