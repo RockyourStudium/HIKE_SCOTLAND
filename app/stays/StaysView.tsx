@@ -7,6 +7,7 @@ import AddToTripButton from "@/components/AddToTripButton";
 import MapPanel from "@/components/MapPanel";
 import type { Stay } from "@/data/types";
 import { useTrip } from "@/lib/trip";
+import { useCatalog } from "@/lib/catalog-client";
 import { tripPoints, stayPoint } from "@/lib/mapPoints";
 
 export default function StaysView({ stays }: { stays: Stay[] }) {
@@ -14,6 +15,7 @@ export default function StaysView({ stays }: { stays: Stay[] }) {
   const [region, setRegion] = useState("All");
   const [hovered, setHovered] = useState<string | null>(null);
   const { trip } = useTrip();
+  const catalog = useCatalog();
 
   const types = useMemo(
     () => ["All", ...Array.from(new Set(stays.map((s) => s.type)))],
@@ -33,7 +35,7 @@ export default function StaysView({ stays }: { stays: Stay[] }) {
     });
   }, [stays, type, region]);
 
-  const bookedPoints = useMemo(() => tripPoints(trip.items), [trip.items]);
+  const bookedPoints = useMemo(() => tripPoints(trip.items, catalog), [trip.items, catalog]);
   const hoveredStay = hovered ? stays.find((s) => s.id === hovered) : undefined;
   const extraPoint = hoveredStay ? stayPoint(hoveredStay) : null;
 

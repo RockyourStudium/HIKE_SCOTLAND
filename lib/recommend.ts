@@ -1,7 +1,11 @@
-import { routes } from "@/data/routes";
-import { tours } from "@/data/tours";
-import { stays } from "@/data/stays";
 import type { Difficulty, Route, Stay, Terrain, Tour } from "@/data/types";
+
+/** Katalogdaten, gegen die empfohlen wird (vom CatalogProvider geliefert). */
+export interface CatalogData {
+  routes: Route[];
+  tours: Tour[];
+  stays: Stay[];
+}
 
 export interface Answers {
   experience: "Beginner" | "Some" | "Experienced" | "Expert";
@@ -164,19 +168,19 @@ export interface Recommendations {
   stays: Scored<Stay>[];
 }
 
-export function recommend(a: Answers): Recommendations {
-  const rankedRoutes = routes
+export function recommend(a: Answers, catalog: CatalogData): Recommendations {
+  const rankedRoutes = catalog.routes
     .map((r) => scoreRoute(r, a))
     .sort((x, y) => y.score - x.score)
     .slice(0, 3);
 
-  const rankedTours = tours
+  const rankedTours = catalog.tours
     .map((t) => scoreTour(t, a))
     .filter((t) => t.score > 0)
     .sort((x, y) => y.score - x.score)
     .slice(0, 2);
 
-  const rankedStays = stays
+  const rankedStays = catalog.stays
     .map((s) => scoreStay(s, a))
     .sort((x, y) => y.score - x.score)
     .slice(0, 3);

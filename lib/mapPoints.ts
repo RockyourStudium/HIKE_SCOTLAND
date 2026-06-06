@@ -1,6 +1,3 @@
-import { getRouteById } from "@/data/routes";
-import { getTourById } from "@/data/tours";
-import { getStayById } from "@/data/stays";
 import type { Route, Stay, Tour } from "@/data/types";
 import type { TripItem } from "@/lib/trip";
 import type { MapPoint } from "@/components/TripMap";
@@ -15,18 +12,25 @@ export function stayPoint(s: Stay): MapPoint {
   return { id: s.id, kind: "stay", name: s.name, region: s.region, lat: s.coords.lat, lng: s.coords.lng };
 }
 
+/** id-Lookups, wie sie der CatalogProvider bereitstellt. */
+export interface CatalogLookups {
+  routeById: Map<string, Route>;
+  tourById: Map<string, Tour>;
+  stayById: Map<string, Stay>;
+}
+
 /** Map points for every item currently in the trip (any kind). */
-export function tripPoints(items: TripItem[]): MapPoint[] {
+export function tripPoints(items: TripItem[], cat: CatalogLookups): MapPoint[] {
   return items.flatMap((it) => {
     if (it.kind === "route") {
-      const r = getRouteById(it.id);
+      const r = cat.routeById.get(it.id);
       return r ? [routePoint(r)] : [];
     }
     if (it.kind === "tour") {
-      const t = getTourById(it.id);
+      const t = cat.tourById.get(it.id);
       return t ? [tourPoint(t)] : [];
     }
-    const s = getStayById(it.id);
+    const s = cat.stayById.get(it.id);
     return s ? [stayPoint(s)] : [];
   });
 }

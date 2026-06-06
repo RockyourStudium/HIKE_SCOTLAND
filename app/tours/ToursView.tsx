@@ -6,6 +6,7 @@ import TourCard from "@/components/TourCard";
 import MapPanel from "@/components/MapPanel";
 import type { Tour } from "@/data/types";
 import { useTrip } from "@/lib/trip";
+import { useCatalog } from "@/lib/catalog-client";
 import { tripPoints, tourPoint } from "@/lib/mapPoints";
 
 const types = ["All", "Guided", "Self-guided"] as const;
@@ -15,6 +16,7 @@ export default function ToursView({ tours }: { tours: Tour[] }) {
   const [region, setRegion] = useState("All");
   const [hovered, setHovered] = useState<string | null>(null);
   const { trip } = useTrip();
+  const catalog = useCatalog();
 
   const regions = useMemo(
     () => ["All", ...Array.from(new Set(tours.map((t) => t.region)))],
@@ -31,7 +33,7 @@ export default function ToursView({ tours }: { tours: Tour[] }) {
     });
   }, [tours, type, region]);
 
-  const bookedPoints = useMemo(() => tripPoints(trip.items), [trip.items]);
+  const bookedPoints = useMemo(() => tripPoints(trip.items, catalog), [trip.items, catalog]);
   const hoveredTour = hovered ? tours.find((t) => t.id === hovered) : undefined;
   const extraPoint = hoveredTour ? tourPoint(hoveredTour) : null;
 

@@ -20,14 +20,12 @@ import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import MapPanel, { type MapPoint } from "@/components/MapPanel";
 import { useTrip, type TripItem, type TripItemKind } from "@/lib/trip";
-import { getRouteById } from "@/data/routes";
-import { getTourById } from "@/data/tours";
-import { getStayById } from "@/data/stays";
+import { useCatalog, type Catalog } from "@/lib/catalog-client";
 
 /** Resolve a trip item to a uniform shape the itinerary row can render. */
-function resolve(item: TripItem) {
+function resolve(item: TripItem, cat: Catalog) {
   if (item.kind === "route") {
-    const r = getRouteById(item.id);
+    const r = cat.routeById.get(item.id);
     if (!r) return null;
     return {
       kind: "route" as const,
@@ -42,7 +40,7 @@ function resolve(item: TripItem) {
     };
   }
   if (item.kind === "tour") {
-    const t = getTourById(item.id);
+    const t = cat.tourById.get(item.id);
     if (!t) return null;
     return {
       kind: "tour" as const,
@@ -56,7 +54,7 @@ function resolve(item: TripItem) {
       coords: t.coords,
     };
   }
-  const s = getStayById(item.id);
+  const s = cat.stayById.get(item.id);
   if (!s) return null;
   const nights = item.nights ?? 1;
   return {
@@ -85,12 +83,13 @@ const kindLabel: Record<TripItemKind, string> = {
 
 export default function MyTripPage() {
   const { trip, hydrated, move, remove, setNights, clear } = useTrip();
+  const catalog = useCatalog();
   const [sent, setSent] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
 
   const rows = useMemo(
-    () => trip.items.map((item) => ({ item, data: resolve(item) })),
-    [trip.items]
+    () => trip.items.map((item) => ({ item, data: resolve(item, catalog) })),
+    [trip.items, catalog]
   );
 
   const points = useMemo<MapPoint[]>(

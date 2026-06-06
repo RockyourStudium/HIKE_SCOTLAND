@@ -6,6 +6,7 @@ import RouteCard from "@/components/RouteCard";
 import MapPanel from "@/components/MapPanel";
 import type { Difficulty, Route } from "@/data/types";
 import { useTrip } from "@/lib/trip";
+import { useCatalog } from "@/lib/catalog-client";
 import { tripPoints, routePoint } from "@/lib/mapPoints";
 
 const difficulties: (Difficulty | "All")[] = [
@@ -24,6 +25,7 @@ export default function RoutesView({ routes }: { routes: Route[] }) {
   const [duration, setDuration] = useState<(typeof durations)[number]>("All");
   const [hovered, setHovered] = useState<string | null>(null);
   const { trip } = useTrip();
+  const catalog = useCatalog();
 
   const regions = useMemo(
     () => ["All", ...Array.from(new Set(routes.map((r) => r.region)))],
@@ -41,7 +43,7 @@ export default function RoutesView({ routes }: { routes: Route[] }) {
     });
   }, [routes, difficulty, region, duration]);
 
-  const bookedPoints = useMemo(() => tripPoints(trip.items), [trip.items]);
+  const bookedPoints = useMemo(() => tripPoints(trip.items, catalog), [trip.items, catalog]);
   const hoveredRoute = hovered ? routes.find((r) => r.id === hovered) : undefined;
   const extraPoint = hoveredRoute ? routePoint(hoveredRoute) : null;
 

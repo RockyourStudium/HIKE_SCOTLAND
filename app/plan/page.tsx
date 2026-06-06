@@ -13,11 +13,12 @@ import TourCard from "@/components/TourCard";
 import StayCard from "@/components/StayCard";
 import AddToTripButton from "@/components/AddToTripButton";
 import { recommend, type Answers } from "@/lib/recommend";
-import { routes, getRouteById } from "@/data/routes";
+import { useCatalog } from "@/lib/catalog-client";
+import { destinations } from "@/data/destinations";
 import { useTrip } from "@/lib/trip";
 import type { Route, Terrain } from "@/data/types";
 
-const regionOptions = ["Anywhere", ...Array.from(new Set(routes.map((r) => r.region)))];
+const regionOptions = ["Anywhere", ...Array.from(new Set(destinations.map((d) => d.region)))];
 const terrainOptions: Terrain[] = [
   "Mountain",
   "Loch",
@@ -135,7 +136,8 @@ export default function PlanPage() {
 function PlanFlow() {
   const searchParams = useSearchParams();
   const routeId = searchParams.get("route") ?? undefined;
-  const anchorRoute = routeId ? getRouteById(routeId) : undefined;
+  const catalog = useCatalog();
+  const anchorRoute = routeId ? catalog.routeById.get(routeId) : undefined;
   const { setAnchorRoute } = useTrip();
 
   // Drop the anchor route into the trip as soon as we arrive from its page.
@@ -225,8 +227,8 @@ function PlanFlow() {
   };
 
   const recommendations = useMemo(
-    () => (showResults ? recommend(answers as Answers) : null),
-    [showResults, answers]
+    () => (showResults ? recommend(answers as Answers, catalog) : null),
+    [showResults, answers, catalog]
   );
 
   if (showResults && recommendations) {
