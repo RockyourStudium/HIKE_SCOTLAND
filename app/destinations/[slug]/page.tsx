@@ -10,10 +10,11 @@ import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import RouteCard from "@/components/RouteCard";
 import { destinations, getDestinationBySlug } from "@/data/destinations";
-import { routes } from "@/data/routes";
-import { tours } from "@/data/tours";
-import { stays } from "@/data/stays";
+import { getRoutes, getStays, getTours } from "@/lib/catalog";
 import { heroImage } from "@/lib/heroImage";
+
+// ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
+export const revalidate = 300;
 
 export function generateStaticParams() {
   return destinations.map((d) => ({ slug: d.slug }));
@@ -32,7 +33,7 @@ export function generateMetadata({
   };
 }
 
-export default function DestinationPage({
+export default async function DestinationPage({
   params,
 }: {
   params: { slug: string };
@@ -40,6 +41,11 @@ export default function DestinationPage({
   const dest = getDestinationBySlug(params.slug);
   if (!dest) notFound();
 
+  const [routes, tours, stays] = await Promise.all([
+    getRoutes(),
+    getTours(),
+    getStays(),
+  ]);
   const regionRoutes = routes.filter((r) => r.region === dest.region);
   const featured = regionRoutes.slice(0, 3);
   const regionTours = tours.filter((t) => t.region === dest.region);

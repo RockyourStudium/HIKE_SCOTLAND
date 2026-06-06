@@ -4,8 +4,11 @@ import type { Metadata } from "next";
 import CinematicHero from "@/components/CinematicHero";
 import Container from "@/components/Container";
 import { destinations } from "@/data/destinations";
-import { routes } from "@/data/routes";
+import { getRoutes } from "@/lib/catalog";
 import { heroImage } from "@/lib/heroImage";
+
+// ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Destinations — Hike Scotland",
@@ -13,7 +16,8 @@ export const metadata: Metadata = {
     "Explore Scotland's best hiking regions: the Highlands, Cairngorms, Isle of Skye, Glencoe, Loch Lomond & The Trossachs and the Scottish Borders.",
 };
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
+  const routes = await getRoutes();
   return (
     <div className="bg-forest-darkest text-fog">
       <CinematicHero

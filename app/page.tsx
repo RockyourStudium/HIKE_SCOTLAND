@@ -8,9 +8,12 @@ import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import RouteCarousel from "@/components/RouteCarousel";
-import { routes } from "@/data/routes";
+import { getRoutes } from "@/lib/catalog";
 import { destinations } from "@/data/destinations";
 import { heroImage } from "@/lib/heroImage";
+
+// ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
+export const revalidate = 300;
 
 const stats = [
   { value: "282", label: "Munros" },
@@ -78,8 +81,8 @@ const benefits = [
   },
 ];
 
-export default function HomePage() {
-  const featuredRoutes = routes.slice(0, 5);
+export default async function HomePage() {
+  const featuredRoutes = (await getRoutes()).slice(0, 5);
 
   return (
     <div className="bg-forest-darkest text-fog">
