@@ -76,6 +76,8 @@ export type Database = {
           created_at: string
           currency: string
           end_date: string | null
+          guest_email: string | null
+          guest_name: string | null
           id: string
           notes: string | null
           party_size: number
@@ -84,12 +86,14 @@ export type Database = {
           status: string
           total: number
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           currency?: string
           end_date?: string | null
+          guest_email?: string | null
+          guest_name?: string | null
           id?: string
           notes?: string | null
           party_size?: number
@@ -98,12 +102,14 @@ export type Database = {
           status?: string
           total?: number
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           currency?: string
           end_date?: string | null
+          guest_email?: string | null
+          guest_name?: string | null
           id?: string
           notes?: string | null
           party_size?: number
@@ -112,7 +118,7 @@ export type Database = {
           status?: string
           total?: number
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -472,6 +478,17 @@ export type Database = {
       check_booking_availability: {
         Args: {
           p_end: string
+          p_items: Json
+          p_party_size: number
+          p_start: string
+        }
+        Returns: Json
+      }
+      create_booking: {
+        Args: {
+          p_end: string
+          p_guest_email: string
+          p_guest_name: string
           p_items: Json
           p_party_size: number
           p_start: string

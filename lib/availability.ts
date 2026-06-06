@@ -4,12 +4,9 @@ import type { Json } from "@/types/database.types";
 export type BookableKind = "route" | "tour" | "stay";
 
 export interface AvailabilityReason {
-  code:
-    | "guides_full"
-    | "stay_full"
-    | "stay_unknown"
-    | "invalid_dates"
-    | "invalid_party";
+  // Backend-Codes, z.B. guides_full | stay_full | stay_unknown | invalid_dates |
+  // invalid_party | missing_contact | empty_trip | item_unknown | db_error.
+  code: string;
   message: string;
   item_id?: string;
 }

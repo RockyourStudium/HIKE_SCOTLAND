@@ -21,7 +21,7 @@ import Eyebrow from "@/components/Eyebrow";
 import MapPanel, { type MapPoint } from "@/components/MapPanel";
 import { useTrip, type TripItem, type TripItemKind } from "@/lib/trip";
 import { useCatalog, type Catalog } from "@/lib/catalog-client";
-import AvailabilityCheck from "@/components/AvailabilityCheck";
+import BookingPanel from "@/components/BookingPanel";
 
 /** Resolve a trip item to a uniform shape the itinerary row can render. */
 function resolve(item: TripItem, cat: Catalog) {
@@ -85,7 +85,6 @@ const kindLabel: Record<TripItemKind, string> = {
 export default function MyTripPage() {
   const { trip, hydrated, move, remove, setNights, clear } = useTrip();
   const catalog = useCatalog();
-  const [sent, setSent] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
 
   const rows = useMemo(
@@ -310,41 +309,15 @@ export default function MyTripPage() {
           </button>
         </div>
 
-        {/* Verfügbarkeit prüfen */}
-        <AvailabilityCheck
-          items={trip.items.map((it) => ({ item_type: it.kind, item_id: it.id }))}
+        {/* Check & book (Gastbuchung; Login folgt später) */}
+        <BookingPanel
+          items={trip.items.map((it, i) => ({
+            item_type: it.kind,
+            item_id: it.id,
+            nights: it.kind === "stay" ? it.nights ?? 1 : undefined,
+            position: i + 1,
+          }))}
         />
-
-        {/* Finalise — placeholder until the booking backend lands */}
-        <section className="mt-10 rounded-2xl bg-forest-gradient p-8 text-center text-fog">
-          <h2 className="font-display text-2xl font-bold">This is your trip</h2>
-          <p className="mx-auto mt-2 max-w-md text-fog/85">
-            {totals.walkingDays > 0 && `${totals.walkingDays} walking days`}
-            {totals.nights > 0 && ` · ${totals.nights} nights`}
-            {totals.cost > 0 && ` · from £${totals.cost} per person`}.
-          </p>
-          {sent ? (
-            <p
-              role="status"
-              className="mx-auto mt-6 max-w-md rounded-xl bg-white/10 px-4 py-3 text-sm text-fog ring-1 ring-inset ring-white/20"
-            >
-              Thanks! Online booking is coming soon — for now your itinerary lives
-              on this device. We&apos;ll wire this button up to real enquiries in the
-              next step.
-            </p>
-          ) : (
-            <AnimatedCTA type="button" onClick={() => setSent(true)} className="mt-6">
-              Request this itinerary
-            </AnimatedCTA>
-          )}
-          {/*
-            TODO (backend course module): replace the local setSent() above with a
-            real submission. The whole `trip` object (anchorRouteId + ordered items
-            with nights) is already shaped to POST straight to an enquiry/booking
-            endpoint — e.g. fetch("/api/enquiry", { method: "POST", body: JSON.stringify(trip) }).
-            Add a name/email lead form here at that point.
-          */}
-        </section>
       </Container>
     </>
   );
