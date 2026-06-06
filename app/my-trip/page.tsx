@@ -21,6 +21,7 @@ import Eyebrow from "@/components/Eyebrow";
 import MapPanel, { type MapPoint } from "@/components/MapPanel";
 import { useTrip, type TripItem, type TripItemKind } from "@/lib/trip";
 import { useCatalog, type Catalog } from "@/lib/catalog-client";
+import AvailabilityCheck from "@/components/AvailabilityCheck";
 
 /** Resolve a trip item to a uniform shape the itinerary row can render. */
 function resolve(item: TripItem, cat: Catalog) {
@@ -308,6 +309,11 @@ export default function MyTripPage() {
             Clear trip
           </button>
         </div>
+
+        {/* Verfügbarkeit prüfen */}
+        <AvailabilityCheck
+          items={trip.items.map((it) => ({ item_type: it.kind, item_id: it.id }))}
+        />
 
         {/* Finalise — placeholder until the booking backend lands */}
         <section className="mt-10 rounded-2xl bg-forest-gradient p-8 text-center text-fog">
