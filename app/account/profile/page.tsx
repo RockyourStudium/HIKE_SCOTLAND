@@ -232,16 +232,15 @@ export default async function PublicProfilePage({
         <fieldset className="space-y-3">
           <legend className={LABEL}>Social links</legend>
           {SOCIAL_PLATFORMS.map(({ key, label, baseUrl, placeholder }) => (
-            <div key={key} className="flex items-center gap-2">
-              <span className="w-24 flex-shrink-0 text-sm text-neutralgray">{label}</span>
-              <span className="hidden text-xs text-neutralgray sm:inline">
-                {baseUrl.replace(/^https?:\/\//, "")}
+            <div key={key} className="flex items-center gap-3">
+              <span className="w-20 flex-shrink-0 text-sm font-medium text-forest-dark">
+                {label}
               </span>
               <input
                 name={`social_${key}`}
                 type="text"
                 defaultValue={socials[key] ?? ""}
-                placeholder={placeholder}
+                placeholder={`${baseUrl.replace(/^https?:\/\//, "")}${placeholder}`}
                 className={FIELD}
               />
             </div>

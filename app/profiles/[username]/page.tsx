@@ -2,11 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { MapPin, Mountain, Route as RouteIcon, Tent, ArrowUpRight } from "lucide-react";
+import { MapPin } from "lucide-react";
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import SocialLinks from "@/components/SocialLinks";
 import { createClient } from "@/lib/supabase/server";
+import { getTours, getRoutes, getStays } from "@/lib/catalog";
 import { heroImage } from "@/lib/heroImage";
 import { normalizeUsername, type Socials } from "@/lib/profile";
 
@@ -50,11 +51,13 @@ async function getPublicProfile(username: string): Promise<PublicProfile | null>
 
 type Trip = { item_type: string; item_id: string; title: string };
 
-const TRIP_META: Record<string, { base: string; label: string; Icon: typeof Mountain }> = {
-  tour: { base: "/tours", label: "Tour", Icon: Mountain },
-  route: { base: "/routes", label: "Route", Icon: RouteIcon },
-  stay: { base: "/stays", label: "Stay", Icon: Tent },
+const TRIP_META: Record<string, { base: string; label: string }> = {
+  tour: { base: "/tours", label: "Tour" },
+  route: { base: "/routes", label: "Route" },
+  stay: { base: "/stays", label: "Stay" },
 };
+
+type TripCard = Trip & { image?: string; gradient: string; region?: string };
 
 async function getTrips(username: string): Promise<Trip[]> {
   const supabase = createClient();
@@ -66,6 +69,23 @@ async function getTrips(username: string): Promise<Trip[]> {
   return (data ?? [])
     .filter((t): t is Trip => Boolean(t.item_type && t.item_id && t.title))
     .map((t) => ({ item_type: t.item_type!, item_id: t.item_id!, title: t.title! }));
+}
+
+/** Reichert die gebuchten Posten mit Highlight-Foto/Gradient + Region aus dem
+ *  Katalog an (public-read). Bewahrt die Reihenfolge der Trips. */
+async function withCatalog(trips: Trip[]): Promise<TripCard[]> {
+  if (trips.length === 0) return [];
+  const [tours, routes, stays] = await Promise.all([getTours(), getRoutes(), getStays()]);
+
+  const map = new Map<string, { image?: string; gradient: string; region?: string }>();
+  for (const t of tours) map.set(`tour:${t.id}`, { image: t.image, gradient: t.gradient, region: t.region });
+  for (const r of routes) map.set(`route:${r.id}`, { image: r.image, gradient: r.gradient, region: r.region });
+  for (const s of stays) map.set(`stay:${s.id}`, { gradient: s.gradient, region: s.region });
+
+  return trips.map((t) => {
+    const hit = map.get(`${t.item_type}:${t.item_id}`);
+    return { ...t, image: hit?.image, gradient: hit?.gradient ?? "", region: hit?.region };
+  });
 }
 
 export async function generateMetadata({
@@ -100,7 +120,7 @@ export default async function PublicProfilePage({
   const profile = await getPublicProfile(params.username);
   if (!profile) notFound();
 
-  const trips = await getTrips(profile.username);
+  const trips = await withCatalog(await getTrips(profile.username));
   const name = profile.display_name || `@${profile.username}`;
   const memberSince = profile.created_at
     ? new Date(profile.created_at).getFullYear()
@@ -121,7 +141,7 @@ export default async function PublicProfilePage({
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-darkest via-forest-darkest/80 to-forest-darkest/50" />
         <div className="absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b from-forest-darkest/70 to-transparent" />
 
-        <Container py="standard">
+        <Container py="standard" size="5xl">
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-end">
             {/* Avatar (plain img wie im UserMenu — keine Remote-Domain-Config nötig) */}
             <span className="flex h-28 w-28 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-mint text-3xl font-bold text-forest-darkest ring-4 ring-white/10 sm:h-32 sm:w-32">
@@ -157,7 +177,7 @@ export default async function PublicProfilePage({
       </section>
 
       {/* Bio + Links */}
-      <Container py="compact" size="4xl">
+      <Container py="compact" size="5xl">
         {profile.bio && (
           <p className="max-w-2xl whitespace-pre-line text-lg leading-relaxed text-fog/85">
             {profile.bio}
@@ -176,34 +196,36 @@ export default async function PublicProfilePage({
             <h2 className="mt-3 font-display text-2xl font-bold text-fog">
               Booked trips
             </h2>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2">
               {trips.map((trip) => {
                 const meta = TRIP_META[trip.item_type] ?? TRIP_META.tour;
-                const { Icon } = meta;
                 return (
                   <li key={`${trip.item_type}-${trip.item_id}`}>
                     <Link
                       href={`${meta.base}/${trip.item_id}`}
-                      className="group flex items-center gap-3 rounded-xl bg-white/[0.06] p-4 ring-1 ring-white/10 transition-colors hover:bg-white/[0.12]"
+                      className="group relative flex h-44 flex-col justify-end overflow-hidden rounded-2xl ring-1 ring-white/10"
                     >
-                      <Icon
-                        aria-hidden
-                        className="h-5 w-5 flex-shrink-0 text-mint"
-                        strokeWidth={2}
-                      />
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate font-semibold text-fog">
-                          {trip.title}
-                        </span>
-                        <span className="text-xs uppercase tracking-wide text-fog/50">
+                      {trip.image ? (
+                        <Image
+                          src={trip.image}
+                          alt=""
+                          fill
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className={`absolute inset-0 bg-gradient-to-br ${trip.gradient}`} />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-forest-darkest/90 via-forest-darkest/30 to-transparent" />
+                      <div className="relative z-10 p-4">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-mint">
                           {meta.label}
+                          {trip.region ? ` · ${trip.region}` : ""}
                         </span>
-                      </span>
-                      <ArrowUpRight
-                        aria-hidden
-                        className="h-4 w-4 flex-shrink-0 text-fog/40 transition-colors group-hover:text-mint"
-                        strokeWidth={2}
-                      />
+                        <p className="mt-0.5 font-display text-lg font-bold leading-tight text-fog drop-shadow">
+                          {trip.title}
+                        </p>
+                      </div>
                     </Link>
                   </li>
                 );
