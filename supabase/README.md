@@ -463,6 +463,23 @@ Regeln:
 - Migrationen sind **additiv**: keine alte Datei nachträglich ändern.
 - Nach Schemaänderung TypeScript-Typen neu generieren (siehe 4).
 
+### Repo ↔ DB synchron halten (Drift-Check)
+
+Prüfen, ob Dateien und Live-DB übereinstimmen:
+
+```bash
+npx supabase migration list   # vergleicht supabase/migrations/ mit der DB
+                              #  -> Local- und Remote-Spalte müssen je Eintrag matchen
+npx supabase db diff          # zeigt Schema-Unterschiede (sollte leer sein)
+```
+
+> **Hinweis (Stand 06/2026):** Einige Migrationen wurden über den **Supabase-MCP**
+> (statt `db push`) eingespielt; ihre Versions-Timestamps in
+> `supabase_migrations.schema_migrations` wurden danach **einmalig auf die
+> Repo-Dateipräfixe angeglichen**, sodass `migration list` sauber matcht. Wer per
+> MCP/`apply_migration` einspielt, sollte denselben Dateinamen-Präfix als Version
+> verwenden — dann bleibt es synchron. `db push` aus dem Repo ist der Normalweg.
+
 ---
 
 ## 4. TypeScript-Typen generieren
