@@ -15,6 +15,8 @@ import { createClient } from "@/lib/supabase/client";
 type AuthContextValue = {
   user: User | null;
   isAdmin: boolean;
+  /** Username des eigenen Profils, falls öffentlich freigeschaltet (sonst null). */
+  publicUsername: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -33,6 +35,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [publicUsername, setPublicUsername] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const supabase = useMemo(() => createClient(), []);
@@ -44,15 +47,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const fetchRole = async (u: User | null) => {
       if (!u) {
-        if (active) setIsAdmin(false);
+        if (active) {
+          setIsAdmin(false);
+          setPublicUsername(null);
+        }
         return;
       }
       const { data } = await supabase
         .from("profiles")
-        .select("role")
+        .select("role, username, is_public")
         .eq("id", u.id)
         .single();
-      if (active) setIsAdmin(data?.role === "admin");
+      if (active) {
+        setIsAdmin(data?.role === "admin");
+        setPublicUsername(data?.is_public ? (data.username ?? null) : null);
+      }
     };
 
     const {
@@ -98,8 +107,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<AuthContextValue>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    () => ({ user, isAdmin, signInWithGoogle, signOut }),
-    [user, isAdmin],
+    () => ({ user, isAdmin, publicUsername, signInWithGoogle, signOut }),
+    [user, isAdmin, publicUsername],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

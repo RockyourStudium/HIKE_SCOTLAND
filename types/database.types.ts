@@ -151,6 +151,7 @@ export type Database = {
           name: string | null
           phone: string | null
           role: string
+          show_trips: boolean
           socials: Json
           updated_at: string
           username: string | null
@@ -169,6 +170,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           role?: string
+          show_trips?: boolean
           socials?: Json
           updated_at?: string
           username?: string | null
@@ -187,6 +189,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           role?: string
+          show_trips?: boolean
           socials?: Json
           updated_at?: string
           username?: string | null
@@ -516,6 +519,15 @@ export type Database = {
       }
     }
     Views: {
+      public_profile_trips: {
+        Row: {
+          item_id: string | null
+          item_type: string | null
+          title: string | null
+          username: string | null
+        }
+        Relationships: []
+      }
       public_profiles: {
         Row: {
           avatar_url: string | null

@@ -50,6 +50,7 @@ export async function updatePublicProfile(formData: FormData) {
   const displayName = String(formData.get("display_name") ?? "").trim();
   const location = String(formData.get("location") ?? "").trim();
   const bio = String(formData.get("bio") ?? "").trim();
+  const showTrips = formData.get("show_trips") === "on";
 
   const { error } = await supabase
     .from("profiles")
@@ -61,6 +62,7 @@ export async function updatePublicProfile(formData: FormData) {
       website,
       socials,
       is_public: isPublic,
+      show_trips: showTrips,
     })
     .eq("id", user.id);
 

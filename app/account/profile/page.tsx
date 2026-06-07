@@ -4,6 +4,7 @@ import { CheckCircle2, AlertCircle, ExternalLink, Globe } from "lucide-react";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import AvatarUpload from "@/components/AvatarUpload";
+import CopyLinkButton from "@/components/CopyLinkButton";
 import { createClient } from "@/lib/supabase/server";
 import { SOCIAL_PLATFORMS, type Socials } from "@/lib/profile";
 import { updatePublicProfile, uploadAvatar, resetAvatar } from "./actions";
@@ -41,7 +42,7 @@ export default async function PublicProfilePage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("username, display_name, is_public, bio, website, location, avatar_url, socials")
+    .select("username, display_name, is_public, show_trips, bio, website, location, avatar_url, socials")
     .eq("id", user.id)
     .single();
 
@@ -84,13 +85,17 @@ export default async function PublicProfilePage({
       )}
 
       {profile?.is_public && profile.username && (
-        <Link
-          href={`/profiles/${profile.username}`}
-          className="mt-6 flex items-center gap-2 rounded-lg bg-fog px-4 py-3 text-sm font-medium text-forest-dark transition-colors hover:bg-mint/40"
-        >
-          <ExternalLink aria-hidden className="h-4 w-4 text-forest-highland" strokeWidth={2} />
-          View your public profile at /profiles/{profile.username}
-        </Link>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-fog px-4 py-3">
+          <Link
+            href={`/profiles/${profile.username}`}
+            target="_blank"
+            className="flex items-center gap-2 text-sm font-medium text-forest-dark hover:underline"
+          >
+            <ExternalLink aria-hidden className="h-4 w-4 text-forest-highland" strokeWidth={2} />
+            Your profile is live at /profiles/{profile.username}
+          </Link>
+          <CopyLinkButton path={`/profiles/${profile.username}`} />
+        </div>
       )}
 
       {/* Avatar */}
@@ -126,6 +131,24 @@ export default async function PublicProfilePage({
             </span>
             <span className="block text-xs text-neutralgray">
               Anyone with the link can see the fields below. Needs a username.
+            </span>
+          </span>
+        </label>
+
+        <label className="flex items-start gap-3 rounded-lg bg-fog/60 p-4">
+          <input
+            type="checkbox"
+            name="show_trips"
+            defaultChecked={profile?.show_trips ?? false}
+            className="mt-0.5 h-4 w-4 rounded border-mint/60 text-forest-highland focus:ring-forest-highland"
+          />
+          <span>
+            <span className="block text-sm font-medium text-forest-dark">
+              Show my booked trips
+            </span>
+            <span className="block text-xs text-neutralgray">
+              Lists the names of your booked tours, routes and stays on your public
+              profile (no dates or prices). Only applies when your profile is public.
             </span>
           </span>
         </label>

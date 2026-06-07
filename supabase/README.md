@@ -365,6 +365,15 @@ Anzeigename, Bio, Website, Social-Links, eigener Avatar). Migration:
 - **Avatar-Storage:** public-read Bucket **`avatars`**. Schreiben ausschließlich
   serverseitig über `service_role` (`sharp` → 400×400 webp, Pfad
   `<user-id>/avatar.webp`, `upsert`) — daher **keine** object-Policies nötig.
+- **Geteilte Touren (Opt-in `profiles.show_trips`):** zeigt die gebuchten Posten
+  (Touren/Routen/Stays) auf dem öffentlichen Profil. Lesepfad ist die View
+  **`public_profile_trips`** (`security_invoker=false`, anon-grant): joint
+  `profiles`/`bookings`/`booking_items` und gibt **nur** `username` + `item_type`
+  + `item_id` + `title` opt-in-freigegebener Profile zurück (`is_public` **und**
+  `show_trips`), ohne stornierte/no-show-Buchungen — **keine** Daten, Preise,
+  Personenzahl oder Status. Migration:
+  `supabase/migrations/20260607030000_public_profile_trips.sql`. (Gleicher
+  bewusst akzeptierter `security_definer_view`-Advisor wie oben.)
 
 **Code / Routen:**
 

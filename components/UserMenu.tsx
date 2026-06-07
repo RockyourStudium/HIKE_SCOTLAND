@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LogIn, LogOut, User as UserIcon, UserCircle, Backpack, ShieldCheck } from "lucide-react";
+import { LogIn, LogOut, User as UserIcon, UserCircle, ExternalLink, Backpack, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 
 function displayName(meta: Record<string, unknown> | undefined, email?: string) {
@@ -22,7 +22,7 @@ function initial(name: string) {
  * `mobile` rendert die Einträge flach (für das mobile Menü) statt als Dropdown.
  */
 export default function UserMenu({ mobile = false }: { mobile?: boolean }) {
-  const { user, isAdmin, signInWithGoogle, signOut } = useAuth();
+  const { user, isAdmin, publicUsername, signInWithGoogle, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLLIElement>(null);
   const pathname = usePathname();
@@ -96,6 +96,16 @@ export default function UserMenu({ mobile = false }: { mobile?: boolean }) {
         <UserCircle aria-hidden className="h-4 w-4 text-mist" strokeWidth={2} />
         Public profile
       </Link>
+      {publicUsername && (
+        <Link
+          href={`/profiles/${publicUsername}`}
+          target="_blank"
+          className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-fog"
+        >
+          <ExternalLink aria-hidden className="h-4 w-4 text-mist" strokeWidth={2} />
+          View public profile
+        </Link>
+      )}
       <Link
         href="/account/bookings"
         className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-fog"

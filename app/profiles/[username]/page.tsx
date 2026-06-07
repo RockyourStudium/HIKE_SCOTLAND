@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { MapPin } from "lucide-react";
+import { MapPin, Mountain, Route as RouteIcon, Tent, ArrowUpRight } from "lucide-react";
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import SocialLinks from "@/components/SocialLinks";
@@ -48,6 +48,26 @@ async function getPublicProfile(username: string): Promise<PublicProfile | null>
   };
 }
 
+type Trip = { item_type: string; item_id: string; title: string };
+
+const TRIP_META: Record<string, { base: string; label: string; Icon: typeof Mountain }> = {
+  tour: { base: "/tours", label: "Tour", Icon: Mountain },
+  route: { base: "/routes", label: "Route", Icon: RouteIcon },
+  stay: { base: "/stays", label: "Stay", Icon: Tent },
+};
+
+async function getTrips(username: string): Promise<Trip[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("public_profile_trips")
+    .select("item_type, item_id, title")
+    .eq("username", username);
+
+  return (data ?? [])
+    .filter((t): t is Trip => Boolean(t.item_type && t.item_id && t.title))
+    .map((t) => ({ item_type: t.item_type!, item_id: t.item_id!, title: t.title! }));
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -80,6 +100,7 @@ export default async function PublicProfilePage({
   const profile = await getPublicProfile(params.username);
   if (!profile) notFound();
 
+  const trips = await getTrips(profile.username);
   const name = profile.display_name || `@${profile.username}`;
   const memberSince = profile.created_at
     ? new Date(profile.created_at).getFullYear()
@@ -146,6 +167,50 @@ export default async function PublicProfilePage({
         <div className="mt-8">
           <SocialLinks socials={profile.socials} website={profile.website} />
         </div>
+
+        {trips.length > 0 && (
+          <section className="mt-12">
+            <Eyebrow tone="mint" dash>
+              Adventures
+            </Eyebrow>
+            <h2 className="mt-3 font-display text-2xl font-bold text-fog">
+              Booked trips
+            </h2>
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {trips.map((trip) => {
+                const meta = TRIP_META[trip.item_type] ?? TRIP_META.tour;
+                const { Icon } = meta;
+                return (
+                  <li key={`${trip.item_type}-${trip.item_id}`}>
+                    <Link
+                      href={`${meta.base}/${trip.item_id}`}
+                      className="group flex items-center gap-3 rounded-xl bg-white/[0.06] p-4 ring-1 ring-white/10 transition-colors hover:bg-white/[0.12]"
+                    >
+                      <Icon
+                        aria-hidden
+                        className="h-5 w-5 flex-shrink-0 text-mint"
+                        strokeWidth={2}
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-semibold text-fog">
+                          {trip.title}
+                        </span>
+                        <span className="text-xs uppercase tracking-wide text-fog/50">
+                          {meta.label}
+                        </span>
+                      </span>
+                      <ArrowUpRight
+                        aria-hidden
+                        className="h-4 w-4 flex-shrink-0 text-fog/40 transition-colors group-hover:text-mint"
+                        strokeWidth={2}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
         <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-sm text-fog/60">
           {memberSince && <span>On Hike Scotland since {memberSince}</span>}
