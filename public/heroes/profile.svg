@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylised Scottish mountain ridgeline at dusk">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#081C15"/>
+      <stop offset="0.55" stop-color="#1B4332"/>
+      <stop offset="1" stop-color="#2D6A4F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.32" cy="0.32" r="0.5">
+      <stop offset="0" stop-color="#95D5B2" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#95D5B2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="520" cy="300" r="420" fill="url(#glow)"/>
+  <!-- distant range -->
+  <path d="M0,580 L220,500 L420,585 L640,470 L880,580 L1120,455 L1360,560 L1600,490 L1600,900 L0,900 Z" fill="#2D6A4F" opacity="0.40"/>
+  <!-- mid range -->
+  <path d="M0,680 L260,560 L500,690 L740,535 L980,690 L1240,575 L1480,690 L1600,640 L1600,900 L0,900 Z" fill="#1B4332" opacity="0.75"/>
+  <!-- foreground -->
+  <path d="M0,800 L300,710 L600,810 L900,705 L1200,815 L1600,720 L1600,900 L0,900 Z" fill="#081C15"/>
+</svg>

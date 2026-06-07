@@ -31,6 +31,14 @@ client-seitig im `AuthProvider` (`lib/auth/AuthProvider.tsx`, `useAuth`). UI:
 `components/UserMenu.tsx` (Nav), Self-Service unter `app/account/*`, Nutzer-/
 Rollenverwaltung unter `app/admin/profiles/*`. Details in `supabase/README.md`.
 
+**Öffentliche Profile:** Opt-in (`profiles.is_public`, privat per Default). Editor
+unter `app/account/profile` (hell, login-geschützt); öffentliche Seite
+`app/profiles/[username]` (dunkel) liest die View `public_profiles` über den
+anon-Client — die exponiert **nur** unbedenkliche Spalten (E-Mail/Telefon/Adresse/
+Rolle bleiben privat). Avatare im public-read Bucket `avatars` (Schreiben via
+`service_role`). Logik in `lib/profile.ts` + `app/account/profile/actions.ts`.
+Details in `supabase/README.md`.
+
 ## Dev-Workflow
 
 ```bash
@@ -51,8 +59,10 @@ bauen/prüfen, dann pushen.
 - **Hell/Dunkel-Teilung nicht ohne Ansage brechen.** Marketing-Seiten (`/`,
   `/destinations`, `/destinations/[slug]`) sind bewusst dunkel/cineastisch;
   funktionale Seiten (`/plan`, `/my-trip`, `/routes`, `/tours`, `/stays`,
-  Detailseiten, `/credits`, `/admin`) bleiben hell — wegen Lesbarkeit von
-  Formularen, Karten und Cards.
+  Detailseiten, `/credits`, `/admin`, `/account*`) bleiben hell — wegen
+  Lesbarkeit von Formularen, Karten und Cards. **Ausnahme:** die öffentliche
+  Profilseite `/profiles/[username]` ist bewusst **dunkel/cineastisch** (gehört
+  zur Marketing-Außenwirkung), während ihr Editor `/account/profile` hell bleibt.
 - **`<Suspense>` im Planner nicht entfernen.** `useSearchParams` in
   `app/plan/page.tsx` braucht in Next 14 eine Suspense-Grenze beim statischen
   Prerender, sonst bricht der Build.

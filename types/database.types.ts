@@ -128,38 +128,69 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
         Row: {
           address: string | null
+          avatar_url: string | null
+          bio: string | null
           created_at: string
+          display_name: string | null
           email: string | null
           id: string
+          is_public: boolean
+          location: string | null
           name: string | null
           phone: string | null
           role: string
+          socials: Json
           updated_at: string
+          username: string | null
+          website: string | null
         }
         Insert: {
           address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
+          display_name?: string | null
           email?: string | null
           id: string
+          is_public?: boolean
+          location?: string | null
           name?: string | null
           phone?: string | null
           role?: string
+          socials?: Json
           updated_at?: string
+          username?: string | null
+          website?: string | null
         }
         Update: {
           address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
+          display_name?: string | null
           email?: string | null
           id?: string
+          is_public?: boolean
+          location?: string | null
           name?: string | null
           phone?: string | null
           role?: string
+          socials?: Json
           updated_at?: string
+          username?: string | null
+          website?: string | null
         }
         Relationships: []
       }
@@ -200,6 +231,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -478,7 +516,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string | null
+          location: string | null
+          socials: Json | null
+          username: string | null
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string | null
+          location?: string | null
+          socials?: Json | null
+          username?: string | null
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string | null
+          location?: string | null
+          socials?: Json | null
+          username?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_booking_availability: {

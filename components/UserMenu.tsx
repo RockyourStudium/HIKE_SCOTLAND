@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LogIn, LogOut, User as UserIcon, Backpack, ShieldCheck } from "lucide-react";
+import { LogIn, LogOut, User as UserIcon, UserCircle, Backpack, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 
 function displayName(meta: Record<string, unknown> | undefined, email?: string) {
@@ -88,6 +88,13 @@ export default function UserMenu({ mobile = false }: { mobile?: boolean }) {
       >
         <UserIcon aria-hidden className="h-4 w-4 text-mist" strokeWidth={2} />
         My Account
+      </Link>
+      <Link
+        href="/account/profile"
+        className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-fog"
+      >
+        <UserCircle aria-hidden className="h-4 w-4 text-mist" strokeWidth={2} />
+        Public profile
       </Link>
       <Link
         href="/account/bookings"

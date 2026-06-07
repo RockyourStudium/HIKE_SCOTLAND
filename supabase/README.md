@@ -337,6 +337,46 @@ verwalten. Schutz: ein Admin kann sich dort **nicht selbst** herabstufen.
 
 ---
 
+## Öffentliche Profile
+
+Nutzer können ihr Profil **opt-in** öffentlich schalten (Influencer-tauglich:
+Anzeigename, Bio, Website, Social-Links, eigener Avatar). Migration:
+`supabase/migrations/20260607020000_public_profiles.sql`.
+
+- **Neue `profiles`-Spalten:** `username` (case-insensitiv eindeutig via
+  `profiles_username_lower_key`, Format-Check 3–30 `[a-z0-9_-]`), `display_name`
+  (öffentlich, **getrennt** vom privaten `name` für Buchungen), `is_public`
+  (default `false`), `bio`, `website`, `location`, `avatar_url`, `socials` (jsonb,
+  Keys `instagram|youtube|tiktok|linkedin`).
+- **Avatar:** `handle_new_user()` übernimmt beim Signup das Google-Bild
+  (`raw_user_meta_data.avatar_url`/`picture`) nach `profiles.avatar_url`. Im
+  Editor überschreibbar per Upload (siehe Bucket) oder „Reset auf Google-Bild".
+- **Öffentlicher Lesezugriff — View statt RLS-Lockerung:** Die `profiles`-RLS
+  bleibt strikt „read own". Die View **`public_profiles`** (`security_invoker =
+  false`, `grant select` an `anon`/`authenticated`) exponiert **nur** die
+  unbedenklichen Spalten der `is_public`-Zeilen — E-Mail/Telefon/Adresse/Rolle
+  bleiben unerreichbar. RLS ist zeilen-, nicht spaltenbasiert; eine View ist hier
+  der einzige Weg, „eigene Zeile voll / fremde öffentliche Zeile reduziert"
+  sauber zu trennen.
+  > ⚠️ **Advisor `security_definer_view` (ERROR) ist bewusst akzeptiert.** Die
+  > View ist ein statisches read-only SELECT ohne User-Input, das gezielt nur die
+  > freigegebenen Spalten/Zeilen zeigt — genau das ist der Zweck. (Analog zum
+  > bereits akzeptierten `check_booking_availability`-WARN.)
+- **Avatar-Storage:** public-read Bucket **`avatars`**. Schreiben ausschließlich
+  serverseitig über `service_role` (`sharp` → 400×400 webp, Pfad
+  `<user-id>/avatar.webp`, `upsert`) — daher **keine** object-Policies nötig.
+
+**Code / Routen:**
+
+| Pfad | Zweck |
+|---|---|
+| `/profiles/[username]` | öffentliche Profilseite (dunkel/cineastisch), liest die View über den anon-Client |
+| `/account/profile` | Editor (hell, login-geschützt via Middleware): Felder + Sichtbarkeits-Toggle + Avatar-Upload |
+| `lib/profile.ts` | Username-Regeln/Reserved-Liste, Social-URL-Bau, Normalisierung |
+| `app/account/profile/actions.ts` | `updatePublicProfile` (RLS update own), `uploadAvatar`/`resetAvatar` (service_role) |
+
+---
+
 ## 1. Voraussetzungen (einmalig)
 
 | Was | Befehl / Quelle |
