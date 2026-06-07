@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import NewsletterBand from "@/components/NewsletterBand";
 import { TripProvider } from "@/lib/trip";
 import { CatalogProvider } from "@/lib/catalog-client";
+import { AuthProvider } from "@/lib/auth/AuthProvider";
 
 // next/font downloads these at build time and self-hosts the .woff2 files,
 // so the browser never makes a request to Google — no user data leaves the site.
@@ -66,20 +67,22 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
-        <CatalogProvider>
-          <TripProvider>
-            <HideOnAdmin>
-              <Navbar />
-            </HideOnAdmin>
-            <main id="main" className="flex-1">
-              {children}
-            </main>
-            <HideOnAdmin>
-              <NewsletterBand />
-              <Footer />
-            </HideOnAdmin>
-          </TripProvider>
-        </CatalogProvider>
+        <AuthProvider>
+          <CatalogProvider>
+            <TripProvider>
+              <HideOnAdmin>
+                <Navbar />
+              </HideOnAdmin>
+              <main id="main" className="flex-1">
+                {children}
+              </main>
+              <HideOnAdmin>
+                <NewsletterBand />
+                <Footer />
+              </HideOnAdmin>
+            </TripProvider>
+          </CatalogProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/types/database.types";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,5 +49,21 @@ export async function POST(req: Request) {
   if (error) {
     return fail([{ code: "db_error", message: "Booking failed. Please try again." }], 500);
   }
+
+  // Ist der Besucher eingeloggt, die soeben angelegte Buchung mit dem Konto
+  // verknüpfen (sonst bleibt es eine Gastbuchung mit user_id = null).
+  const result = data as { ok?: boolean; booking_id?: string } | null;
+  if (result?.booking_id) {
+    const {
+      data: { user },
+    } = await createClient().auth.getUser();
+    if (user) {
+      await admin
+        .from("bookings")
+        .update({ user_id: user.id })
+        .eq("id", result.booking_id);
+    }
+  }
+
   return NextResponse.json(data);
 }

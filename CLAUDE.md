@@ -24,6 +24,13 @@ Admin-Zugriff **nur** server-seitig über `lib/supabase-admin.ts` (`service_role
 In `data/*.ts` bleiben nur noch `destinations`, `imageCredits` und `types`
 (App-Typen). Trip-State lebt im React Context + localStorage (`lib/trip.tsx`).
 
+**Auth:** Google OAuth über Supabase Auth (`@supabase/ssr`). Cookie-bewusste
+Clients in `lib/supabase/{server,client,middleware}.ts`; Rolle/Schutz server-seitig
+(`middleware.ts` + `lib/auth/roles.ts`, DB-Spalte `profiles.role`), Login-Status
+client-seitig im `AuthProvider` (`lib/auth/AuthProvider.tsx`, `useAuth`). UI:
+`components/UserMenu.tsx` (Nav), Self-Service unter `app/account/*`, Nutzer-/
+Rollenverwaltung unter `app/admin/profiles/*`. Details in `supabase/README.md`.
+
 ## Dev-Workflow
 
 ```bash
@@ -55,11 +62,23 @@ bauen/prüfen, dann pushen.
 - **Hydration:** Trip-Inhalte werden erst clientseitig aus localStorage geladen
   (`hydrated`-Flag). Komponenten dürfen vor `hydrated` nichts Abweichendes
   rendern — sonst SSR/CSR-Mismatch.
-- **`/admin` ist noch ohne echtes Login** und zeigt PII + Schreibzugriff. Schutz
-  vorerst über `middleware.ts`: 404, solange `ADMIN_ENABLED !== "true"` (Variable
-  nur lokal in `.env.local`). **In Production NICHT setzen**, bis echte Auth steht
-  — sonst läge das Dashboard offen. Reads über `service_role` nur in Server
-  Components / Server Actions (`lib/admin/*`).
+- **`/admin` ist echt geschützt** (Google-Login + `profiles.role='admin'`). Die
+  Middleware frischt die Session auf und antwortet auf `/admin*` mit 404, wenn
+  kein Admin (kein Info-Leak); `/account*` verlangt Login. Das alte
+  `ADMIN_ENABLED`-Gate ist **entfernt** — die Variable wird nicht mehr gelesen
+  (kann aus `.env*` raus). Reads/Writes im Admin weiterhin über `service_role`
+  (`lib/admin/*`); zusätzlich prüft `app/admin/layout.tsx` die Rolle noch einmal.
+- **Admin-Selbstsperre vermeiden:** In `app/admin/profiles/*` kann sich der
+  eingeloggte Admin **nicht selbst** die Admin-Rolle entziehen (Guard in den
+  Server Actions) — sonst Aussperr-Risiko.
+- **Prod-OAuth-Config nicht vergessen:** Google-Login braucht pro Umgebung die
+  Redirect-URLs in Supabase (Auth → URL Configuration) **und** den Google-OAuth-
+  Client. Lokal = `http://localhost:3000/auth/callback`; für Production die echte
+  Domain ergänzen, sonst schlägt der Login nach dem Deploy fehl.
+- **Auth-Hydration:** Login-Status kommt **client-seitig** über den `AuthProvider`
+  (kein Cookie-Read im Root-Layout) — so bleiben die Marketing-Seiten statisch.
+  `UserMenu` rendert für eingeloggte User erst nach Auflösen des Status, sonst
+  SSR/CSR-Flash.
 
 ## Konventionen
 

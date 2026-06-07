@@ -2,17 +2,52 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import Eyebrow from "@/components/Eyebrow";
 import NewsletterForm from "@/components/NewsletterForm";
+import { useAuth } from "@/lib/auth/AuthProvider";
+import { createClient } from "@/lib/supabase/client";
 
 /**
- * Compact newsletter section shown above the footer on every page. The
- * dedicated /newsletter page already leads with the full form, so we skip
- * the band there to avoid two sign-up forms on one page.
+ * Compact newsletter section shown above the footer. Skipped where it doesn't
+ * make sense:
+ *  - /newsletter      (the page already leads with the full form)
+ *  - /account*        (the account page has its own subscription control)
+ *  - admins           (they manage the site, not a sign-up target)
+ *  - already-subscribed, signed-in users (no need to nag)
  */
 export default function NewsletterBand() {
   const pathname = usePathname();
+  const { user, isAdmin } = useAuth();
+  // "unknown" until we've checked the signed-in user's subscription.
+  const [sub, setSub] = useState<"unknown" | "subscribed" | "none">("unknown");
+
+  useEffect(() => {
+    if (!user) {
+      setSub("none");
+      return;
+    }
+    let active = true;
+    setSub("unknown");
+    const supabase = createClient();
+    supabase
+      .from("subscribers")
+      .select("status")
+      .eq("email", (user.email ?? "").toLowerCase())
+      .maybeSingle()
+      .then(({ data }) => {
+        if (active) setSub(data?.status === "subscribed" ? "subscribed" : "none");
+      });
+    return () => {
+      active = false;
+    };
+  }, [user]);
+
   if (pathname === "/newsletter") return null;
+  if (pathname?.startsWith("/account")) return null;
+  if (isAdmin) return null;
+  // Signed-in: hide until we know the status, and hide if already subscribed.
+  if (user && sub !== "none") return null;
 
   return (
     <section className="relative isolate overflow-hidden bg-forest-darkest text-fog">

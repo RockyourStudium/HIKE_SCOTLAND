@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Mountain, Backpack } from "lucide-react";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import SearchDialog from "@/components/SearchDialog";
+import UserMenu from "@/components/UserMenu";
 import { destinations } from "@/data/destinations";
 import { useTrip } from "@/lib/trip";
 
@@ -171,6 +172,7 @@ export default function Navbar() {
           <li>
             <TripLink />
           </li>
+          <UserMenu />
           <li>
             <AnimatedCTA href="/plan" size="sm" className="ml-2 text-sm uppercase tracking-wide">
               Start Planning
@@ -276,6 +278,9 @@ export default function Navbar() {
             })}
             <li>
               <TripLink block />
+            </li>
+            <li className="pt-2">
+              <UserMenu mobile />
             </li>
             <li className="pt-2">
               <AnimatedCTA href="/plan" block className="text-base uppercase tracking-wide">

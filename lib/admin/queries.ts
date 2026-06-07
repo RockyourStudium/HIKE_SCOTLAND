@@ -9,6 +9,10 @@ import type { Tables } from "@/types/database.types";
 export type Subscriber = Tables<"subscribers">;
 export type Booking = Tables<"bookings">;
 export type BookingItem = Tables<"booking_items">;
+export type Profile = Tables<"profiles">;
+
+export const ROLES = ["user", "admin"] as const;
+export type RoleValue = (typeof ROLES)[number];
 
 export type SubscriberStatus = "pending" | "subscribed" | "unsubscribed";
 export const SUBSCRIBER_STATUSES: SubscriberStatus[] = [
@@ -183,6 +187,60 @@ export async function listBookings(): Promise<BookingWithMeta[]> {
     );
     return { ...b, items: its, overlapCount };
   });
+}
+
+// --- Profile / Nutzer --------------------------------------------------------
+
+export interface ProfileWithMeta extends Profile {
+  bookingCount: number;
+}
+
+export async function listProfiles(opts: {
+  q?: string;
+  role?: string;
+}): Promise<ProfileWithMeta[]> {
+  const admin = getSupabaseAdmin();
+  let query = admin
+    .from("profiles")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (opts.role && opts.role !== "all") query = query.eq("role", opts.role);
+  if (opts.q) {
+    const like = `%${opts.q}%`;
+    query = query.or(`name.ilike.${like},email.ilike.${like}`);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  const rows = data ?? [];
+
+  // Buchungen pro Nutzer zählen.
+  const { data: books } = await admin.from("bookings").select("user_id");
+  const counts = new Map<string, number>();
+  for (const b of books ?? []) {
+    if (b.user_id) counts.set(b.user_id, (counts.get(b.user_id) ?? 0) + 1);
+  }
+
+  return rows.map((p) => ({ ...p, bookingCount: counts.get(p.id) ?? 0 }));
+}
+
+export async function getProfile(id: string): Promise<ProfileWithMeta | null> {
+  const admin = getSupabaseAdmin();
+  const { data, error } = await admin
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+
+  const { count } = await admin
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", id);
+
+  return { ...data, bookingCount: count ?? 0 };
 }
 
 export async function getBooking(

@@ -29,10 +29,12 @@ erDiagram
     profiles {
         uuid        id          PK "= auth.users.id"
         text        name
-        text        email          "unique"
+        text        email          "unique (Kontakt-E-Mail)"
         text        phone
         text        address
+        text        role           "user|admin (Admin-Gate)"
         timestamptz created_at
+        timestamptz updated_at
     }
 
     tour_departures {
@@ -186,12 +188,15 @@ prüft die Verfügbarkeit **race-sicher erneut**, friert die Preise ein
 (Tour = Preis × Personen, Stay = Preis/Nacht × Nächte, Route = 0) und legt
 `bookings` + `booking_items` in **einer Transaktion** an. Nur via `service_role`
 aufrufbar — Aufruf über die Route `POST /api/bookings` (`lib/bookings.ts` →
-`createBooking`). **Gastbuchung** (Name + E-Mail; `user_id` bleibt null, bis
-Login kommt). UI: `components/BookingPanel.tsx` in `/my-trip`.
+`createBooking`). **Gastbuchung** (Name + E-Mail). Ist beim Buchen ein User
+eingeloggt, verknüpft `POST /api/bookings` die Buchung nachträglich mit dem Konto
+(`user_id`); ausgeloggt bleibt `user_id` null. Eigene Buchungen sieht der User
+unter `/account/bookings` (RLS „read own"). UI: `components/BookingPanel.tsx` in
+`/my-trip`.
 
-> ⚠️ **Noch offen:** Zahlungsanbindung; Login/Account-Bindung (dann `user_id`
-> füllen statt Gastfelder). Sitzplatz-Abzug auf `tour_departures` ist bewusst
-> **nicht** Teil der Durchsetzung — das gewählte Modell ist „max. 5 gleichzeitig".
+> ⚠️ **Noch offen:** Zahlungsanbindung. Sitzplatz-Abzug auf `tour_departures` ist
+> bewusst **nicht** Teil der Durchsetzung — das gewählte Modell ist „max. 5
+> gleichzeitig".
 
 ---
 
@@ -242,19 +247,27 @@ nur via `service_role`.
 > `data/types.ts` (App-Typen), `data/destinations.ts` und `data/imageCredits.ts`
 > bleiben bewusst statisch — nur tours/routes/stays sind in die DB gewandert.
 
-> **Pflege im Betrieb:** Katalog, Buchungen und Newsletter werden über das
-> interne Dashboard `/admin` bearbeitet (server-only via `service_role`, hinter
-> dem `ADMIN_ENABLED`-Gate — siehe Projekt-`CLAUDE.md`). Schema-Änderungen
-> weiterhin **nur** per Migration.
+> **Pflege im Betrieb:** Katalog, Buchungen, Newsletter und Nutzer/Rollen werden
+> über das interne Dashboard `/admin` bearbeitet (server-only via `service_role`,
+> hinter echtem Google-Login + `profiles.role='admin'` — siehe „Auth / Login"
+> unten und Projekt-`CLAUDE.md`). Schema-Änderungen weiterhin **nur** per Migration.
 
 ---
 
 ## Newsletter — Abonnenten (`subscribers`)
 
-Eigene, **auth-unabhängige** Tabelle für Newsletter-Anmeldungen (kein Login).
-Enthält PII (E-Mails) → **kein öffentlicher Lesezugriff**: RLS ist aktiv, aber
-bewusst **ohne** anon/authenticated-Policies. Aller Zugriff läuft serverseitig
-über den `service_role`-Key.
+Eigene, **auth-unabhängige** Tabelle für Newsletter-Anmeldungen (Anmeldung ohne
+Login möglich). Enthält PII (E-Mails) → **kein offener Lesezugriff**. RLS ist aktiv;
+Schreiben läuft ausschließlich serverseitig über den `service_role`-Key. **Einzige
+Lese-Policy:** „read own by email" — eingeloggte User dürfen **genau ihre eigene**
+Zeile lesen (Match `lower(email) = auth.jwt()->>'email'`), nötig für die
+Status-Anzeige im Konto und im Newsletter-Banner. Migration:
+`supabase/migrations/20260607010000_subscribers_read_own.sql`.
+
+**Self-Service:** Eingeloggte User schalten ihr Abo unter `/account` an/aus
+(`setNewsletter` in `app/account/actions.ts`, service_role). Der globale Banner
+(`components/NewsletterBand.tsx`) blendet sich für Admins, bereits Abonnierte und
+auf `/account*`/`/newsletter` aus.
 
 - **Spalten:** `id · email · first_name · status (pending|subscribed|unsubscribed) · token · source · created_at · updated_at · confirmed_at · unsubscribed_at`. E-Mail case-insensitive eindeutig (`unique index on lower(email)`); jeder Abonnent hat einen geheimen `token` für Confirm-/Unsubscribe-Links.
 - **Aktueller Modus:** *ohne* Double Opt-in — Anmeldung setzt direkt `status='subscribed'`. Schema unterstützt Double Opt-in über `pending` + Confirm-Route; für DE/EU-Marketing **vor echtem Versand nachrüsten**.
@@ -275,6 +288,52 @@ bewusst **ohne** anon/authenticated-Policies. Aller Zugriff läuft serverseitig
 `app/unsubscribe/` · Anbindung in `components/NewsletterForm.tsx`.
 
 > ⚠️ **Mailversand ist noch nicht angebunden** — aktuell wird nur gespeichert.
+
+---
+
+## Auth / Login (Google OAuth)
+
+Login läuft über **Supabase Auth mit Google** (`@supabase/ssr`, cookie-basierte
+Session). Es gibt **kein** Passwort-Login.
+
+**Datenmodell & Automatik**
+- `profiles` (1:1 zu `auth.users`) hält die App-Daten inkl. **`role`** (`user` |
+  `admin`). RLS unverändert: „read/insert/update own" über `auth.uid()`.
+- **Auto-Profil:** Trigger `on_auth_user_created` → `handle_new_user()`
+  (`SECURITY DEFINER`) legt bei jedem neuen `auth.users`-Eintrag (z.B. erster
+  Google-Login) automatisch eine `profiles`-Zeile an (`role='user'`). Die Funktion
+  ist **nicht** als RPC ausführbar (Rechte entzogen). Migration:
+  `supabase/migrations/20260607000000_auth_roles_and_profile_trigger.sql`.
+- **Login-E-Mail vs. Kontakt-E-Mail:** Login = Google-Konto (unveränderbar);
+  `profiles.email` ist eine separat editierbare Kontakt-E-Mail (Buchungen/Newsletter).
+
+**Code**
+- Clients: `lib/supabase/server.ts` (RSC/Actions/Route Handler), `client.ts`
+  (Browser), `middleware.ts` (`updateSession`).
+- Schutz: `middleware.ts` (Session-Refresh + Gates `/admin*` Admin, `/account*`
+  Login) + `lib/auth/roles.ts` (`getUserWithRole`); `app/admin/layout.tsx` prüft
+  die Rolle zusätzlich (Defense-in-Depth). OAuth-Callback: `app/auth/callback/route.ts`.
+- Client-State: `lib/auth/AuthProvider.tsx` (`useAuth` → `user`, `isAdmin`,
+  `signInWithGoogle`, `signOut`); UI in `components/UserMenu.tsx`.
+
+**Admin-Rolle setzen** (kein UI-Bootstrap — erster Admin per SQL):
+```sql
+update public.profiles set role='admin' where email='<login-email>';
+```
+Danach lässt sich jede Rolle bequem im Dashboard unter **`/admin/profiles`**
+verwalten. Schutz: ein Admin kann sich dort **nicht selbst** herabstufen.
+
+**Dashboard-Konfiguration (pro Umgebung, NICHT im Code):**
+1. Google Cloud Console → OAuth-Client (Web). Authorized redirect URI:
+   `https://<ref>.supabase.co/auth/v1/callback`.
+2. Supabase → Authentication → Providers → **Google** aktivieren (Client-ID/Secret).
+3. Supabase → Authentication → **URL Configuration → Redirect URLs**:
+   `http://localhost:3000/auth/callback` **und** die Production-Domain
+   `…/auth/callback` eintragen — sonst schlägt der Login nach dem Deploy fehl.
+
+> Die „Weiter zu `<ref>.supabase.co`"-Zeile im Google-Dialog lässt sich nur über
+> eine **Supabase Custom Domain** (Pro-Add-on) ändern; App-Name/Logo kommen aus
+> dem Google-OAuth-Consent-Screen.
 
 ---
 
