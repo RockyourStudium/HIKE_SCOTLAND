@@ -188,11 +188,12 @@ prüft die Verfügbarkeit **race-sicher erneut**, friert die Preise ein
 (Tour = Preis × Personen, Stay = Preis/Nacht × Nächte, Route = 0) und legt
 `bookings` + `booking_items` in **einer Transaktion** an. Nur via `service_role`
 aufrufbar — Aufruf über die Route `POST /api/bookings` (`lib/bookings.ts` →
-`createBooking`). **Gastbuchung** (Name + E-Mail). Ist beim Buchen ein User
-eingeloggt, verknüpft `POST /api/bookings` die Buchung nachträglich mit dem Konto
-(`user_id`); ausgeloggt bleibt `user_id` null. Eigene Buchungen sieht der User
-unter `/account/bookings` (RLS „read own"). UI: `components/BookingPanel.tsx` in
-`/my-trip`.
+`createBooking`). **Kontaktdaten:** eingeloggte Nutzer geben **keine** Name/E-Mail
+mehr ein — `POST /api/bookings` leitet sie server-seitig aus `profiles`/Auth ab
+(Client-Werte werden ignoriert) und verknüpft die Buchung mit dem Konto (`user_id`);
+**Gäste** liefern Name + E-Mail wie bisher, `user_id` bleibt null. Eigene Buchungen
+sieht der User unter `/account/bookings` (RLS „read own"). UI:
+`components/BookingPanel.tsx` in `/my-trip` (blendet die Kontaktfelder bei Login aus).
 
 > ⚠️ **Noch offen:** Zahlungsanbindung. Sitzplatz-Abzug auf `tour_departures` ist
 > bewusst **nicht** Teil der Durchsetzung — das gewählte Modell ist „max. 5

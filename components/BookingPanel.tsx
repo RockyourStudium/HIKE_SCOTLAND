@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, CheckCircle2, Loader2, PartyPopper, XCircle } from "lucide-react";
+import { CalendarDays, CheckCircle2, Loader2, PartyPopper, UserCheck, XCircle } from "lucide-react";
 import { checkBookingAvailability, type AvailabilityResult } from "@/lib/availability";
 import { createBooking, type BookingItemInput, type CreateBookingResult } from "@/lib/bookings";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -18,6 +19,12 @@ export default function BookingPanel({
   items: BookingItemInput[];
   onBooked?: () => void;
 }) {
+  const { user } = useAuth();
+  const isLoggedIn = !!user;
+  const meta = user?.user_metadata as { full_name?: string; name?: string } | undefined;
+  const authEmail = user?.email ?? "";
+  const authName = (meta?.full_name ?? meta?.name ?? authEmail) || "";
+
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [party, setParty] = useState(2);
@@ -31,7 +38,10 @@ export default function BookingPanel({
   const [booking, setBooking] = useState<CreateBookingResult | null>(null);
 
   const datesValid = !!start && !!end && party >= 1;
-  const contactValid = name.trim().length > 0 && EMAIL_RE.test(email.trim());
+  // Eingeloggte brauchen keine Kontaktdaten — der Server leitet sie aus dem Konto ab.
+  const contactValid = isLoggedIn || (name.trim().length > 0 && EMAIL_RE.test(email.trim()));
+  const effectiveName = isLoggedIn ? authName : name.trim();
+  const effectiveEmail = isLoggedIn ? authEmail : email.trim();
 
   async function onCheck() {
     setCheckState("loading");
@@ -53,8 +63,8 @@ export default function BookingPanel({
       startDate: start,
       endDate: end,
       partySize: party,
-      name: name.trim(),
-      email: email.trim(),
+      // Bei eingeloggten Nutzern leitet der Server die Kontaktdaten serverseitig ab.
+      ...(isLoggedIn ? {} : { name: name.trim(), email: email.trim() }),
     });
     setBooking(r);
     setBookState(r.ok ? "done" : "error");
@@ -68,9 +78,9 @@ export default function BookingPanel({
         <PartyPopper aria-hidden className="mx-auto h-12 w-12 text-mint" strokeWidth={1.75} />
         <h2 className="mt-4 font-display text-2xl font-bold">Booking requested!</h2>
         <p className="mx-auto mt-2 max-w-md text-fog/85">
-          Thanks, {name.trim()} — your trip is reserved
+          Thanks, {effectiveName} — your trip is reserved
           {typeof booking.total === "number" && booking.total > 0 && ` (from £${booking.total})`}.
-          We&apos;ve got your request and will be in touch at {email.trim()}.
+          We&apos;ve got your request and will be in touch at {effectiveEmail}.
         </p>
         {booking.booking_id && (
           <p className="mx-auto mt-4 inline-block rounded-lg bg-white/10 px-4 py-2 text-sm text-fog ring-1 ring-inset ring-white/20">
@@ -88,8 +98,8 @@ export default function BookingPanel({
         Check &amp; book
       </h2>
       <p className="mt-1 text-sm text-neutralgray">
-        Pick your dates and party size, then request your trip. No account needed —
-        we&apos;ll confirm by email.
+        Pick your dates and party size, then request your trip — we&apos;ll confirm
+        by email.
       </p>
 
       {/* Dates + party */}
@@ -127,14 +137,29 @@ export default function BookingPanel({
 
       {/* Contact + book */}
       <div className="mt-6 border-t border-softgray/50 pt-6">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Your name" htmlFor="bk-name">
-            <input id="bk-name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className={inputCls} />
-          </Field>
-          <Field label="Email" htmlFor="bk-email">
-            <input id="bk-email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={inputCls} />
-          </Field>
-        </div>
+        {isLoggedIn ? (
+          <div className="flex items-start gap-3 rounded-xl bg-fog/60 p-4">
+            <UserCheck aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-forest-highland" strokeWidth={2} />
+            <p className="text-sm text-forest-dark">
+              Booking as <span className="font-semibold">{authName}</span>
+              {authEmail && <> · {authEmail}</>}. We&apos;ll confirm by email — manage
+              your details in{" "}
+              <a href="/account" className="font-medium text-forest-highland hover:underline">
+                your account
+              </a>
+              .
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Your name" htmlFor="bk-name">
+              <input id="bk-name" type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className={inputCls} />
+            </Field>
+            <Field label="Email" htmlFor="bk-email">
+              <input id="bk-email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={inputCls} />
+            </Field>
+          </div>
+        )}
 
         <button
           type="button"

@@ -12,8 +12,10 @@ export interface CreateBookingInput {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   partySize: number;
-  name: string;
-  email: string;
+  /** Nur für Gäste nötig; bei eingeloggten Nutzern leitet der Server die
+   *  Kontaktdaten aus dem Konto/Profil ab. */
+  name?: string;
+  email?: string;
 }
 
 export interface CreateBookingResult {
