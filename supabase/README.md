@@ -346,8 +346,11 @@ Anzeigename, Bio, Website, Social-Links, eigener Avatar). Migration:
 - **Neue `profiles`-Spalten:** `username` (case-insensitiv eindeutig via
   `profiles_username_lower_key`, Format-Check 3–30 `[a-z0-9_-]`), `display_name`
   (öffentlich, **getrennt** vom privaten `name` für Buchungen), `is_public`
-  (default `false`), `bio`, `website`, `location`, `avatar_url`, `socials` (jsonb,
-  Keys `instagram|youtube|tiktok|linkedin`).
+  (default `false`), `bio`, `websites` (jsonb-Array mehrerer URLs — Add/Remove im
+  Editor; ersetzt die alte Einzel-Spalte `website`, die additiv erhalten bleibt),
+  `location`, `avatar_url`, `socials` (jsonb, Keys `instagram|youtube|tiktok|
+  linkedin`). Auf der Profilseite werden Links mit ihrem **Ziel** angezeigt
+  (Domain bzw. `@handle`), nicht generisch.
 - **Avatar:** `handle_new_user()` übernimmt beim Signup das Google-Bild
   (`raw_user_meta_data.avatar_url`/`picture`) nach `profiles.avatar_url`. Im
   Editor überschreibbar per Upload (siehe Bucket) oder „Reset auf Google-Bild".

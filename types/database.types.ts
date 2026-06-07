@@ -156,6 +156,7 @@ export type Database = {
           updated_at: string
           username: string | null
           website: string | null
+          websites: Json
         }
         Insert: {
           address?: string | null
@@ -175,6 +176,7 @@ export type Database = {
           updated_at?: string
           username?: string | null
           website?: string | null
+          websites?: Json
         }
         Update: {
           address?: string | null
@@ -194,6 +196,7 @@ export type Database = {
           updated_at?: string
           username?: string | null
           website?: string | null
+          websites?: Json
         }
         Relationships: []
       }
@@ -538,7 +541,7 @@ export type Database = {
           location: string | null
           socials: Json | null
           username: string | null
-          website: string | null
+          websites: Json | null
         }
         Insert: {
           avatar_url?: string | null
@@ -549,7 +552,7 @@ export type Database = {
           location?: string | null
           socials?: Json | null
           username?: string | null
-          website?: string | null
+          websites?: Json | null
         }
         Update: {
           avatar_url?: string | null
@@ -560,7 +563,7 @@ export type Database = {
           location?: string | null
           socials?: Json | null
           username?: string | null
-          website?: string | null
+          websites?: Json | null
         }
         Relationships: []
       }

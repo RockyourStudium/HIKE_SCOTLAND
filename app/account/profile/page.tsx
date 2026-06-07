@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CheckCircle2, AlertCircle, ExternalLink, Globe } from "lucide-react";
+import { CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import AvatarUpload from "@/components/AvatarUpload";
 import CopyLinkButton from "@/components/CopyLinkButton";
+import WebsiteList from "@/components/WebsiteList";
 import { createClient } from "@/lib/supabase/server";
 import { SOCIAL_PLATFORMS, type Socials } from "@/lib/profile";
 import { updatePublicProfile, uploadAvatar, resetAvatar } from "./actions";
@@ -42,11 +43,14 @@ export default async function PublicProfilePage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("username, display_name, is_public, show_trips, bio, website, location, avatar_url, socials")
+    .select("username, display_name, is_public, show_trips, bio, websites, location, avatar_url, socials")
     .eq("id", user.id)
     .single();
 
   const socials = (profile?.socials ?? {}) as Socials;
+  const websites = Array.isArray(profile?.websites)
+    ? (profile!.websites as string[])
+    : [];
   const saved = searchParams.saved;
   const errMsg = searchParams.err ? ERRORS[searchParams.err] : null;
 
@@ -220,24 +224,8 @@ export default async function PublicProfilePage({
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="website" className={LABEL}>
-            Website
-          </label>
-          <div className="relative">
-            <Globe
-              aria-hidden
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mist"
-              strokeWidth={2}
-            />
-            <input
-              id="website"
-              name="website"
-              type="text"
-              defaultValue={profile?.website ?? ""}
-              placeholder="yoursite.com"
-              className={`${FIELD} pl-9`}
-            />
-          </div>
+          <span className={LABEL}>Websites</span>
+          <WebsiteList initial={websites} />
         </div>
 
         {/* Social-Links */}

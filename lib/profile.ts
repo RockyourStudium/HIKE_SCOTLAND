@@ -75,3 +75,23 @@ export function socialUrl(key: SocialKey, handle: string): string {
   const platform = SOCIAL_PLATFORMS.find((p) => p.key === key);
   return platform ? `${platform.baseUrl}${handle}` : handle;
 }
+
+/**
+ * Kurzes, sprechendes Ziel-Label für eine Website-URL (Host ohne www, plus Pfad,
+ * falls vorhanden) — damit Nutzer sehen, wohin der Link führt.
+ */
+export function websiteLabel(url: string): string {
+  try {
+    const u = new URL(url);
+    const host = u.host.replace(/^www\./i, "");
+    const path = u.pathname === "/" ? "" : u.pathname.replace(/\/$/, "");
+    return `${host}${path}`;
+  } catch {
+    return url.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
+  }
+}
+
+/** Sichtbares Handle-Label einer Plattform (mit @ außer bei LinkedIn). */
+export function socialHandleLabel(key: SocialKey, handle: string): string {
+  return key === "linkedin" ? handle : `@${handle}`;
+}

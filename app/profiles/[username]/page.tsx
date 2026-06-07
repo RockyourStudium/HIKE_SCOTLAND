@@ -17,7 +17,7 @@ type PublicProfile = {
   username: string;
   display_name: string | null;
   bio: string | null;
-  website: string | null;
+  websites: string[];
   location: string | null;
   avatar_url: string | null;
   socials: Socials;
@@ -31,7 +31,7 @@ async function getPublicProfile(username: string): Promise<PublicProfile | null>
   const supabase = createClient();
   const { data } = await supabase
     .from("public_profiles")
-    .select("username, display_name, bio, website, location, avatar_url, socials, created_at")
+    .select("username, display_name, bio, websites, location, avatar_url, socials, created_at")
     .eq("username", key)
     .maybeSingle();
 
@@ -40,7 +40,7 @@ async function getPublicProfile(username: string): Promise<PublicProfile | null>
     username: data.username,
     display_name: data.display_name,
     bio: data.bio,
-    website: data.website,
+    websites: Array.isArray(data.websites) ? (data.websites as string[]) : [],
     location: data.location,
     avatar_url: data.avatar_url,
     socials: (data.socials ?? {}) as Socials,
@@ -165,7 +165,7 @@ export default async function PublicProfilePage({
         )}
 
         <div className="mt-8">
-          <SocialLinks socials={profile.socials} website={profile.website} />
+          <SocialLinks socials={profile.socials} websites={profile.websites} />
         </div>
 
         {trips.length > 0 && (

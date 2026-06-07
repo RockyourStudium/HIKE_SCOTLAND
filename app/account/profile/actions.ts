@@ -37,9 +37,14 @@ export async function updatePublicProfile(formData: FormData) {
   const isPublic = formData.get("is_public") === "on";
   if (isPublic && !username) redirect("/account/profile?err=public_needs_username");
 
-  const websiteRaw = String(formData.get("website") ?? "").trim();
-  const website = websiteRaw ? normalizeWebsite(websiteRaw) : null;
-  if (websiteRaw && !website) redirect("/account/profile?err=website_invalid");
+  const websites: string[] = [];
+  for (const raw of formData.getAll("website")) {
+    const v = String(raw).trim();
+    if (!v) continue;
+    const url = normalizeWebsite(v);
+    if (!url) redirect("/account/profile?err=website_invalid");
+    if (!websites.includes(url)) websites.push(url);
+  }
 
   const socials: Socials = {};
   for (const { key } of SOCIAL_PLATFORMS) {
@@ -59,7 +64,7 @@ export async function updatePublicProfile(formData: FormData) {
       display_name: displayName || null,
       location: location || null,
       bio: bio ? bio.slice(0, 600) : null,
-      website,
+      websites,
       socials,
       is_public: isPublic,
       show_trips: showTrips,

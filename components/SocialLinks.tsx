@@ -1,5 +1,12 @@
 import { Globe } from "lucide-react";
-import { SOCIAL_PLATFORMS, socialUrl, type SocialKey, type Socials } from "@/lib/profile";
+import {
+  SOCIAL_PLATFORMS,
+  socialUrl,
+  socialHandleLabel,
+  websiteLabel,
+  type SocialKey,
+  type Socials,
+} from "@/lib/profile";
 
 // lucide-react führt aus Markenschutz-Gründen keine Social-Brand-Icons mehr —
 // daher kleine Inline-SVGs im gleichen 24×24-Raster.
@@ -48,39 +55,40 @@ const ICONS: Record<SocialKey, (p: IconProps) => JSX.Element> = {
 
 /**
  * Social- und Website-Links für die öffentliche Profilseite (dunkler Stil).
- * Rendert nur, was wirklich gesetzt ist.
+ * Zeigt das **Ziel** an (Domain bzw. Handle), nicht nur einen generischen Label,
+ * damit klar ist, wohin der Link führt. Rendert nur, was wirklich gesetzt ist.
  */
 export default function SocialLinks({
   socials,
-  website,
+  websites = [],
 }: {
   socials: Socials;
-  website?: string | null;
+  websites?: string[];
 }) {
   const entries = SOCIAL_PLATFORMS.filter((p) => socials[p.key]).map((p) => ({
     key: p.key,
-    label: p.label,
+    target: socialHandleLabel(p.key, socials[p.key]!),
     href: socialUrl(p.key, socials[p.key]!),
     Icon: ICONS[p.key],
   }));
 
-  if (entries.length === 0 && !website) return null;
+  if (entries.length === 0 && websites.length === 0) return null;
 
   const pill =
     "inline-flex items-center gap-2 rounded-full bg-white/[0.08] px-4 py-2 text-sm font-medium text-fog ring-1 ring-white/10 transition-colors hover:bg-white/[0.14]";
 
   return (
     <div className="flex flex-wrap gap-3">
-      {website && (
-        <a href={website} target="_blank" rel="me noopener noreferrer" className={pill}>
-          <Globe aria-hidden className="h-4 w-4 text-mint" strokeWidth={2} />
-          Website
+      {websites.map((url) => (
+        <a key={url} href={url} target="_blank" rel="me noopener noreferrer" className={pill}>
+          <Globe aria-hidden className="h-4 w-4 flex-shrink-0 text-mint" strokeWidth={2} />
+          {websiteLabel(url)}
         </a>
-      )}
-      {entries.map(({ key, label, href, Icon }) => (
+      ))}
+      {entries.map(({ key, target, href, Icon }) => (
         <a key={key} href={href} target="_blank" rel="me noopener noreferrer" className={pill}>
-          <Icon className="h-4 w-4 text-mint" />
-          {label}
+          <Icon className="h-4 w-4 flex-shrink-0 text-mint" />
+          {target}
         </a>
       ))}
     </div>
