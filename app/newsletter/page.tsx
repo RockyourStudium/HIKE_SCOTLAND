@@ -5,7 +5,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 import { heroImage } from "@/lib/heroImage";
 
 export const metadata: Metadata = {
-  title: "Newsletter — Hike Scotland",
+  title: "Newsletter",
   description:
     "Subscribe to the Hike Scotland newsletter for fresh routes, guided tours and seasonal highlights from the Highlands and beyond.",
 };

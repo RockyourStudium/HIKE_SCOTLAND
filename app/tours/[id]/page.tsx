@@ -21,8 +21,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const tour = await getTourById(params.id);
-  if (!tour) return { title: "Tour not found — Hike Scotland" };
-  return { title: `${tour.name} — Hike Scotland`, description: tour.summary };
+  if (!tour) return { title: "Tour not found" };
+  return {
+    title: `${tour.name} · ${tour.days}-Day ${tour.guided ? "Guided" : "Self-Guided"} Hiking Tour`,
+    description: tour.summary,
+  };
 }
 
 function Fact({ label, value }: { label: string; value: string }) {

@@ -5,7 +5,7 @@ import Eyebrow from "@/components/Eyebrow";
 import { getImageCredits, IMAGE_LICENSE } from "@/data/imageCredits";
 
 export const metadata: Metadata = {
-  title: "Image Credits — Hike Scotland",
+  title: "Image Credits",
   description:
     "Photography credits and licensing for the images used across Hike Scotland.",
 };

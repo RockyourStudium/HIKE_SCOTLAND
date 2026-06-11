@@ -94,14 +94,14 @@ export async function generateMetadata({
   params: { username: string };
 }): Promise<Metadata> {
   const profile = await getPublicProfile(params.username);
-  if (!profile) return { title: "Profile not found — Hike Scotland" };
+  if (!profile) return { title: "Profile not found" };
 
   const name = profile.display_name || `@${profile.username}`;
   const description =
     profile.bio || `${name} on Hike Scotland — trails, tours and the highlands.`;
 
   return {
-    title: `${name} — Hike Scotland`,
+    title: name,
     description,
     openGraph: {
       title: `${name} — Hike Scotland`,

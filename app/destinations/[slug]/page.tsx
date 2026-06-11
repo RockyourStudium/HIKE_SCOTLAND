@@ -26,9 +26,9 @@ export function generateMetadata({
   params: { slug: string };
 }): Metadata {
   const dest = getDestinationBySlug(params.slug);
-  if (!dest) return { title: "Destination not found — Hike Scotland" };
+  if (!dest) return { title: "Destination not found" };
   return {
-    title: `${dest.name} — Hike Scotland`,
+    title: `Hiking in ${dest.name} — Routes, Tours & Stays`,
     description: dest.introParagraphs[0],
   };
 }

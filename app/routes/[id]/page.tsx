@@ -21,8 +21,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const route = await getRouteById(params.id);
-  if (!route) return { title: "Route not found — Hike Scotland" };
-  return { title: `${route.name} — Hike Scotland`, description: route.summary };
+  if (!route) return { title: "Route not found" };
+  return {
+    title: `${route.name} · Hiking Route in ${route.region}`,
+    description: route.summary,
+  };
 }
 
 function Fact({ label, value }: { label: string; value: string }) {

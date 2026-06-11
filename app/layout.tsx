@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Josefin_Sans, Lato } from "next/font/google";
 import "./globals.css";
+import { siteUrl } from "@/lib/site";
 import HideOnAdmin from "@/components/HideOnAdmin";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -26,7 +27,13 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Hike Scotland — Discover & Plan Scottish Hiking Adventures",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Hike Scotland — Hiking Routes, Guided Tours & Trip Planner",
+    // Unterseiten liefern nur den reinen Seitentitel; das Template hängt
+    // die Marke an (einheitliche, SEO-freundliche Titles).
+    template: "%s — Hike Scotland",
+  },
   description:
     "Explore hiking routes, guided tours and accommodation across Scotland. Build a personalised itinerary with our interactive trip planner.",
   keywords: [
@@ -37,6 +44,14 @@ export const metadata: Metadata = {
     "hiking routes",
     "trip planner",
   ],
+  openGraph: {
+    type: "website",
+    siteName: "Hike Scotland",
+    locale: "en_GB",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

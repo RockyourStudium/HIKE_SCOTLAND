@@ -11,7 +11,7 @@ import { heroImage } from "@/lib/heroImage";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Destinations — Hike Scotland",
+  title: "Hiking Destinations in Scotland",
   description:
     "Explore Scotland's best hiking regions: the Highlands, Cairngorms, Isle of Skye, Glencoe, Loch Lomond & The Trossachs and the Scottish Borders.",
 };

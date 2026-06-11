@@ -7,7 +7,7 @@ import SignOutButton from "@/components/SignOutButton";
 import { getUserWithRole } from "@/lib/auth/roles";
 
 export const metadata: Metadata = {
-  title: "Admin — Hike Scotland",
+  title: "Admin",
   robots: { index: false, follow: false },
 };
 

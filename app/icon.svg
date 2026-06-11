@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Marken-Favicon: Lucide-Mountain (wie Navbar) in Mint auf forest-darkest. -->
+  <rect width="64" height="64" rx="14" fill="#081C15" />
+  <g transform="translate(8 8) scale(2)" fill="none" stroke="#95D5B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m8 3 4 8 5-5 5 15H2L8 3" />
+  </g>
+</svg>
