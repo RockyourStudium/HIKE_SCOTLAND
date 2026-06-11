@@ -567,6 +567,50 @@ export type Database = {
         }
         Relationships: []
       }
+      public_reviews: {
+        Row: {
+          author_avatar_url: string | null
+          author_name: string | null
+          author_username: string | null
+          body: string | null
+          created_at: string | null
+          id: string | null
+          rating: number | null
+          subject_id: string | null
+          subject_type: string | null
+        }
+        Insert: {
+          author_avatar_url?: never
+          author_name?: never
+          author_username?: never
+          body?: string | null
+          created_at?: string | null
+          id?: string | null
+          rating?: number | null
+          subject_id?: string | null
+          subject_type?: string | null
+        }
+        Update: {
+          author_avatar_url?: never
+          author_name?: never
+          author_username?: never
+          body?: string | null
+          created_at?: string | null
+          id?: string | null
+          rating?: number | null
+          subject_id?: string | null
+          subject_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       check_booking_availability: {

@@ -9,6 +9,7 @@ import AddToTripButton from "@/components/AddToTripButton";
 import Button from "@/components/Button";
 import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
+import ReviewsSection from "@/components/ReviewsSection";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
 // ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
@@ -158,6 +159,12 @@ export default async function RouteDetailPage({ params }: { params: { id: string
                 </div>
               </div>
             </section>
+
+            <ReviewsSection
+              subjectType="route"
+              subjectId={route.id}
+              path={`/routes/${route.id}`}
+            />
           </div>
 
           {/* Sidebar */}

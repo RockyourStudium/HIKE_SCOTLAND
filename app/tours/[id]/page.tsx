@@ -3,12 +3,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
-import { getTourById, getTours } from "@/lib/catalog";
+import { getTourById, getTourDepartures, getTours } from "@/lib/catalog";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
 import Button from "@/components/Button";
 import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
+import ReviewsSection from "@/components/ReviewsSection";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
 // ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
@@ -37,9 +38,46 @@ function Fact({ label, value }: { label: string; value: string }) {
   );
 }
 
+// Server-Komponente → deterministisch formatiert, kein Hydration-Thema.
+function departureDate(iso: string, style: "long" | "short" = "long") {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
+    ...(style === "long" ? { weekday: "short" } : {}),
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function SeatsBadge({ remaining, capacity }: { remaining: number; capacity: number }) {
+  if (remaining === 0) {
+    return (
+      <span className="rounded-full bg-softgray/30 px-3 py-1 text-xs font-semibold text-neutralgray">
+        Sold out
+      </span>
+    );
+  }
+  if (remaining <= 3) {
+    return (
+      <span className="rounded-full bg-danger/10 px-3 py-1 text-xs font-semibold text-danger">
+        Only {remaining} {remaining === 1 ? "seat" : "seats"} left
+      </span>
+    );
+  }
+  return (
+    <span className="rounded-full bg-mint/30 px-3 py-1 text-xs font-semibold text-forest-dark">
+      {remaining} of {capacity} seats left
+    </span>
+  );
+}
+
 export default async function TourDetailPage({ params }: { params: { id: string } }) {
-  const tour = await getTourById(params.id);
+  const [tour, departures] = await Promise.all([
+    getTourById(params.id),
+    getTourDepartures(params.id),
+  ]);
   if (!tour) notFound();
+  const nextBookable = departures.find((d) => d.seatsRemaining > 0);
 
   const dest = destinationForRegion(tour.region);
   const gear = gearFor(tour.difficulty);
@@ -106,6 +144,49 @@ export default async function TourDetailPage({ params }: { params: { id: string 
               </ul>
             </section>
 
+            {/* Upcoming departures */}
+            <section id="departures">
+              <h2 className="font-display text-2xl font-bold text-forest-darkest">
+                Upcoming departures
+              </h2>
+              {departures.length === 0 ? (
+                <p className="mt-4 text-sm leading-relaxed text-neutralgray">
+                  New season dates are being finalised. Enquire and we&apos;ll let you
+                  know first — private departures are often possible.
+                </p>
+              ) : (
+                <ul className="mt-4 space-y-3">
+                  {departures.map((d) => (
+                    <li
+                      key={d.id}
+                      className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white p-4 shadow-card"
+                    >
+                      <div className="flex items-center gap-3">
+                        <CalendarDays aria-hidden className="h-5 w-5" color="url(#hike-gradient)" />
+                        <div>
+                          <p className="text-sm font-semibold text-forest-dark">
+                            {departureDate(d.date)}
+                          </p>
+                          <p className="text-xs text-neutralgray">
+                            {tour.days} {tour.days === 1 ? "day" : "days"} · £
+                            {d.pricePerPerson ?? tour.pricePerPerson} per person
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {d.status === "weather_hold" && (
+                          <span className="rounded-full bg-fog px-3 py-1 text-xs font-semibold text-forest-dark">
+                            Weather hold
+                          </span>
+                        )}
+                        <SeatsBadge remaining={d.seatsRemaining} capacity={d.capacity} />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
             {/* Good to know */}
             <section>
               <h2 className="font-display text-2xl font-bold text-forest-darkest">Good to know</h2>
@@ -152,6 +233,12 @@ export default async function TourDetailPage({ params }: { params: { id: string 
                 </div>
               </div>
             </section>
+
+            <ReviewsSection
+              subjectType="tour"
+              subjectId={tour.id}
+              path={`/tours/${tour.id}`}
+            />
           </div>
 
           {/* Booking sidebar */}
@@ -168,6 +255,12 @@ export default async function TourDetailPage({ params }: { params: { id: string 
                 <Fact label="Group size" value={tour.groupSize} />
                 <Fact label="Difficulty" value={tour.difficulty} />
                 <Fact label="Region" value={tour.region} />
+                {nextBookable && (
+                  <Fact
+                    label="Next departure"
+                    value={departureDate(nextBookable.date, "short")}
+                  />
+                )}
               </dl>
               <AnimatedCTA type="button" block className="mt-5 text-sm">
                 Enquire &amp; book this tour

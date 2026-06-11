@@ -110,3 +110,37 @@ export async function getStayById(id: string): Promise<Stay | null> {
   if (error) throw error;
   return data ? toStay(data) : null;
 }
+
+// --- Tour departures -----------------------------------------------------------
+export interface TourDeparture {
+  id: string;
+  /** ISO-Datum (yyyy-mm-dd). */
+  date: string;
+  capacity: number;
+  seatsRemaining: number;
+  /** Preis-Override für diesen Termin; sonst gilt der Katalogpreis der Tour. */
+  pricePerPerson: number | null;
+  status: "scheduled" | "weather_hold";
+}
+
+/** Kommende Termine einer Tour (public-read via RLS); cancelled/completed bleiben außen vor. */
+export async function getTourDepartures(tourId: string): Promise<TourDeparture[]> {
+  const today = new Date().toISOString().slice(0, 10);
+  const { data, error } = await getSupabase()
+    .from("tour_departures")
+    .select("*")
+    .eq("tour_id", tourId)
+    .in("status", ["scheduled", "weather_hold"])
+    .gte("departure_date", today)
+    .order("departure_date")
+    .limit(8);
+  if (error) throw error;
+  return (data ?? []).map((d) => ({
+    id: d.id,
+    date: d.departure_date,
+    capacity: d.capacity,
+    seatsRemaining: d.seats_remaining,
+    pricePerPerson: d.price_per_person,
+    status: d.status as TourDeparture["status"],
+  }));
+}
