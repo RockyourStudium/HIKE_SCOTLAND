@@ -40,7 +40,10 @@ export default function MapPanel({
 
   return (
     <div
-      className={`overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-softgray/40 ${className}`}
+      // `isolate`: eigener Stacking-Context — Leaflets interne z-Indizes
+      // (Panes 200–700, Controls 1000) bleiben eingekapselt und stechen
+      // nicht die Sticky-Navbar (z-50) aus.
+      className={`isolate overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-softgray/40 ${className}`}
     >
       {hasAnything ? (
         <TripMap
