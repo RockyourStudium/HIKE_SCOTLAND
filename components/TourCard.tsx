@@ -27,7 +27,9 @@ export default function TourCard({ tour }: { tour: Tour }) {
           <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-forest-darkest">
             {tour.guided ? "Guided" : "Self-guided"}
           </span>
-          <span className="text-sm font-semibold text-fog drop-shadow">{tour.days} days</span>
+          <span className="text-sm font-semibold text-fog drop-shadow">
+            {tour.days} {tour.days === 1 ? "day" : "days"}
+          </span>
         </div>
       </div>
 

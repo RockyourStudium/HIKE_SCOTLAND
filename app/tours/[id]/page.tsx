@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
 import { getTourById, getTourDepartures, getTours } from "@/lib/catalog";
-import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
+import BookTourButton from "@/components/BookTourButton";
 import Button from "@/components/Button";
 import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
@@ -262,9 +262,7 @@ export default async function TourDetailPage({ params }: { params: { id: string 
                   />
                 )}
               </dl>
-              <AnimatedCTA type="button" block className="mt-5 text-sm">
-                Enquire &amp; book this tour
-              </AnimatedCTA>
+              <BookTourButton tourId={tour.id} />
               <div className="mt-2">
                 <AddToTripButton kind="tour" id={tour.id} block />
               </div>

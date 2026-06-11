@@ -186,7 +186,7 @@ export default function NewsletterForm() {
         </div>
 
         <AnimatedCTA type="submit" block className="mt-7 text-base" disabled={pending}>
-          {pending ? "Signing you up …" : "Fetch latest news"}
+          {pending ? "Signing you up …" : "Join the newsletter"}
         </AnimatedCTA>
 
         <p className="mt-4 text-center text-xs leading-relaxed text-fog/60">
