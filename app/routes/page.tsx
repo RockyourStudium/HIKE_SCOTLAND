@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getRoutes } from "@/lib/catalog";
+import { getRatingSummaries } from "@/lib/reviews";
 import RoutesView from "./RoutesView";
 
 // ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
@@ -12,6 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RoutesPage() {
-  const routes = await getRoutes();
-  return <RoutesView routes={routes} />;
+  const [routes, ratings] = await Promise.all([
+    getRoutes(),
+    getRatingSummaries("route"),
+  ]);
+  return <RoutesView routes={routes} ratings={ratings} />;
 }

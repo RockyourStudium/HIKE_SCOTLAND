@@ -5,6 +5,7 @@ import Container from "@/components/Container";
 import RouteCard from "@/components/RouteCard";
 import MapPanel from "@/components/MapPanel";
 import type { Difficulty, Route } from "@/data/types";
+import type { RatingSummary } from "@/lib/reviews";
 import { useTrip } from "@/lib/trip";
 import { useCatalog } from "@/lib/catalog-client";
 import { tripPoints, routePoint } from "@/lib/mapPoints";
@@ -19,7 +20,13 @@ const difficulties: (Difficulty | "All")[] = [
 
 const durations = ["All", "Day walk", "Multi-day"] as const;
 
-export default function RoutesView({ routes }: { routes: Route[] }) {
+export default function RoutesView({
+  routes,
+  ratings = {},
+}: {
+  routes: Route[];
+  ratings?: Record<string, RatingSummary>;
+}) {
   const [difficulty, setDifficulty] = useState<(typeof difficulties)[number]>("All");
   const [region, setRegion] = useState<string>("All");
   const [duration, setDuration] = useState<(typeof durations)[number]>("All");
@@ -117,7 +124,7 @@ export default function RoutesView({ routes }: { routes: Route[] }) {
                     onMouseEnter={() => setHovered(route.id)}
                     onMouseLeave={() => setHovered(null)}
                   >
-                    <RouteCard route={route} />
+                    <RouteCard route={route} rating={ratings[route.id]} />
                   </div>
                 ))}
               </div>

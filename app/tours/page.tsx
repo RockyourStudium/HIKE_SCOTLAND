@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTours } from "@/lib/catalog";
+import { getRatingSummaries } from "@/lib/reviews";
 import ToursView from "./ToursView";
 
 // ISR: DB-Änderungen erscheinen ohne Deploy (alle 5 Min revalidiert).
@@ -12,6 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ToursPage() {
-  const tours = await getTours();
-  return <ToursView tours={tours} />;
+  const [tours, ratings] = await Promise.all([
+    getTours(),
+    getRatingSummaries("tour"),
+  ]);
+  return <ToursView tours={tours} ratings={ratings} />;
 }

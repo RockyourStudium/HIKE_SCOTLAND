@@ -5,13 +5,20 @@ import Container from "@/components/Container";
 import TourCard from "@/components/TourCard";
 import MapPanel from "@/components/MapPanel";
 import type { Tour } from "@/data/types";
+import type { RatingSummary } from "@/lib/reviews";
 import { useTrip } from "@/lib/trip";
 import { useCatalog } from "@/lib/catalog-client";
 import { tripPoints, tourPoint } from "@/lib/mapPoints";
 
 const types = ["All", "Guided", "Self-guided"] as const;
 
-export default function ToursView({ tours }: { tours: Tour[] }) {
+export default function ToursView({
+  tours,
+  ratings = {},
+}: {
+  tours: Tour[];
+  ratings?: Record<string, RatingSummary>;
+}) {
   const [type, setType] = useState<(typeof types)[number]>("All");
   const [region, setRegion] = useState("All");
   const [hovered, setHovered] = useState<string | null>(null);
@@ -100,7 +107,7 @@ export default function ToursView({ tours }: { tours: Tour[] }) {
                     onMouseEnter={() => setHovered(tour.id)}
                     onMouseLeave={() => setHovered(null)}
                   >
-                    <TourCard tour={tour} />
+                    <TourCard tour={tour} rating={ratings[tour.id]} />
                   </div>
                 ))}
               </div>

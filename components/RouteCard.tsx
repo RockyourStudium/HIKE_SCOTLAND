@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PawPrint } from "lucide-react";
+import { PawPrint, Star } from "lucide-react";
 import type { Route } from "@/data/types";
+import type { RatingSummary } from "@/lib/reviews";
 import { DifficultyBadge, Tag } from "./Badge";
 
 function Stat({ label, value }: { label: string; value: string }) {
@@ -16,10 +17,13 @@ function Stat({ label, value }: { label: string; value: string }) {
 export default function RouteCard({
   route,
   tone = "light",
+  rating,
 }: {
   route: Route;
   /** "light" = white (default), "tinted" = pale fog — for dark backgrounds. */
   tone?: "light" | "tinted";
+  /** Aggregierte Reviews (Browse-Seiten); ohne Wert erscheint kein Badge. */
+  rating?: RatingSummary;
 }) {
   return (
     <Link
@@ -50,9 +54,18 @@ export default function RouteCard({
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="shimmer-title font-display text-xl font-bold">
-          {route.name}
-        </h3>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="shimmer-title font-display text-xl font-bold">
+            {route.name}
+          </h3>
+          {rating && (
+            <span className="flex shrink-0 items-center gap-1 pt-1 text-sm font-semibold text-forest-dark">
+              <Star aria-hidden className="h-4 w-4 fill-mist text-mist" />
+              {rating.avg.toFixed(1)}
+              <span className="font-normal text-neutralgray">({rating.count})</span>
+            </span>
+          )}
+        </div>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-neutralgray">
           {route.summary}
         </p>

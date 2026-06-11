@@ -2,13 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { CalendarDays, TrainFront, Backpack, Dumbbell } from "lucide-react";
+import { CalendarDays, TrainFront, Backpack, Dumbbell, Star } from "lucide-react";
 import { getTourById, getTourDepartures, getTours } from "@/lib/catalog";
+import { getReviews, summarizeReviews } from "@/lib/reviews";
 import AddToTripButton from "@/components/AddToTripButton";
 import BookTourButton from "@/components/BookTourButton";
 import Button from "@/components/Button";
 import { DifficultyBadge } from "@/components/Badge";
 import Container from "@/components/Container";
+import MobileBookingBar from "@/components/MobileBookingBar";
 import ReviewsSection from "@/components/ReviewsSection";
 import { gearFor, fitnessNote, destinationForRegion } from "@/lib/detail";
 
@@ -72,12 +74,14 @@ function SeatsBadge({ remaining, capacity }: { remaining: number; capacity: numb
 }
 
 export default async function TourDetailPage({ params }: { params: { id: string } }) {
-  const [tour, departures] = await Promise.all([
+  const [tour, departures, reviews] = await Promise.all([
     getTourById(params.id),
     getTourDepartures(params.id),
+    getReviews("tour", params.id),
   ]);
   if (!tour) notFound();
   const nextBookable = departures.find((d) => d.seatsRemaining > 0);
+  const rating = summarizeReviews(reviews);
 
   const dest = destinationForRegion(tour.region);
   const gear = gearFor(tour.difficulty);
@@ -114,6 +118,18 @@ export default async function TourDetailPage({ params }: { params: { id: string 
             {tour.name}
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-fog/90">{tour.summary}</p>
+          {rating && (
+            <a
+              href="#reviews"
+              className="mt-3 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-fog/90 hover:text-fog"
+            >
+              <Star aria-hidden className="h-4 w-4 fill-mint text-mint" />
+              {rating.avg.toFixed(1)}
+              <span className="font-normal text-fog/75">
+                · {rating.count} {rating.count === 1 ? "review" : "reviews"}
+              </span>
+            </a>
+          )}
         </div>
       </section>
 
@@ -238,6 +254,7 @@ export default async function TourDetailPage({ params }: { params: { id: string 
               subjectType="tour"
               subjectId={tour.id}
               path={`/tours/${tour.id}`}
+              reviews={reviews}
             />
           </div>
 
@@ -276,6 +293,14 @@ export default async function TourDetailPage({ params }: { params: { id: string 
           </aside>
         </div>
       </Container>
+
+      {/* Mobile: Sidebar liegt unter dem Content — sticky Leiste hält Preis + CTA sichtbar */}
+      <MobileBookingBar
+        tourId={tour.id}
+        price={nextBookable?.pricePerPerson ?? tour.pricePerPerson}
+        nextDeparture={nextBookable ? departureDate(nextBookable.date, "short") : undefined}
+      />
+      <div aria-hidden className="h-20 lg:hidden" />
     </>
   );
 }

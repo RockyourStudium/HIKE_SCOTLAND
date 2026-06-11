@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { getReviews, type ReviewSubject } from "@/lib/reviews";
+import type { PublicReview, ReviewSubject } from "@/lib/reviews";
 import ReviewForm from "@/components/ReviewForm";
 
 function Stars({ value, label }: { value: number; label?: string }) {
@@ -29,19 +29,21 @@ function initial(name: string) {
 
 /**
  * Reviews einer Tour/Route (+ Abgabe-Formular für eingeloggte User).
- * Server-Komponente: liest über die anon-View public_reviews, bleibt also
- * ISR-kompatibel; der Login-Status fürs Formular kommt client-seitig.
+ * Die Seite fetcht die Reviews (lib/reviews) und reicht sie durch — so teilen
+ * sich Hero-Badge und Sektion dieselben Daten; der Login-Status fürs Formular
+ * kommt client-seitig (ISR-kompatibel).
  */
-export default async function ReviewsSection({
+export default function ReviewsSection({
   subjectType,
   subjectId,
   path,
+  reviews,
 }: {
   subjectType: ReviewSubject;
   subjectId: string;
   path: string;
+  reviews: PublicReview[];
 }) {
-  const reviews = await getReviews(subjectType, subjectId);
   const avg = reviews.length
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : null;

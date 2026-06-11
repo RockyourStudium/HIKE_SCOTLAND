@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { CalendarDays, TrainFront, Backpack, Dumbbell, PawPrint } from "lucide-react";
+import { CalendarDays, TrainFront, Backpack, Dumbbell, PawPrint, Star } from "lucide-react";
 import { getRouteById, getRoutes } from "@/lib/catalog";
+import { getReviews, summarizeReviews } from "@/lib/reviews";
 import AnimatedCTA from "@/components/AnimatedCTA";
 import AddToTripButton from "@/components/AddToTripButton";
 import Button from "@/components/Button";
@@ -39,8 +40,12 @@ function Fact({ label, value }: { label: string; value: string }) {
 }
 
 export default async function RouteDetailPage({ params }: { params: { id: string } }) {
-  const route = await getRouteById(params.id);
+  const [route, reviews] = await Promise.all([
+    getRouteById(params.id),
+    getReviews("route", params.id),
+  ]);
   if (!route) notFound();
+  const rating = summarizeReviews(reviews);
 
   const dest = destinationForRegion(route.region);
   const gear = gearFor(route.difficulty);
@@ -74,6 +79,18 @@ export default async function RouteDetailPage({ params }: { params: { id: string
             {route.name}
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-fog/90">{route.summary}</p>
+          {rating && (
+            <a
+              href="#reviews"
+              className="mt-3 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-fog/90 hover:text-fog"
+            >
+              <Star aria-hidden className="h-4 w-4 fill-mint text-mint" />
+              {rating.avg.toFixed(1)}
+              <span className="font-normal text-fog/75">
+                · {rating.count} {rating.count === 1 ? "review" : "reviews"}
+              </span>
+            </a>
+          )}
         </div>
       </section>
 
@@ -164,6 +181,7 @@ export default async function RouteDetailPage({ params }: { params: { id: string
               subjectType="route"
               subjectId={route.id}
               path={`/routes/${route.id}`}
+              reviews={reviews}
             />
           </div>
 

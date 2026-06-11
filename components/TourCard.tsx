@@ -1,10 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Star } from "lucide-react";
 import type { Tour } from "@/data/types";
+import type { RatingSummary } from "@/lib/reviews";
 import { DifficultyBadge } from "./Badge";
 import Button from "./Button";
 
-export default function TourCard({ tour }: { tour: Tour }) {
+export default function TourCard({
+  tour,
+  rating,
+}: {
+  tour: Tour;
+  /** Aggregierte Reviews (Browse-Seiten); ohne Wert erscheint kein Badge. */
+  rating?: RatingSummary;
+}) {
   return (
     <Link
       href={`/tours/${tour.id}`}
@@ -40,7 +49,16 @@ export default function TourCard({ tour }: { tour: Tour }) {
           </h3>
           <DifficultyBadge level={tour.difficulty} />
         </div>
-        <p className="mt-1 text-sm text-neutralgray">{tour.region}</p>
+        <div className="mt-1 flex items-center justify-between gap-3">
+          <p className="text-sm text-neutralgray">{tour.region}</p>
+          {rating && (
+            <span className="flex items-center gap-1 text-sm font-semibold text-forest-dark">
+              <Star aria-hidden className="h-4 w-4 fill-mist text-mist" />
+              {rating.avg.toFixed(1)}
+              <span className="font-normal text-neutralgray">({rating.count})</span>
+            </span>
+          )}
+        </div>
         <p className="mt-3 flex-1 text-sm leading-relaxed text-neutralgray">
           {tour.summary}
         </p>

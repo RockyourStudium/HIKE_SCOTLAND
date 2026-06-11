@@ -17,6 +17,47 @@ export interface PublicReview {
   authorUsername: string | null;
 }
 
+export interface RatingSummary {
+  avg: number;
+  count: number;
+}
+
+/** Durchschnitt + Anzahl über eine Review-Liste; null, wenn leer. */
+export function summarizeReviews(reviews: PublicReview[]): RatingSummary | null {
+  if (reviews.length === 0) return null;
+  return {
+    avg: reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length,
+    count: reviews.length,
+  };
+}
+
+/**
+ * Rating-Zusammenfassung je Katalog-Item (für Badges auf Browse-Cards).
+ * Plain Object statt Map, damit es als Prop an Client-Komponenten geht.
+ */
+export async function getRatingSummaries(
+  subjectType: ReviewSubject,
+): Promise<Record<string, RatingSummary>> {
+  const { data, error } = await getSupabase()
+    .from("public_reviews")
+    .select("subject_id, rating")
+    .eq("subject_type", subjectType);
+  if (error) return {};
+  const acc: Record<string, { sum: number; count: number }> = {};
+  for (const row of data ?? []) {
+    if (!row.subject_id || !row.rating) continue;
+    const entry = (acc[row.subject_id] ??= { sum: 0, count: 0 });
+    entry.sum += row.rating;
+    entry.count += 1;
+  }
+  return Object.fromEntries(
+    Object.entries(acc).map(([id, { sum, count }]) => [
+      id,
+      { avg: sum / count, count },
+    ]),
+  );
+}
+
 export async function getReviews(
   subjectType: ReviewSubject,
   subjectId: string,
