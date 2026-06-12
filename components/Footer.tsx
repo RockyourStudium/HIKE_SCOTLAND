@@ -21,13 +21,22 @@ const columns = [
       { href: "/newsletter", label: "Newsletter" },
     ],
   },
+  {
+    title: "Legal",
+    links: [
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms & Conditions" },
+      { href: "/legal-notice", label: "Legal Notice" },
+      { href: "/credits", label: "Image Credits" },
+    ],
+  },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-forest-darkest text-fog">
       <Container py="compact">
-        <div className="grid gap-10 md:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
               <Mountain aria-hidden className="h-6 w-6 text-mint" strokeWidth={2} />
@@ -62,16 +71,10 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-forest-highland/30 pt-6 text-sm text-fog/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Hike Scotland. Walk wild, tread lightly.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/credits" className="transition-colors hover:text-fog">
-              Image Credits
-            </Link>
-            <span aria-hidden>·</span>
-            <p className="inline-flex items-center gap-1.5">
-              Made for outdoor enthusiasts
-              <TreePine aria-hidden className="h-4 w-4 text-mint" />
-            </p>
-          </div>
+          <p className="inline-flex items-center gap-1.5">
+            Made for outdoor enthusiasts
+            <TreePine aria-hidden className="h-4 w-4 text-mint" />
+          </p>
         </div>
       </Container>
     </footer>
