@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Josefin_Sans, Lato } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/site";
@@ -98,6 +99,11 @@ export default function RootLayout({
             </TripProvider>
           </CatalogProvider>
         </AuthProvider>
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="1582056d-c7ae-4fd4-bc8f-334b343bb61b"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
