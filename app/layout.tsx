@@ -63,6 +63,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${josefinSans.variable} ${lato.variable}`}>
       <body className="min-h-screen flex flex-col bg-fog text-forest-dark">
+        {/* Demo notice — showcase project, real DB behind it, so no real bookings/payments */}
+        <div
+          style={{
+            background: "#b45309",
+            color: "#fff",
+            textAlign: "center",
+            padding: "8px 16px",
+            fontSize: "14px",
+            fontWeight: 600,
+          }}
+        >
+          ⚠️ Demo site — bookings are not real and no payments are taken.
+        </div>
         {/* Shared SVG gradient for Lucide icons — mirrors the site's
             forest-gradient (#081C15 → #2D6A4F). Reference via
             color="url(#hike-gradient)" on any icon over a light surface. */}
